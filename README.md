@@ -9,7 +9,7 @@ Exam dates:
 Planned:
 * **Developer Associate**
 * **SysOps Administrator Associate**
-* **Database Specialty*
+* **Database Specialty**
 
 I used [Adrian Cantrill's courses](https://learn.cantrill.io/) and [TutorialDojo's practice exams](https://tutorialsdojo.com/) as my primary tools to prepare for both Solutions Architect exams.
 
