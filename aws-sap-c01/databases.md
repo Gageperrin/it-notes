@@ -18,8 +18,11 @@
 * [DynamoDB Global Tables](#dynamo-global-tables)
 
 [Elasticsearch](#elasticsearch)
+
 [Athena](#athena)
+
 [Amazon Neptune](#amazon-neptune)
+
 [Amazon Quantum Ledger Database QLDB](#amazon-quantum-ledger-database-qldb)
 
 ## RDS Architecture
