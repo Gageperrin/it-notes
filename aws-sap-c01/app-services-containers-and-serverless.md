@@ -163,4 +163,56 @@ It was a predecessor to Step Functions using instances and servers. Same pattern
 * Deciders schedule activity tasks, provides input data, and ends workflows.
 * One year maximum run-time
 * Step functions are serverless and have a lower admin overhead.
-* SWF: AWS flow framework, external signals needed to intervene in processses that launch child flows that return to the parent. Bespoke and compelx decisions using custom decider application that interact with Mechanical Turk. A child workflow can be initiated as part of a single activity of the parent. It runs, re-runs, and its results are used to decide flows in the parent workflow.
+* SWF: AWS flow framework, external signals needed to intervene in processses that launch child flows that return to the parent. Bespoke and complex decisions using custom decider application that interact with Mechanical Turk. A child workflow can be initiated as part of a single activity of the parent. It runs, re-runs, and its results are used to decide flows in the parent workflow.
+
+
+## Amazon Mechanical Turk
+
+Amazon Mechanical Turk is a crowd-sourcing marketplace for outsourcing processes and jobs. Managed human task outsourcing where requesters post human intelligence tasks (HITs). Pay per task basis. Great for data collection, manual processing, and image classification.
+
+
+## Elastic Transcoder and AWS Elemental MediaConvert
+
+> [AWS Elemental MediaConvert](https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html) is a file-based video processing service that provides scalable video processing for content owners and distributors with media libraries of any size. 
+
+A file-based video transcoding service with broadcast-grade features. MediaConvert is a new product designed to replace Elastic Transcoder. It is serverless, so one pays for resources used. Add jobs to pipelines (with ET) or queues (MC). File load from S3, processed, then stored on S3. MC supports EventBridge (CWEvents v2) for job signalling.
+
+Architecture:
+1. Upload to InputBucket which is configured to execute a Transcode Lambda function into MediaConvert which loads the product into OutputBucket Origin.
+2. MediaConvert registers an event through EventBridge which adds video metadata to DynamoDB using Lambda.
+3. Output bucket can have its media distributed privately through CloudFront.
+4. Users load HTML/JS from the website, connect to the API Gateway backed by a Lambda function.
+5. If authorized, a signedURL is generated from the DynamoDB metadata and provided to the user to give access to the CloudFront private distribution.
+
+Elastic Transcoder is legacy, default to Elemental MediaConvert. MediaConvert supports more codecs and is designed for larger volume and parallel processing, MediaConvert supports reserved pricing. Use Elastic Transcoder for WebM (VP8/VP9), animated GIF, MP3, FLAC, Vorbis, and WAV.
+
+
+## AWS IOT
+
+> [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html) provides the cloud services that connect your IoT devices to other devices and AWS cloud services. AWS IoT provides device software that can help you integrate your IoT devices into AWS IoT-based solutions. If your devices can connect to AWS IoT, AWS IoT can connect them to the cloud services that AWS provides.
+
+The AWS IoT core is a suite of products for the Internet of Things devices. Used for managing millions of devices. It provides provisioning, updates, and control. Communication with devices may have unreliable links, so IoT provides device shadows. These are reliable and consistent copies of a real device which can be read from or written to. Any writes will be sent to the device when it next connects. Rules and event-driven integration with AWS services.
+
+Device messages are in JSON using MQTT topics. IoT rules match events and can be used to invoke Lambda functions which check DynamoDB for customer set water level alert value. It uses SNS to send a push notification. Kinesis Data Firehose could be used to persist the data from IoT into S3 and/or send it on for near real-time processing using Kinesis Data Analytics.
+
+
+## AWS Greengrass
+
+> [AWS IoT Greengrass](https://docs.aws.amazon.com/greengrass/latest/developerguide/what-is-gg.html) is software that extends cloud capabilities to local devices. This enables devices to collect and analyze data closer to the source of information, react autonomously to local events, and communicate securely with each other on local networks. Local devices can also communicate securely with AWS IoT Core and export IoT data to the AWS Cloud. AWS IoT Greengrass developers can use AWS Lambda functions and prebuilt connectors to create serverless applications that are deployed to devices for local execution.
+
+AWS IoT Greengrass extends AWS to edge devices with some compute, messaging, data management, sync and ML capabilities. Locally run Lambda and containers and shadow IoT devices locally.
+
+Device reactions can occur in real-time locally with no cloud communications or latency. Greengrass allows for operation to continue even with intermittent connectivity. AWS based services can be used via AWS IoT core and directly from local Lambda functions.
+
+
+## AWS Serverless Application Model SAM
+
+The AWS Serverless Application Model (SAM) is an open-source framework for building serverless applications. It provides shorthand syntax to express functions, APIs, databases, and event source mappings.
+
+Functions and services:
+* Front end code and assets - SE and CloudFront
+* API Endpoint - API Gateway
+* Compute - Lambda
+* Database - DynamoDB
+
+AWS SAM template specification is an extension of CloudFormation with transform, globals, and resources (CFN plus SAM). AWS SAM CLI to build SAM apps, local testing, and deployment into AWS. SAM apps have a defined structure with a defined template format defining application resoruces. SAM-package packages a SAM application. It takes local assets and build a ZIP file that is uploaded to S3. `Sam-deploy.yaml` template is returned which references the uploaded assets. Sam-deploy deploys infrastructure using packaged resources. CloudFormation Stack deploys SAM resources.
