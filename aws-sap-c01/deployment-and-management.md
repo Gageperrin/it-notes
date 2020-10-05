@@ -8,7 +8,7 @@
 * [AWS OpsWorks](#aws-opsworks)
 * [AWS Systems Manager](#aws-systems-manager)
 
-## [CloudFormation]
+## CloudFormation
 
 > [AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html) is a service that helps you model and set up your Amazon Web Services resources so that you can spend less time managing those resources and more time focusing on your applications that run in AWS. You create a template that describes all the AWS resources that you want (like Amazon EC2 instances or Amazon RDS DB instances), and AWS CloudFormation takes care of provisioning and configuring those resources for you. 
 
