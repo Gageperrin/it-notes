@@ -131,7 +131,7 @@ Flow Log Syntax: `[Source ID][Destination ID][Source IP][Destination IP][Source 
 Information to and from 169.254.169.254, 169.254.169.123, DHCP, Amazon DNS sever & Amazon Windows license not recorded.
 
 
-## AWS WAF and Shield
+## AWS WAF
 
 > [AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html) is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to an Amazon CloudFront distribution, an Amazon API Gateway REST API, an Application Load Balancer, or an AWS AppSync GraphQL API. AWS WAF also lets you control access to your content. Based on conditions that you specify, such as the IP addresses that requests originate from or the values of query strings, Amazon CloudFront, Amazon API Gateway, Application Load Balancer, or AWS AppSync responds to requests either with the requested content or with an HTTP 403 status code (Forbidden). You also can configure CloudFront to return a custom error page when a request is blocked.
 
