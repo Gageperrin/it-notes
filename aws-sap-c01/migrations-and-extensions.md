@@ -65,7 +65,7 @@ TAPE is made for large backups (LTO-9 can hold up to 24 TB) with up to 60 TB com
 
 Traditional: Equipment costs (tapes, software, library) and CAPEX and OPEX costs. Offsite tape storage is managed by a 3rd party. Only tapes physically in the library can be used for backups and restores. Tapes are moved offsite when not in active use. Transport between locations takes time and has costs.
 
-Storage Gateway Tape (VTL): The backup server sees VTL as a regular tape loader through iSCI. There is an upload buffer and local cache. The backup is loaded into VTL in S3. Tape Shelf (VTS) is stored in Glacier. Virtual tape can go from 100 GB to 5 TB with 1 PB across 1500 virtual tapes. Unlimited VTS (archive) storage. Virtual Tape Library can retrieve data from Tape Shelf in Glacier. **It pretends to be an iSCI tape library, changer and drive.
+Storage Gateway Tape (VTL): The backup server sees VTL as a regular tape loader through iSCI. There is an upload buffer and local cache. The backup is loaded into VTL in S3. Tape Shelf (VTS) is stored in Glacier, **so its data cannot be retrieved in real-time.** Virtual tape can go from 100 GB to 5 TB with 1 PB across 1500 virtual tapes. Unlimited VTS (archive) storage. Virtual Tape Library can retrieve data from Tape Shelf in Glacier. **It pretends to be an iSCI tape library, changer and drive.**
 
 
 ### Storage Gateway - File Gateways
