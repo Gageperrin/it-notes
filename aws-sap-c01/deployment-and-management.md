@@ -197,14 +197,10 @@ Architecture:
 ### State Manager
 
 AWS Systems Manager State Manager is a secure and scalable configuration management service that automates the process of keeping your Amazon EC2 and hybrid infrastructure in a state that you define. The following list describes the types of tasks you can perform with State Manager:
-* Bootstrap instances with specific software at start-up
-* Download and update agents on a defined schedule,
-including SSM Agent
-* Configure network settings
-* Join instances to a Windows domain (Windows
-instances only)
-* Patch instances with software updates throughout
-their lifecycle
-* Run scripts on Linux and Windows managed instances
-throughout their lifecycle
+* Bootstrap instances with specific software at start-up.
+* Download and update agents on a defined schedule, including SSM Agent.
+* Configure network settings.
+* Join instances to a Windows domain (Windows instances only).
+* Patch instances with software updates throughout their lifecycle.
+* Run scripts on Linux and Windows managed instances throughout their lifecycle.
 
