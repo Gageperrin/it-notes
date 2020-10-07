@@ -1,5 +1,20 @@
 # Networking and Hybrid
 
+## Table of Contents
+* [Border Gateway Protocol](#border-gateway-protocol)
+* [AWS Global Accelerator](#aws-global-accelerator)
+* [Site to Site VPN](#site-to-site-vpn)
+* [Transit Gateway](#transit-gateway)
+* [Advanced VPC Routing](#advanced-vpc-routing)
+* [Accelerated Site-to-Site VPN](#accelerated-site-to-site-vpn)
+* [Direct Connect](#direct-connect)
+* [DNS Fundamental](#dns-fundamentals)
+* [Route 53 Fundamentals](#route-53-fundamentals)
+* [VPC Endpoints: Gateway and Interface](#vpc-endpoints:-gateway-and-interface)
+* [AWS PrivateLink](#aws-privatelink)
+* [VPC IPv6](#vpc-ipv6)
+* [Advanced VPC Structure](#advanced-vpc-structure)
+
 ## Border Gateway Protocol
 
 Border Gateway Protocol (BGP) is a routing protocol used by Direct Connect and Dynamic Site to Site VPNs. BGP is made up of autonomous systems (AS)--routers controlled by one entity. ASN are unique and allocated by IANA (0-65535), 64512-65534 are private and can be used in private peering relationships. 
@@ -168,7 +183,7 @@ Zone files in AWS are called hosted zones. They can either be public or private 
 
 A R53 Hosted Zone is a DNS database for a domain. A public hosted zone is hosted on R54 by provided public DNS servers. Globally resilient because of multiple DNS servers. Created with domain registration via R53.
 
-It hosts DNS records (A, AAAA, MX, NS, TXT), and the hosted zones are authoritative since the DNS system references them.
+It hosts DNS records (A, AAAA, MX, NS, TXT), and the hosted zones are authoritative since the DNS system references them. However, Route 53 does not support DNSSEC services. These must be integrated through a third party.
 
 ### Route 53 Health Checks
 
