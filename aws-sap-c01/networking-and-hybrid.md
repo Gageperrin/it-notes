@@ -10,7 +10,7 @@
 * [Direct Connect](#direct-connect)
 * [DNS Fundamental](#dns-fundamentals)
 * [Route 53 Fundamentals](#route-53-fundamentals)
-* [VPC Endpoints](#vpc-endpoints
+* [VPC Endpoints](#vpc-endpoints)
 * [AWS PrivateLink](#aws-privatelink)
 * [VPC IPv6](#vpc-ipv6)
 * [Advanced VPC Structure](#advanced-vpc-structure)
