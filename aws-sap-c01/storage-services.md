@@ -125,7 +125,7 @@ S3 Select and Glacier Select allows the user to avoid retrieving the whole objec
 
 > [Amazon Elastic Block Store](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html) (Amazon EBS) provides block level storage volumes for use with EC2 instances. EBS volumes behave like raw, unformatted block devices. You can mount these volumes as devices on your instances. EBS volumes that are attached to an instance are exposed as storage volumes that persist independently from the life of the instance. You can create a file system on top of these volumes, or use them in any way you would use a block device (such as a hard drive). You can dynamically change the configuration of a volume attached to an instance.
 
-EBS is network storage that is separated from EC2. EBS is provisioned in one AZ (so risk of failure), but volumes can be re-sized and snapshotted as well as detached and re-attached. They follow instances between EC2 hosts with a per instance max storage performance.
+EBS is network storage that is separated from EC2. EBS is provisioned in one AZ (so risk of failure), but volumes can be re-sized and snapshotted as well as detached and re-attached. They follow instances between EC2 hosts with a per instance max storage performance. However, EBS is not the best option for a scalable solution.
 
 Instance stores are physical disks in an EC2 host. Data lost if hardware fails or instance moves between hosts. The size cannot be adjusted because the disks are physical. High performance (IOPS and MB/s optimized) since they are locally connected. Temporary and should not be used for persistent data.
 
