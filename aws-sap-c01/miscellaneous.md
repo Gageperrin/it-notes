@@ -2,17 +2,14 @@
 
 ## Table of Contents
 
-[Amazon Lex](#amazon-lex)
+* [Amazon Lex](#amazon-lex)
+* [Amazon Connect](#amazon-connect)
+* [AWS Rekognition](#aws-rekognition)
+* [Kinesis Video Streams](#kinesis-video-streams)
+* [AWS Glue](#aws-glue)
+* [AWS Device Farm](#aws-device-farm)
+* [Amazon CloudSearch](#amazon-cloudsearch)
 
-[Amazon Connect](#amazon-connect)
-
-[AWS Rekognition](#aws-rekognition)
-
-[Kinesis Video Streams](#kinesis-video-streams)
-
-[AWS Glue](#aws-glue)
-
-[AWS Device Farm](#aws-device-farm)
 
 
 ## Amazon Lex
@@ -90,4 +87,6 @@ Device Farm sequence:
 3. Configure which devices tests should be run against.
 4. Configure device state, additional apps, radio states, device location and device language. Device remote connection is available as required.
 
+## Amazon CloudSearch
 
+> [Amazon CloudSearch](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/what-is-cloudsearch.html) is a fully managed service in the cloud that makes it easy to set up, manage, and scale a search solution for your website or application. With Amazon CloudSearch you can search large collections of data such as web pages, document files, forum posts, or product information. You can quickly add search capabilities without having to become a search expert or worry about hardware provisioning, setup, and maintenance. As your volume of data and traffic fluctuates, Amazon CloudSearch scales to meet your needs.
