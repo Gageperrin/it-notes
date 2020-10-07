@@ -176,7 +176,10 @@ MX records have a priority and a value. Value can point inside the same zone or 
 
 Route53 registers domains and host zones with managed nameservers. It is a global service with a single database and is globally resilient.
 
-Zone files in AWS are called hosted zones. They can either be public or private and linked to a VPC. Hosted zone stores records (recordsets)
+Zone files in AWS are called hosted zones. They can either be public or private and linked to a VPC. Hosted zone stores records (recordsets).
+
+`enableDnsHostnames` indicates whether the instances launched in the VPC get public DNS hostnames. If this attribute is true , instances in the VPC get public DNS hostnames, but only if the enableDnsSupport attribute is also set to true. `enableDnsSuport` Indicates whether the DNS resolution is supported for the VPC. If this attribute is false, the Amazon-provided DNS server in the VPC that resolves public DNS hostnames to IP addresses is not enabled. If this attribute is true , queries to the Amazon provided DNS server at the 169.254.169.253 IP address, or the reserved IP address at the base of the VPC IPv4 network range plus two ( *.*.*.2 ) will succeed.
+
 
 
 ### Route 53 Public Hosted Zones
