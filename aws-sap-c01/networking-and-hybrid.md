@@ -10,7 +10,7 @@
 * [Direct Connect](#direct-connect)
 * [DNS Fundamental](#dns-fundamentals)
 * [Route 53 Fundamentals](#route-53-fundamentals)
-* [VPC Endpoints: Gateway and Interface](#vpc-endpoints:-gateway-and-interface)
+* [VPC Endpoints](#vpc-endpoints
 * [AWS PrivateLink](#aws-privatelink)
 * [VPC IPv6](#vpc-ipv6)
 * [Advanced VPC Structure](#advanced-vpc-structure)
@@ -207,7 +207,7 @@ Types of checks:
 * Multi-value: Routing traffic to multiple resources, creating more than one record of the same name and type
 
 
-## VPC Endpoints: Gateway and Interface
+## VPC Endpoints
 
 >A [VPC endpoint](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html) enables you to privately connect your VPC to supported AWS services and VPC endpoint services powered by AWS PrivateLink without requiring an internet gateway, NAT device, VPN connection, or AWS Direct Connect connection. Instances in your VPC do not require public IP addresses to communicate with resources in the service. Traffic between your VPC and the other service does not leave the Amazon network.
 
@@ -294,4 +294,4 @@ Designing robust VPCs:
 
 Formula: **N of subnets needed = n of application subnets x AZs**
 
-
+VPC Peering is the best way to route traffic between two VPCs privately. IPSec tunnels do not work between VPCs.
