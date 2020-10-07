@@ -36,6 +36,14 @@ In EC2 mode, a ECS cluster is created in an AWS account. EC2 instances are used 
 
 Use cases: If using containers, EC2 for large workloads and price conscious, and use Fargate for large loads and if overhead conscious, as well as for small or burst workloads, and for batch or periodic workloads.
 
+ECS allows for various Docker networking modes to be used by containers in the ECS task:
+* `none`: The task's containers do not have external connectivity.
+* `bridge`: The task utilized Docker's built-in virtual network which runs inside each container instance.
+* `host`: The task bypasses the built-in virtual network and ports directly to the EC2 instance's network interface. It is not possible to run multiple instantations of the same task on a single container instance in this mode.
+* `awsvpc`: The task is allocated to an ENI and the user must specify a `NetworkConfiguration`.
+
+Task networking simplifies container networking and provides greater security for containers by integrating security groups and network monitoring.
+
 
 ## Simple Notification Service SNS
 
