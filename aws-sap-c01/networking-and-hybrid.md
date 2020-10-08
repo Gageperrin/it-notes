@@ -50,6 +50,8 @@ BGP exchanges the shortest ASPATH by default even if a longer fibre would provid
 * Billing: AWS hourly cost, GB cost, data cap (on premises).
 * Advantages: Fast set-up, all configuration is software. Can be either a bakcup for Direct Connect (DX).
 
+[VPN CloudHub](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPN_CloudHub.html) uses a simple hub-and-spoke model  to provide secure communication between multiple VPN connections even if they are not inside a VPC (i.e. remote sites).
+
 ## Transit Gateway (TGW)
 > A [transit gateway](https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html) is a network transit hub that you can use to interconnect your virtual private clouds (VPC) and on-premises networks.
 
