@@ -82,6 +82,12 @@ Amazon Workspaces is a Desktop-As-A-Service similar to Citriz or Remote Desktop-
 * AWS Services which support authentication and authorization via Directory Service can be used. Delivers MS Active Directory natively as a service.
 * Microsoft AD if RADIUS/MFA (possibly), TRUSTS/SCHEMAS, support SCHEMA extensions. Microsoft AD for larger user numbers. If no Directory info in AWS then AD Connector. Microsoft AD mode if it needs to work with failed network link.
 
+### LDAP
+
+Lightweight Directory Access Protocol (LDAP) is a standard communications protocol used to read and write data to and from Active Directory. You can manage your user identities in an external system outside of AWS and grant users who sign in from those systems access to perform AWS tasks and access your AWS resources. The distinction is where the external system resides—in your data center or an external third party on the web.
+
+Authenticating against LDAP happens prior to IAM or STS interactions.
+
 
 ## AD Connector
 
