@@ -176,7 +176,9 @@ MX records have a priority and a value. Value can point inside the same zone or 
 
 >[Amazon Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html) is a highly available and scalable Domain Name System (DNS) web service. You can use Route 53 to perform three main functions in any combination: domain registration, DNS routing, and health checking. 
 
-Route53 registers domains and host zones with managed nameservers. It is a global service with a single database and is globally resilient.
+Route 53 registers domains and host zones with managed nameservers. It is a global service with a single database and is globally resilient.
+
+[Alias records](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html) provide a Route 53-specific extension to DNS functionality that allow the architect to route traffic to selected AWS resoruces like a CF distribution or S3 bucket. They also allow traffic routing from one record in a hosted zone to another record.
 
 Zone files in AWS are called hosted zones. They can either be public or private and linked to a VPC. Hosted zone stores records (recordsets).
 
