@@ -56,9 +56,11 @@ This is an hourly commitment for a 1 or 3 year term. A reservation of general co
 
 ## Advanced EC2 Networking
 
-EC2 instances have a primary ENI which cannot be removed, but additional ENIs can be added and removed from other subnets in the same AZ. Multi-ENI infrastructure offers multiple security zones or traffic types. Security groups attached to ENIs offer different protection rules. Each ENI can also be protected by a NACL around its subnet.
+An [elastic network interface (ENI)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html) is a logical networking component in a VPC that works as a virtual network card.
 
-An EC2 has:
+EC2 instances have a primary elastic network interface (ENI) which cannot be removed, but **additional ENIs can be added and removed from other subnets in the same AZ**. Multi-ENI infrastructure offers multiple security zones or traffic types. Security groups attached to ENIs offer different protection rules. Each ENI can also be protected by a NACL around its subnet.
+
+An EC2 ENI has:
 * One primary private IPv4 address from the subnet range.
 * One or more secondary private IPv4 addresses depending on instance type.
 * One public IPv4 address, not configured on the OS but allocated to the instance.
