@@ -32,7 +32,7 @@ Containers only run the application and environment needed. It provides much of 
 
 ECS clusters are where containers run from. Task definitions store resources are used by task (CPU, memory), networking, and memoery as well as the task role (security through IAM role). A task can contain one or more containers. A service definition is concerned with HA, scalability, how many tasks should be running. The container definition contains image and ports. ECS can run in EC2 mode or Fargate mode.
 
-In EC2 mode, a ECS cluster is created in an AWS account. EC2 instances are used to run containers through an auto-scaling group. User needs to manage capacity and availability. Fargate depends on a shared infrastructure.
+In EC2 mode, a ECS cluster is created in an AWS account. EC2 instances are used to run containers through an auto-scaling group. **Service Auto Scaling can be used to adjust ECS cluster counts in response to CloudWatch alarm triggers.**  User needs to manage capacity and availability. Fargate depends on a shared infrastructure.
 
 Use cases: If using containers, EC2 for large workloads and price conscious, and use Fargate for large loads and if overhead conscious, as well as for small or burst workloads, and for batch or periodic workloads.
 
