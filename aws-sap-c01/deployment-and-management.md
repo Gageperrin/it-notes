@@ -204,3 +204,7 @@ AWS Systems Manager State Manager is a secure and scalable configuration managem
 * Patch instances with software updates throughout their lifecycle.
 * Run scripts on Linux and Windows managed instances throughout their lifecycle.
 
+### Session Manager
+
+Session Manager is primarily used to comply with corporate policies that require controlled access to instances, strict security practices, and fully auditable logs with instance access details but not for applying OS patches.
+
