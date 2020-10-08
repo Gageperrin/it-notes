@@ -55,9 +55,9 @@ Volume gateway is a virtual machine (or hardware appliance) that present storage
 
 Volume gateway has stored and cached modes.
 
-**Stored Mode**: Storage gateway has local storage. **Everything is stored locally.** There is an upload buffer and data is copied asynchronously to a storage gateway endpoint. It is then copied to S3 through EBS snapshots. It is great for "full disk" backups of servers with good RTO/RPO values. It is great also for DR by restoring from EBS snapshots into EBS volumes. It does not improve datameter capacity. Main copy of data is stored on the gateway. There are 32 volumes per gateway, 16 TB per volume, allowing for up to 512 TB per gateway.
+**Stored Mode**: Storage gateway has local storage. **Everything is stored locally.** There is an upload buffer and data is copied asynchronously to a storage gateway endpoint. It is then copied to S3 through EBS snapshots. It is great for "full disk" backups of servers with good RTO/RPO values. It is great also for DR by restoring from EBS snapshots into EBS volumes. It does not improve datameter capacity. Main copy of data is stored on the gateway. There are 32 volumes per gateway, 16 TB per volume, allowing for up to **512 TB per gateway**.
 
-**Cached Mode**: Primary data is stored in AWS S3, not local storage. It is in an AWS Managed portion of S3 and cannot be access from the bucket console. It is great for **data center extension** since data is stored on AWS and cached on-premises. 32 TB per volume, 32 volumes per gateway, 1 PB per gateway.
+**Cached Mode**: Primary data is stored in AWS S3, not local storage. It is in an AWS Managed portion of S3 and cannot be access from the bucket console. It is great for **data center extension** since data is stored on AWS and cached on-premises. 32 TB per volume, 32 volumes per gateway, **1 PB per gateway**.
 
 ### Storage Gateway Tape - VTL Mode
 
