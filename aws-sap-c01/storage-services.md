@@ -116,6 +116,8 @@ Bucket Default Encryption: AES256.
 
 Pre-signed URLs are a feature of S3 that allows generated URLs to be encoded with access permissions for a specific bucket and object, valid for a certain period of time. The permissions match the identity which generated it, it is technically possible to create a URL for an object the user has no access to. The generated URL could therefore lead to an access denied. URLs do not generate a role.
 
+It is better to use CloudFront presigned URLs for more secure access. Unwanted parties can still connect using an S3 presigned URL. [See more here](https://tutorialsdojo.com/s3-pre-signed-urls-vs-cloudfront-signed-urls-vs-origin-access-identity-oai/)
+
 ### S3 Select and Glacier Select
 
 S3 Select and Glacier Select allows the user to avoid retrieving the whole object from S3 to save both time and money. Filtering at the client side does not reduce these costs which is why a Select is necessary as a SQL-like query. It is up to 400% faster and 80% cheaper. It can be used for CSV, JSON, Parquet and BZIP2 compression for CSV and JSON.
