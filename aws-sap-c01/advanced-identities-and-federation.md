@@ -90,7 +90,7 @@ Amazon Workspaces is a Desktop-As-A-Service similar to Citriz or Remote Desktop-
 * A pair of directory endpoints running in AWS (ENIs in a VPC).
 * Redirects requests to existing directory servers.
 * No directory data stored in AWS, all redirected.
-* Use existing on-premises AD with directory compatible AWS services.
+* Unlike the others, it can connect **pre-existing on-premises directory to AWS**.
 * Proof of concepts, where you need existing identities.
 * Two sizes small and large.
 * Multiple AD Connectors can be used to spread load.
