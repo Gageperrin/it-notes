@@ -47,3 +47,20 @@ Layer 2 using a HUB is a weak solution because of collision and errors. It is be
 Switches understand frames and MAC addresses. They maintain a MAC address table which starts off as empty. As the switch received frames on its ports, it learns the connected devices and populates the MAC address table.
 
 Switches store and forward frames. This means only valid frames are forwarded. Collisions are isolated on the port they occur. Every X port has X collision domains. It allows switches to scale.
+
+
+## 3 - Network
+
+Two Local Area Networks need to be connected over a large distance. Layer 2 will not suffice for this communication. Ethernet is a Layer 2 protocol. Long distance point to point links will use more suitable protocols such as PPP/MPLS/ATM.
+
+Internet Protocol (IP) is a Layer 3 protocol which adds cross-network IP addressing and routing to move data between Local Area Networks without direct P2P links. IP packets are moved step by step from source to destination via intermediate networks. Encapsulated in different frames along the way. Router devices (L3) remove frame encapsulation and add new frame encapsulation at every hop.
+
+### IPv4
+
+Source IP address and destination IP address included as well as Layer 4 protocol values.
+
+### IPv6
+
+Similar to IPv6 packets with bigger source and destination IP addresses.
+
+
