@@ -55,12 +55,93 @@ Two Local Area Networks need to be connected over a large distance. Layer 2 will
 
 Internet Protocol (IP) is a Layer 3 protocol which adds cross-network IP addressing and routing to move data between Local Area Networks without direct P2P links. IP packets are moved step by step from source to destination via intermediate networks. Encapsulated in different frames along the way. Router devices (L3) remove frame encapsulation and add new frame encapsulation at every hop.
 
-### IPv4
+Source IP address and destination IP address included as well as Layer 4 protocol values. Similar to IPv6 packets with bigger source and destination IP addresses.
 
-Source IP address and destination IP address included as well as Layer 4 protocol values.
+### IPv4 Addressing
 
-### IPv6
+133.33.3.7 is dotted decimal notation 4 values between 0 and 255. All IP Address have a network part (coming fomr the left). The host part is the remainder allotted from the right. If the network part of two IP addresses match, it means they are on the same IP network. If not, they are on different networks.
 
-Similar to IPv6 packets with bigger source and destination IP addresses.
+IP addresses are only represented in dotted decimal for humans. They are actually binary. Four sets of octets (8 bits). Total of 32 bits. 133.33.3.7 has a /16 prefix. 16 bits of the IP are the network, and the remaining bits are for the hosts. IP addresses are assigned by machine (DHCP) or humans.
 
+### Subnets
 
+Subnet masks are configured on Layer 3 interfaces. They allow a hsot to determine if an IP address is local or remote and whether it needs to use a gateway. A subnet mask is configured on a host device in addition to an IP address.
+
+A subnet mask is a dotted decimal version of a binary number which indicates which part of an IP address is network (1) and which part is host (0). So a subnet mask of 255.255.0.0 designates the first two octets for the network (the 1's), and the last two octets for the host (the 0's).
+
+133.33.3.7 IP address with a subnet of 255.255.0.0 has a network start of 133.33.0.0 and ends at 133.33.255.255.
+
+### Route Tables and Routes
+
+A source sends its IP packet on the default route 0.0.0.0/0 to the router. The router has multiple route tables to use for selection. The router compares the packet destination IP and route table for matching destinations. The more specific prefixes are preferred (0 is lowest, 32 is highest). 
+
+Packet is forwarded on to the next hop or the target. (The higher the number after the slash, the more specific the prefix.) Packets are routed through sequential hops from source to the destination across the Internet.
+
+### Address Resolution Protocol (ARP)
+
+But how to find the MAC address for a given IP address? The Address Resolution Protocol.
+
+Within a local network, data is moved via Layer 2 frames over Layer 1. ARP discovers which MAC relates to a given IP as the data is handed to the Layer 3 destination. ARP broadcasts on Layer 2 asking for a IP address. The destination IP address responds with the MAC address. The source device passes the frame using the destination MAC address obtained via ARP to Layer 1 for transmission.
+
+Layer 1 on the destination device hands off the raw data to the frame on Layer 2. The destination MAC matches the address provided, so Layer 2 strips the frame and passes the payload to Layer 3. The packet matches the destination IP address, so the data is handed on to the destination.
+
+### IP Routing
+
+Outside of a local network. Subnet mask and desitnation IP show the destination IP is not local. It wraps it up in a frame. ARP is used to find the MAC address of the default gateway. The packet is given the router's IP and encapsulated in a frame. The destination is the router.
+
+The router removes the frame around the packet and reviews packet IP destination. The router has a route for the network that the destination IP is in. It creates a new frame with a second router as the destination MAC. The packet is unchanged as it remains in the frame payload. The frame is sent to the sefcond router.
+
+The second router removes the frame around the packet. The router confirms the destination IP is on the same network and uses ARP to get the MAC address of the destination. It creates a new frame with the destination MAC address and encapsulates the packet. The frame is sent to the destination device, the final destination.
+
+### Summary
+
+* IP Addresses add cross network addressing
+* ARP
+* Route
+* Route Tables
+* Router (encapsulates through Layer 2)
+* Device to device over the Internet
+
+## Layer 4 - Transport
+
+Layer 3 has no method for channeling communications, and data can be sent out of order. Each packet is routed independently. Routing decisions are per packet. Per packet routing can have delays, and some packets can even be lost in transit.
+
+Layer 4 consists of TCP (Transmission Control Protocol) and UDP traffic. TCP is slower and more reliable. UDP is faster but less reliable. 
+
+### TCP
+
+TCP segments are placed inside IP packets. Segments do not have source or destination IP addresses because the packets provide device addressing. 
+
+The TCP header includes:
+* A source and destination port. Ports allow for multiple streams of communication. 
+* A sequence number for ordering and identfying segments in a connection.
+* The acknowledgent field is the way that one side can indicate that it has received a segment in a sequence.
+* Flags N' Things is another aspect used to close connection, synchronize sequence numbers, and reserve some space.
+* The Window allows the receivers to control the rate at which the receiver receives the data. * * * Checksum is used for error checking and arrange for retransmission of the data.
+* The urgent point marks latency-sensitive traffic. 
+
+Alongsidethe header is the payload of data, all wrapped in the TCP segment.
+
+TCP is connection based. A conneciton is established using a random port on a client and a known port on the server. The connection is bilateral.
+
+Layer 4 divides data into segments linked to a connection with error checking, ordering, and retransmission not possible at Layer 3. 
+
+A well known port like tcp/443 is used as a destination while an ephemeral port like tcp/23060 is used as a source. The connection is split between each direction. This is why there are two rules in NACL, one for outbound and one for response traffic.
+
+TCP Well known ports:
+* tcp/80 - HTTP & tcp/443 HTTPS
+* tcp/22 - SSH
+* tcp/25 - SMTP (email)
+* tcp/21 - TELNET
+* tcp/3389 Remote Desktop Protocol
+* tcp/3306 MySQL/MariaDB/Aurora
+
+TCP requires a three way handshake initiated through Flags. Flags can be set to alter the connection. `FIN` can be used to close, `ACK` for acknowledgements, and `SYN` to synchronize sequence numbers.
+
+Send a segment with `SYN` sequence set from the client to the server ('cs'. `SYN-ACK` on server side will increment the sequence set. It picks a random sequence and sends the segment. It sends on a sequence of 'cs+1' and a sequence 'ss' back to the client. The client `ACK` increments both the sequence and the acknowledgement. Sends the acknowledgement back as a sequence 'cs+2' and the sequence back as an acknowledgement 'ss+1'. The connection is subsequently established and the client can send data.
+
+## Layer 5 - Session
+
+A stateless firewall does not understand the state of traffic. It needs two rules for both outbound and response traffic.
+
+A stateful firewall sees one thing. Allowing the outbound implicity allows the inbound (e.g. AWS security group).
