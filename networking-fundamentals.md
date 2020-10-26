@@ -145,3 +145,15 @@ Send a segment with `SYN` sequence set from the client to the server ('cs'. `SYN
 A stateless firewall does not understand the state of traffic. It needs two rules for both outbound and response traffic.
 
 A stateful firewall sees one thing. Allowing the outbound implicity allows the inbound (e.g. AWS security group).
+
+## Network Address Translation - NAT
+
+NAT is designed to overcome IPv4 shortages by adjusting packets of source and destination addresses to allow transit across different networks. NAT translates private IPv4 addresses to public ones.
+
+A Static NAT device translates 1 private address to 1 fixed public address (IGW). A Dynamic NAT translates 1 private address to first available public address. Port Address Translation (PAT) translates many private addresses to 1 public address (NATGW).
+
+Static NAT: The router maintains a NAT table, it maps PrivateIP : PublicIP (1:1). Packets are generated as normal with a private source IP and an external destination IP. If a Public IP has been allocated to the Private IP, the source address of the packet is translated as it passes through the NAT device.
+
+Dynamic NAT: The router maintains a NAT table, it maps Private IP: Public IP in the same way as Static NAT, but the allocations are temporary. Multiple devices can use the same allocation over time if there is no overlap. In the public Internet, only one private IP will be mapped to the the public IP at any time, it is still 1:1 for the duration of the allocation. If the Public IP pool is exhausted then external access can fail.
+
+PAT: The NAT Device records the soruce IP and source port. It replaces the source IP with the single public IP and a public source port allocated from a pool which allows IP overloading (many to one). Return traffic has the public IP of the Nat device and the destination port. Public Port and Public IP are translated to Private Port and Private IP.
