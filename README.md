@@ -4,12 +4,13 @@ These are my notes drafted in preparation for sitting various [AWS Certification
 
 Exam dates:
 * **Solutions Architect Associate C02** - August 12th, 2020. (No notes)
-* **Solutions Architect Professional C01** - forthcoming
+* **Solutions Architect Professional C01** - October 23, 2020
 
 Planned:
 * **Developer Associate**
 * **SysOps Administrator Associate**
-* **Database Specialty**
+* **Machine Learning Specialty**
+* **DevOps Professional**
 
 I used [Adrian Cantrill's courses](https://learn.cantrill.io/) and [TutorialDojo's practice exams](https://tutorialsdojo.com/) as my primary tools to prepare for both Solutions Architect exams.
 
