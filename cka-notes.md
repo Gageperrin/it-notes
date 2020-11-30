@@ -76,8 +76,17 @@ To view the deployed daemon set, run `kubectl get daemonset -n kube-system`.
 
 #### PODs ####
 
-[Next lesson]
+A POD is a single instance of an application. It is the smallest unit in Kubernetes.
 
+If node usage increases, the node can launch another identical pod to share the workload. If the node is at maximum capacity, a new node can be provisioned with a pod launched inside.
+
+There are multi-container pods. Helper containers can be run inside the pod and can share network or storage.
+
+To see a list of pods, run `kubectl get pods`.
+
+#### ReplicaSets ####
+
+[Next Lesson]
 
 ### Services & Other Network Primitives
 
