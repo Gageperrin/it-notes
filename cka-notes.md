@@ -214,7 +214,67 @@ Run `kubectl create -f service-definition.yml`.
 To see services, run `kubectl get services`.
 Access the server through a browser or run, `curl http://192.168.1.2:[port]`.
 
+### Services - Cluster IP
+
+Because pods are constantly re-provisioned, IPs can be unreliable. A service clusters the IPs together for various pods to provide a consistent IP for external communication.
+
+```
+service.definition.yml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-end
+
+spec:
+  type: ClusterIP
+  ports:
+  - targetPort: 80
+    port: 80
+    
+  selector:
+    app: myapp
+    type: back-end
+```
+
+### Services - Load balancer
+
+The load balancer routes traffic to individual nodes. It is easiest to integrate with native cloud functionality. Under `spec:` change `type: NodePort` to `type: LoadBalancer`.
+
+### Imperative vs. Declarative
+
+An imperative IaaC provides steps to create an infrastructure. The declarative only states the requirements for what the infrastructure should have. The declarative approach is implemented with Ansible, Terraform, etc. and takes less manual work for repetitve workloads (if used correctly). Only the `kubectl apply` command is needed for the declarative approach.
+
+Commands to know for Imperative approach:
+`--dry-run` a resource is created from this. `--dry-run=client` to test it.
+`o yaml` will output the resource definition in YAML format.
+`kubectl run nginx --image=nginx` creates an NGINX pod.
+`kubectl run nginx --image=nginx --dry-run=client -o yaml` generates a pod manifest file without creating the pod.
+
+`kubectl create deployment --image=nginx nginx` creates a deployment.
+`kubectl create deployment --image=nginx nginx --dry-run -o yaml` generates a deployment YAML file without generating deployment.
+`kubectl create deployment nginx --image=nginx --replicas=4`
+
+`kubectl scale deployment nginx --replicas=4` to create a deployment with 4 replicas.
+`kubectl create deployment nginx --image=nginx --dry-run=client -o yaml > nginx.deployment.yaml` 
+
+`kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml` creates a service of type ClusterIP.
+`kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml` will do the same but without using the pod's labels as selectors.
+
+`kubectl expose pod nginx --port=80 --name nginx-service --dry-run=client -o yaml` to create a service named nginx of type NodePort to expose pod nginx's port 80 on port 30080 on the nodes.
+`kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=client -o yaml`
+
+### `kubectl apply` Command
+
+The apply command takes into account the local file, the last applied configuration, and the live Kubernetes configuration. If a field is missing in the local file but shows up in the last applied configuration, it will then be removed from the live configuration.
+
+The JSON file with the last applied configuration is stored on the live object configuration under `metadata:` -> `annotations:`.
+
 ## Scheduling
+
+### Manual Scheduling
+
+Without a scheduler, one has to set the node name fields in the specification file, but this can only be specified at creation time. If it is already created, one can create a binding object with a PUSH request to update the pod's specification. With this approach, the configuration has to be converted to JSON.
 
 ### Labels & Selectors
 ### Resource Limits
