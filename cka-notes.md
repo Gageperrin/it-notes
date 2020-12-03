@@ -270,14 +270,123 @@ The apply command takes into account the local file, the last applied configurat
 
 The JSON file with the last applied configuration is stored on the live object configuration under `metadata:` -> `annotations:`.
 
+
+
 ## Scheduling
 
 ### Manual Scheduling
 
 Without a scheduler, one has to set the node name fields in the specification file, but this can only be specified at creation time. If it is already created, one can create a binding object with a PUSH request to update the pod's specification. With this approach, the configuration has to be converted to JSON.
 
-### Labels & Selectors
+
+### Labels and Selectors
+
+Labels and selectors can be used to filter and select items based on one or multiple criteria. Labels are properties assigned to an object. Selectors filter based on that property.
+
+Label syntax:
+Under `metadata:`
+```
+  labels:
+    app: App1
+    function: Front-end
+```
+
+To select it, run `kubectl get pods --selector app=App1`.
+
+Labels and selectors can also be used for other components such as ReplicaSet. Annotations can be used to add more information as needed.
+
+### Taints and Tolerations
+
+Taints and tolerations apply restrictions to what can be done on nodes. Nodes have taints, and pods have toleration. A taint placed on the node would exclude all pods that do not have a toleration for that particular taint. A toleration must be added to the pod.
+
+To apply a taint to a node, run `kubectl taint nodes node-name key=value:taint-effect`
+
+There are three kinds of taint effect:
+`NoSchedule`: Excludes a pod from the node
+`PreferNoSchedule`: Only possibly excludes a pod from the node
+`NoExecute`: New pods will not be scheduled, current ones will be evicted if they do not have the corresponding tolerance.
+
+To apply a toleration to a pod, run `kubectl taint nodes node1`.
+To see a taint, run `kubectl describe node kubemaster | grep Taint`
+
+### Node Selectors
+
+Node Selectors are added under `spec:` as:
+```
+nodeSelector:
+  size: Large
+```
+
+To label a node, run `kubectl label nodes <node-name> <label-key>=<label-value>`.
+
+Node Selectors are limited and cannot account for exclusionary or disjunctive conditions.
+
+### Node Affinity
+
+Node affinity ensures that particular pods are hosted on particular nodes. 
+
+However it has more complex syntax than node selectors:
+
+```
+...
+ spec:
+  ...
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoreDuringExecution:
+        nodeSelectorTerms:
+         - matchExpressions:
+          - key: size
+            operator: In
+            values:
+            - Large
+```
+
+Node Affinity Types:
+
+* `requiredDuringSchedulingIgnoredDuringExecution`
+* `preferredDuringSchedulingIgnoredDuringExecution`
+
+Under development as of December 2020:
+
+* `requiredDuringSchedulingRequiredDuringExecution`
+* `preferredDuringSchedulingRequiredDuringExecution`
+
+`DuringScheduling`: The state when the pod does not exist and is created for the first time
+`DuringExecution`: When the pod is live.
+
+Required will not place a pod if no matching node is found. Preferred will still place a pod in the event that no matching node is found. In the future, the `RequiredDuringExecution` will evict pods from nodes as needed.
+
+### Taints & Tolerations vs. Node Affinity
+
+Taints and tolerations does not ensure that a pod ends up in a particular node, it is primarily for exclusion. Node affinity ensures that particular pods end up in the right node, but it does not guarantee that other pods will not end up in the node as well. A combination of the two should be used for the most granular selectivity.
+
 ### Resource Limits
+
+Each pod has specific resource limits in terms of CPU, memory, and disk. Each resource request assumes at least .5 CPU and 256 Mi of memory are needed. These defaults can be changed in the pod definition.
+
+```
+spec:
+  containers:
+    ...
+     resources:
+        requests:
+          memory: '1Gi'
+          cpu: 1
+```
+
+.1 CPU is the minimum (also called 100m). 1 CPU is 1 AWS vCPU, 1 GCP Core, 1 Azure Core, or 1 Hyperthread.
+
+The default maximum limits are 1 vCPU and 512 Mi. If a pod exceeds resources, the pod will throttle the CPU. If a pod repeatedly consumes more memory than it has been allotted, the pod will be terminated.
+
+Memory syntax:
+`1 G` is a gigabyte.
+`1 M` is a megabyte.
+`1 K` is a kilobyte.
+`1 Gi` is a Gibibyte (1,073,741,824 bytes)
+`1 Mi` is a Mebibyte (1,048,576 bytes)
+`1 Ki` is a Kibibyte (1,024 bytes)
+
 ### Manual Scheduling
 ### Daemon Sets
 ### Multiple Schedulers
