@@ -387,19 +387,73 @@ Memory syntax:
 `1 Mi` is a Mebibyte (1,048,576 bytes)
 `1 Ki` is a Kibibyte (1,024 bytes)
 
-### Manual Scheduling
 ### Daemon Sets
+
+Daemon sets are like replica sets, but they run one copy of each pod on each node. It ensures that one copy of a pod is always present in the node of any given cluster. This is optimal for monitoring and logging. Kube proxies can be deployed as a daemon set.
+
+This used to be done by giving the pod a special property with each nodeName to land on each node. From v1.12, daemon sets uses Node Affinity.
+
+Syntax:
+```
+daemon-set-definiton.yaml
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: monitoring-daemon
+spec:
+  selector:
+    matchLabels:
+      app: monitoring-agent
+    template:
+      metadata:
+        labels:
+          app: monitoring-agent
+      spec:
+        containers:
+        - name: monitoring-agent
+          image: monitoring-agent
+```
+
+To create, run `kubectl create -f daemon-set-definition.yaml`.
+To view, run `kubectl get daemonsets`.
+
+### Static PODs
+
+Kubelets can be configured to read pod definition files locally within the host rather than through the Kube API server or other cluster components. The directory of the local pod configuration folder is found in `kubelet.service` as `--pod-manifest-path=...\`. Alternatively, this can be defined as `config=kubeconfig.yaml` in `kubelet.serice` with a corresponding path of `staticPodPath: /etc/Kubernetes/manifest` in `kubeconfig.yaml`.
+
+Static pods are still listed in the master node even if not generated through the API server. It is best to use static pods to deploy control plane configuration files (e.g. `controller-manager.yaml`) across nodes.
+
+To recap, static pods are created by the kubelet and deploy control plane components as static pods. DaemonSets are created by the kube-api server and deploy monitoring agents and logging agents on nodes. Both are ignored by the Kube Scheduler.
+
 ### Multiple Schedulers
-### Scheduler Events
-### Configure Kubernetes Scheduler
+
+It is possible to specify a scheduler in `kube-scheduler.service` as `--scheduler-name=[scheduler]`. With `-kubeadm`, copy the `kube-scheduler.yaml` file and then add a line under `spec:` -> `containers:` -> `- command:` that specifies scheduler name `- --scheduler-name-my-custom-scheduler`.
+
+Further Reading:
+* https://github.com/kubernetes/community/blob/master/contributors/devel/scheduler.md
+* https://kubernetes.io/blog/2017/03/advanced-scheduling-in-kubernetes
+* https://jvns.ca/blog/2017/07/27/how-does-the-kubernetes-scheduler-work/
+* https://stackoverflow.com/questions/28857993/how-does-kubernetes-scheduler-work
 
 
 ## Logging & Monitoring
 
 ### Monitor Cluster Components
-### Monitor Cluster Component Logs
-### Monitor Applications
-### Application Logs
+
+As of December 2020, Kubernetes does not include native all-encompassing monitoring solutions, but open-source solutions are available such as Metrics Server, Prometheus, Elastic Stack, DataDog, and Dynatrace.
+
+Heapster was originally the primary monitoring solution for Kubernetes (and has been referenced in many places), but it has been deprecated in favor of Metrics Server. There can be one Metrics Server per Kubernetes cluster. It is an in-memory monitoring solution that does not save on disk. It does not offer historical data.
+
+Kubelets contain a cAdvisor that retrieves performance metrics and exposes them on a port for Metrics Server.
+
+Run `kubectl top node` and `kubectl top pod` to get node and pod metrics respectively.
+
+
+### Managing Application Logs
+
+Run `kubectl logs -f [pod-name]` to get the logs for a pod. `-f` streams the logs live. If there are multiple containers in a pod, the logs command must explicitly specify which container it should retrieve logs for.
+
 
 
 ## Application Lifecycle Management
