@@ -132,3 +132,122 @@ Examples:
 * `ssh localhost` connects to the localhost.
 * `ssh -Y linda@localhost` allows user to login as Linda on the localhost with a GUI.
 
+
+### Lesson 6: Managing Users and Groups
+
+#### 6.1 Understanding the Need for User Accounts ####
+
+A user is a security principle. User accounts are used to provide individuals or processes with access to system resources. Processes use system accounts (low user ID). People use regular user accounts (high user ID).
+
+#### 6.2 Understanding User Properties ####
+
+Syntax for user properties:
+`student:x:1000:1000:student:/home/student:bin/bash`
+name:password:UID (user):GID (group):GECOS (additional info):home directory:default shell
+
+#### 6.3 Creating and Managing Users ####
+
+`useradd` is used to create user accounts. Option `-c` adds a comment.
+`usermod` modifies user accounts. `-G` creates a new list of supplementary groups. `-aG` appends to a list of groups.
+`userdel` deletes user accounts. `-f` forces the deletion. `-r` removes home directory and mail spool as well. Not advised to use `-r` unless absolutely necessary.
+`passwd` sets passwords. `-l` locks the password. `-u` unlocks the password. `-e` expires the password.
+
+#### 6.4 Managing User Default Settings ####
+
+`useradd -D` specifies default settings from the command line. `-D` prints some of the defaults. Files in `/etc/default/useradd` apply to `useradd` only.
+
+* `GROUP=100` is overwritten and is no longer relevant. 
+* Can alternatively write default settings to `/etc/login.defs`.
+* Files in /etc/skel are templates automatically placed in a new user's home directory when the user is created.
+
+#### 6.5 Understanding `/etc/passwd` and `/etc/shadow` ####
+
+`/etc/passwd` stores user properties.`/etc/shadow` stores password properties. It is bad practice to edit `/etc/shadow` through a file editor. `/etc/group` stores group properties.
+
+#### 6.6 Understanding Group Membership ####
+
+Each user must be a member of at least one group. Primary group membership is managed through `/etc/passwd`. The user primary group becomes group-owner if a user creates a file. Secondary groups can be defined as well, and these are managed through `/etc/groups`. Use `id` to see which groups a user is a member of.
+
+
+#### 6.7 Creating and Managing Groups ####
+
+`groupadd` adds a group. `groupdel` and `groupmod` can be used to delete and modify groups respectively. Their options are not particularly useful in most cases.
+
+`lid -g [groupname]` lists all users that are a member of a specific group.
+
+
+#### 6.8 Managing Password Properties ####
+
+Basic password requirements are set in `/etc/login.defs`. Pluggable Authentication Modules (PAM) can be used for advanced password properties (cf. pam_tally2 module). To change password settings for current users use, `chage` or `passwd` as root user.
+
+
+[Lab]
+
+### Lesson 7: Managing Permissions
+
+#### 7.1 Understanding Ownership ####
+
+Every file has a user owner, a group owner, and the 'others' entity that is also granted permissions `ugo`. Linux permissions are not additive, they are applied by sequentially checking levels of ownership.
+
+`ls -l` displays current ownership and associated permissions.
+
+`drwx------` - `d` indicates directory. `rwx` indicates read-write-execute permission for the user-owner. The second set of dashes is for group permission. The third is for others. The second and third groups here have no read-write-execute permissions.
+
+
+#### 7.2 Changing File Ownership ####
+
+Use `chown user[:group] file` to set user-ownership. Group name is not required. Use `chgrp group file` to set group ownership.
+
+
+#### 7.3 Understanding Basic Permissions ####
+
+Three kinds of permissions: Read (4), Write (2), Execute (1). Read can read files and list the directory. Write can modify files and delete or create directories. Execute can run files and `cd` into the directory. Read and execute are needed together.
+
+
+#### 7.4 Managing Basic Permissions ####
+
+Use `chmod` to manage permissions. It can be used in absolute or relative mode.
+
+Example of absolute mode: `chmod 750 myfile`
+7 = Read (4) + Write (2) + Execute (1) for user.
+5 = Read (4) + Execute (1) for group.
+0 = Nothing for others.
+
+Examples of relative mode: 
+`chmod +x myscript` makes the the script executable for all users (implied `ugo`).
+`chmod u+x myscript` will grant the owner execution permissons.
+
+
+#### 7.5 Understanding `umask` ####
+
+The `umask` is a shell setting that subtracts the `umask` from the default permissions. Default permissions for a file are 666. Default permissions for a directory are 777. `umask` is applied to a shell, not a file. A `umask` setting of 022 will make all new files 644 and directories 755. It removes write permissons from the group and others.
+
+
+#### 7.6 Understanding Special Permissions ####
+
+`suid` (4) - set user id - means one can run a file as owner. `sgid` (2) - set group id - means one can run a file as group owner. If set on a directory, any files in the directory will inherit the group owner. Sticky bit (1) means a directory can be deleted only if user is the owner.
+
+
+#### 7.7 Managing Special Permissions ####
+
+`suid` can be written as `chmod 4770 myfile` or `chmod u+s myfile`. It is dangerous and should not be used in most circumstances because it creates a  subshell that makes the user root and can jeopardize the entire system. Files like `/usr/bin/passwd` use `suid` because it needs permissions to access `/etc/shadow`.
+
+`sgid` can be written as `chmod 2770 mydir` or `chmod g+s mydir`.
+
+Sticky bit is applied through `chmod 1770 mydir` or `chmod +t mydir`.
+
+#### 7.8 Understanding ACLs ####
+
+Access Control Lists are used to grant permissions to additional users and groups. The normal ACL applies to existing files only.Use a default ACL on a directory if you want it to apply to new files also. `getfacl` shows current settings.
+
+Example: `setfacl -R -m g:somegroup:rx /data/groups`. This sets an ACL recurisvely on some group where `-m` modifies and `rx` are the permissions. To ensure new files are categorized in this ACL, run `setfacl -m d:g:somegroup:rx /data/groups`. A `+` at the end of a file's permissions means an ACL is active. The default ACL set on a directory is inherited by its files.
+
+
+#### 7.9 Managing ACLs ####
+
+Video demonstration of 7.8's principles. 
+
+
+#### 7.10 Troubleshooting Permissions ####
+
+Demonstration of identifying permissions.
