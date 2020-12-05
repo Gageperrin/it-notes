@@ -458,7 +458,27 @@ Run `kubectl logs -f [pod-name]` to get the logs for a pod. `-f` streams the log
 
 ## Application Lifecycle Management
 
-### Rolling Updates and Rollbacks in Deploy
+### Rolling Updates and Rollbacks
+
+Each rollout of an update is called a revision.
+
+To see status of rollout, run `kubectl rollout status deployment/myapp-deployment`.
+To see history of rollouts, run `kubectl rollout history deployment/myapp-deployment`.
+To undo rollout, run `kubectl rollout undo deployment/myapp-deployment`.
+
+There are two types of deployments: recreate and rolling. Recreate takes the application down and updates the parts. Rolling update switches components one at a time to maintain availability. Kubernetes does rolling update by default.
+
+
+### Commands and Arguments in Docker
+
+Containers exit upon completing its assigned task or process.
+
+Can add `sleep 100` to keep a container live for 100 more seconds after running. A sleep function can be built into an image file. An entrypoint instruction can specify a value on start-up, such as the length of sleep for a sleep command. Entrypoints and CMD should be specified in JSON format.
+
+### Commands and Arguments in Kubernetes
+  To append arguments to an image container. Add `args:` in JSON format under `spec:` -> `containers:`
+
+
 ### Configure Applications
 ### Scale Applications
 ### Self-Healing Application
