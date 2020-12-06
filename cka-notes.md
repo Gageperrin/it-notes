@@ -479,6 +479,86 @@ Can add `sleep 100` to keep a container live for 100 more seconds after running.
   To append arguments to an image container. Add `args:` in JSON format under `spec:` -> `containers:`
 
 
+### ENV Variables in Kubernetes
+Within a definition file, environment variables are set under `spec:` -> `containers` -> `env:` with associated `- name:` and `value:`.
+
+With ConfigMap, environment variables are given a `valueFrom:` with `configMagKeyRef:`.
+
+### Configure ConfigMaps in Applications
+
+ConfigMaps are used to pass configuration information in the form of key:value pairs to individual definition files. It abstracts and streamlines configuration when there are many different configuration files.
+
+To create a ConfigMap with the imperative approach, run `kubectl create configmap` with `<config-name> --from-literal=<key>=<value>`. The `from-literal` can be repeated to add more key-value pairs. Alternatively, one can create from a file using `app-config --from-file=app_config.properties`.
+
+The declarative approach uses `kubectl create -f config-map.yaml` with a YAML file.
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: blue
+  APP_MODE: prod
+```
+
+Each ConfigMap should be named appropriately to maximize clarity.
+
+
+### Secrets
+
+Secrets are like ConfigMaps but are stored in a hashed format. 
+
+There are two ways to create a secret:
+Imperative: `kubectl create secret generic && <secret-name> --from-literal=<key>=<value>`
+Declarative: `kubectl create -f \ && app-secret --from-literal=DB_HOST=mys`
+
+To declare from a file:
+Imperative: `<secret-name> --from-file=<path-to-file>`
+Declarative: `app-secret --from-file=app_secret.properties`
+
+Declarative file:
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+data:
+  DB_Host: mysql
+  DB_User: root
+  DB_Password: paswrd
+```
+ 
+  To see current secrets, run `kubectl get secrets`.
+ To see information on secrets, run `kubectl describe secrets`.
+ To see encrypted secret information, run `kubectl get secret app-secret -o yaml`.
+ 
+ To inject the secret in a pod add the following lines to the pod definition file:
+ `spec:` -> `containers:` ->
+ ```
+ envFrom:
+  - secretRef:
+      name: app-secret
+  ```
+  
+Secrets are encoded in base64 format and are therefore not very secure, but this functionality does provide base-level protection. Better tools include Helm Secrets and HashiCorp Vault.
+
+
+### Multi-Container PODs
+
+Multi-container pods can be developer to break up and segment workloads. They can be specified in the pod definiton file as follows:
+
+```
+spec:
+  containers:
+    - name: simple-webapp
+      image: simple-webapp
+      ports:
+        containerPort: 8080
+    - name: log-agent
+      image: log-agent
+```
+
 ### Configure Applications
 ### Scale Applications
 ### Self-Healing Application
