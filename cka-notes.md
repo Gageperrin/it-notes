@@ -559,16 +559,95 @@ spec:
       image: log-agent
 ```
 
-### Configure Applications
-### Scale Applications
+
+### Init Containers
+
+Normally, each container runs a process that stays alive as long as the pod's lifecycle. There are times though when it is necessary to run a process that runs to completion in a container such as when the pod is first created or when waiting for an external service. 
+
+`initContainers` can solve this. An `initContainer` is run when the pod is first created and is completed before the container that hosts the application actually starts. Multiple `initContainers` can be configured at once to run in a sequential order.
+
+Example syntax:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+  - name: init-mydb
+    image: busybox:1.28
+    command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
+```
+
 ### Self-Healing Application
+
+Self-healing is supported through ReplicaSets and Replication Controllers. Kubernetes provides additional support to monitor the health of running applications through Liveness and Readiness probes. (These are a CKAD topic.)
 
 
 ## Cluster Maintenance
 
+### OS Upgrades
+
+When upgrading a pod, it has 5 minutes before it is by default considered dead and then terminated. To perform maintenance, it is important to keep track of how long an upgrade will take. 
+
+It is best practice to
+1. `kubectl drain node-1` to move pods to another node.
+2. `kubectl cordon node-1` to ensure new pods are not scheduled on the node.
+3. `kubectl uncordon node-1` so pods can be scheduled on the node again.
+
+
+### Kubernetes Releases
+
+Versioning is divided as follows: v1.11.13 (Major.Minor.Patch). In addition to stable releases are alpha and beta releases. Even if Kubernetes components are bundled under one single version package, individual components such as ETCD cluster and CoreDNS are their own projects and will have their own distinct versioning.
+
 ### Cluster Upgrade Process
-### Operating System Upgrades
-### Backup and Restore Methodologies
+
+No component should have a version higher than the Kube API server. `Controller-manager` and `kube-scheduler` can be one minor version lower, and `kubelet` and `kube-proxy` can be two versions lower. One exception is `kubectl` which can run at one version higher or lower than the Kube API server.
+
+Kubernetes only supports three minor releases at a time. It is best practice to upgrade one minor version at a time. The process depends on the cluster configuration.
+
+With Google Cloud, it is relatively easy to upgrade through the GUI or by running `kubeadm upgrade plan` or `kubeadm upgrade apply`. Self-managed Kubernetes solutions require more work.
+
+To upgrade `kubeadm`, run `apt-get upgrade -y kubeadm=[version]` then to upgrade cluster components, run `kubeadm upgrade apply [version]`.
+
+The general steps for upgrading each respective node:
+1. `kubectl drain node-1`
+2. `apt-get upgrade -y kubeadm=[version]`
+3. `apt-get upgrade -y kubelet=[version]`
+4. `kubeadm upgrade node config --kubelet-version v1.12.0`
+5. `systemctl restart kubelet`
+6. `kubectl uncordon node-1`
+
+### Backup and Restore Methods
+
+Backups can be made through resource configurations or ETCD clusters.
+
+Resource configurations can take the imperative or declarative method, as seen above. Declarative is preferred for long-term convenience, and these should be stored on GitHub. One can also query the `kube-apiserver` for undocumented resource configurations. Velero is one tool that can automatically collect and store configurations.
+
+ETCD cluster stores information about the cluster itself. These can be backed up through snapshots `snapshot save [name]`. They can be restored with `snapshot restore [name]` and a specified path. This builds a new cluster. A new cluster token must be specified to avoid misconfiguration.  Run `systemctl daemon-reload` and `service etcd restart`and then `service kube-apiserver start` to finish the restore process.
+
+Alongside the other ETCD commands, specify the certificates, endpoints, and the key.
+
+### Working with ETCDCTL
+
+`etcdctl` is a CLI for ETCD. To use `etcdctl` make sure the API is set to version 3. This can be done by exporting the variable `ETCDCTL_API` prior to using the etcdctl client through `export ETCDCTL_API=3`.
+
+On the master node run:
+```
+export ETCDCTL_API=3
+etcdctl version
+```
+
+To take a snapshot of etcd, run `etcdctl snapshot save -h`. If the ETCD database is TLS enabled, the following are mandatory: `--cacert`, `--cert`, `--endpoints=[127.0.0.1:2379]` and `--key`.
 
 
 ## Security
