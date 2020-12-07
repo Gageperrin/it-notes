@@ -251,3 +251,125 @@ Video demonstration of 7.8's principles.
 #### 7.10 Troubleshooting Permissions ####
 
 Demonstration of identifying permissions.
+
+
+### Lesson 8: Configuring Networking
+
+#### 8.1 Understanding IPv4 Networking ####
+
+In IPv4, each node needs its own IP address which is written in dotted decimal notation. Each IP address must be indicated with a subnet mask behind it. The default router or gateway specifies which server to forward packets to that have an external destination. The DNS nameserver is the IP address of a server that helps resolve names to IP addresses and vice versa (the most common is 8.8.8.8).
+
+IPv4 is still the most common even though IPv6 is gaining popularity. RHCSA does not use IPv6. IPv6 addresses are written in hexadecimal notation. IPv4 and IPv6 can co-exist on the same network interface.
+
+The computer must have an IP address and subnet range, a gateway address and a specified DNS in order to network properly.
+
+
+#### 8.2 Understanding NIC Naming ####
+
+NIC (network interface card). IP address configuration needs to be connected to a specific network device. Use `ip link show` to see current devices and `ip addr show` to check their configuration. Every system has an `lo` device for internal networking. The name of the real network device will also be presented as a BIOS name.
+
+Classic naming uses device names like `eth0` and `eth1` but this shows no information about the device. BIOS naming is based on hardware properties to give more specific information in the device name. `em[1-N]` for embedded NICs, `eno[nn] for embedded NICs`, and `p<slot>p<port>` for NICs on the PCI bus. If the driver does not reveal network device properties, classic naming is used.
+
+#### 8.3 Managing Runtime Configuration with IP ####
+
+The `ip` tool can be used to manage all aspects of IP networking and replaces legacy `ifconfig` tool. Use `ip addr` to manage address properties. Use `ip link` to show link properties. Use `ip route` to manage route properties.
+
+To add an IP address, run `ip addr add dev ens33 [ip-address]`. Adding a secondary IP address is useful for container and cloud hosts.
+
+#### 8.4 Understanding RHEL 8 Networking ####
+
+The file `/etc/sysconfig/networkscripts/ifcfg-ens33` provides configuration to connect `ens33` to the NetworkManager. The `nmcli` and `nmtui`can be used to talk to NetworkManager. The configuration file can also be edited directly but would need to be restarted.
+
+
+#### 8.5 Managing Persistent Networking with nmcli ####
+
+`nmcli` is NetworkManager command line interface. A connection is a configuration added to a network device and is stored in configuration files. The NetworkManager service must be running to manage these files. Ensure that the bash-completion RPM package is installed when working with `nmcli`.
+
+Run `rpm -qa | grep bash-completion` to check RPM for composing long commands.
+Run `nmcli con add con-name my-con-em1 ifname em1 type ethernet \ ip4 192.168.100.100/24 gw4 192.168.100.1 ip4 1.2.3.4 ip6 abbe::cafe` to add a connection.
+Run `nmcli con mod my-con-em1 ipv4.dns "8.8.8. 8.8.4.4"` to modify a connection.
+
+#### 8.6 Managing Persistent Networking with `nmtui` ####
+
+`nmtui` is NetworkManager text user interface and is better for simple and fast adjustments. It provides a graphical interface for NetworkManager configuration. Changes will not automatically be activated; they must be activated in the interface.
+
+
+#### 8.7 Verifying Network Configuration Files ####
+
+The network configuration files are in `/etc/sysconfig/network-scripts/`.
+
+
+#### 8.8 Testing Network Connections ####
+
+`ping` is used to test connectivity. `ping -c 1` to send a single ping rather than a constant stream. `ip addr show` shows current configuration. `ip route show` shows current routing table. `dig` can test to see if the DNS is working.
+
+If a ping is not working and says "Name or service not known" then it is a DNS error. So ping the DNS `8.8.8.8`. If that is unreachable then it is a connectivity problem. Either the local IP address is wrong or there is a networking problem. Run `ip route show` to check the route table. Can check the contents of the configuration file as well.
+
+
+
+## Module 2: Operating Running Systems
+
+### Lesson 9: Managing Processes
+
+#### 9.1 Understanding Jobs and Processes ####
+
+All tasks are started as processes. Processes have a PID. Common process management tasks include scheduling priority and sending signals. Some processes are multi-threaded which means individual threads cannot be managed.
+
+Tasks that are managed from a shell can be managed as jobs. Jobs can be started in the foreground or background.
+
+
+#### 9.2 Managing Shell Jobs ####
+
+Append `&` to a command to start a job in the background. To move a job to the background, stop it using `ctrl+z` then type `bg` to move it to the background. Use `jobs` for a complete overview of running jobs. Use `fg [n]` to move the last job back to the foreground.
+
+
+#### 9.3 Getting Process Information with `ps` ####
+
+The `ps` command has two dialects: BSD and System5. System5 commands can take a `-` for options while BSD commands cannot. 
+
+* `ps` shows an overview of current processes while
+* `ps aux` offers an overview of all processes.
+* `ps -fax` shows hierarchical relations between processes.
+* `ps -fU lidna` shows all processes owned by Linda. 
+* `ps -f --forest -C sshd` shows a process tree for a specific process.
+* `ps L` shows format specifiers.
+* `ps -eo pid,ppid,user,cmd` uses some of these specifiers to show a list of processes
+
+#### 9.4 Understanding Memory Usage ####
+
+Linux places as many files as possible in cache to guarantee fast access to the files, and consequently Linux memory often shows as saturated. Swap is used as an overflow buffer of emulated RAM on disk. The Linux kernel moves inactive memory to swap first. Use `free -m` to get details about current memory usage.
+
+
+#### 9.5 Understanding CPU Load ####
+
+Tasks are sent to a `runqueue` where they are loaded into a `scheduler` which sends the processes to corresponding CPUs. A CPU can only do one task at a time. `uptime` shows load average time. `watch uptime` repeats the command every two seconds. `lscpu` shows CPU information in the system.
+
+
+#### 9.6 Monitoring System Activity with `top` ####
+
+`top` is a dashboard that allows you to monitor current system activity. Press `f` to show and select from available display fields, `M` to filter on memory usage, and `W` to save new display settings. 
+
+
+#### 9.7 Sending Signals to Processes ####
+
+A signal allows the operating system to interrupt a process. Interrupts are comparable to signals but generated from hardware. A limited amount of signals can be used, it is documented in `man 7 signals`. Not all signals work in all cases. The `kill` command is used to send signals to PID's. Can also use `k` from top. Different kill-like commands like `pkill` or `killall` can be used.
+
+Signal 15 is a polite kill request. Signal 9 is an immediate kill command. These are the most used signals, but signal 9 should only be used in emergencies.
+
+
+#### 9.8 Managing Priorities and Niceness ####
+
+By default, Linux processes are started with the same priority. In kernel-land real-time processes can be started which will always have highest priority. To change priorities of non-realtime processes, the `nice` and `renice` commands can be used. Nice values range from `-20` up to `19`. Negative nice value indicates an increased priority, a positive nice value indicates decreased priority. Users can set their processes to a lower priority, to increase priorities you need root access.
+
+To change `dd` processes, use `r` from `top` to reassign nice values. From the CLI, `renice` can alter the priority of processes.
+
+
+#### 9.9 Using Tuned Profiles
+
+`tuned` is a service that allows for performance optimization in an easy way. Different profiles are provided to match specific server workloads. To use `tuned`, first check that the `tuned` service is enabled and started. `tuned-adm list` will show a list of profiles. `tuned-adm profile <name>` will set a profile. `tunead-adm active` will show the current profile.
+
+
+
+
+
+#### 9.8 
