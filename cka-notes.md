@@ -652,7 +652,82 @@ To take a snapshot of etcd, run `etcdctl snapshot save -h`. If the ETCD database
 
 ## Security
 
+### Kubernetes Security Primitives
+
+The `kube-apiserver` is the first line of defense. The authentication mechanisms decide who can access the server thorugh users, passwords, tokens, certifications, LDAP, etc. The authorization mechanisms decide what they can do and include RBAC, ABAC, Node, as well as webhook mode.
+
+
 ### Authentication & Authorization
+
+There are two general types of user accounts: administrators and developer and then there are service accounts for bots. User accounts cannot be created in Kubernetes but service accounts can.
+
+Users are managed by `kube-apiserver` from a static password file, a static token file, certificates, identity services, or some combination of these. Static password files and static token files can be stored as a .csv file with password, user, and user ID columns. These can be passed to the `kube-apiserver` with the option `--basic-auth-file=user-details.csv` in the `kube-apiserver.service` file. To authenticate a user with a command run `curl -v -k https://master-node-ip:6443/api/v1/pods -u "user1:password123"`. With a token file use the option `--token-auth-file=user-details.csv`. 
+
+These are not recommended authentication mechanisms. Consider a volume mount while providing the auth file in a `kubeadm` setup.
+
+### TLS Basics
+
+Symmetric encryption means a single key is used to encrypt and decrypt the data. Asymmetric encryption means a public and private key pair. The former is used to encrypt the data and the latter to decrypt it. SSH uses asymmetric encryption.
+
+Certificate authorities sign and validate certificates for browser traffic. The Certificate Signing Request is sent to the authorities, is validated, and then they sign and send the certificate.
+
+A Public Key Infrastructure (PKI) is used to generate and manage and exchange certificates between the server, client, and certificate authority.
+
+### TLS in Kubernetes
+
+There are three kinds of certificates: root certificates (CA), client, and server. The public key is a `.crt` or `.pem` file. The private key is a `.key` or `-key.pem`.
+
+For a secure connection in the cluster, one must have server certificates for servers and client certificates for clients for each component in the cluster. 
+
+Naming conventions: The `kube-api server` should have an `apiserver.crt` and an `apiserver.key`. The ETCD Server should have an `etcdserver.crt` and an `etcdserver.key`. The kubelet server should have `kubelet.crt` and `kubelet.key`. 
+
+The client certificates for clients are the users accessing the `kube-api server`. The admin, the scheduler, the `kube-proxy` and the controller manager should all have certificates and keys. Since the ETCD server only talks to the `kube-api server`, the `kube-api server` should have its own certificate and key as well.
+
+Server certificates are needed for the ETCD server, the `kube-api server` and the kubelet server.
+
+#### Certificate Creation ####
+
+Certificate authority:
+To generate keys, run `openssl genrsa -out ca.key 2048`.
+To generate a certificate signing request, run `openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr`.
+To sign certificates, run `openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt`.
+
+Client certificates for admin user:
+To generate keys, run `openssl genrsa -out admin.key 2048`.
+To generate a certificate signing request, run `openssl req -new -key admin.key -subj \ "/CN=kube-admin" -out admin.csr`.
+To sign, run `openssl x509 -req -in admin.csr -CA.crt -CAkey ca.key -out admin.crt`.
+
+The same process for other components, but the scheduler, proxy, and controller manager must be prefixed with the keyword `system`.
+
+For server side certificates:
+
+ETCD Servers:
+Same procedure as before, with peer ETCD servers, then peer certificates must be generates. The keys must be specified in the `etcd.yaml` file.
+
+The `kube-api` server is the most requested component. In its case:
+1. Run `openssl genrsa -out apiserver.key 2048`.
+2. Run `openssl req -new -key apiserver.key -subj \ "/CN=kube-apiserver" -out apiserver.cs`
+3. Create an `openssl.cnf` for all alternate names with corresponding DNS and IPs. Pass it as an option when generating the certificate signing request.
+4. Sign with `openssl x509 -req -in apiserver.csr \ -CA ca.crt -CAkey ca.key -out apiserver.crt`
+
+The `kubectl` nodes require a server certificate for each node, named after each node. Authentication and TLS certification must be specified in each node's configuration file.
+
+### View Certificate Details
+
+There are two ways to generate certificates, the hard way and through `kubeadm`. If the Kubernetes is deployed from scratch all the certificates are generated manually as seen above. `kubeadm` deploys certificates automatically as pods.
+
+Run `openssl x509 -in [cert file path] -text -noout` to view the certificate. The name, alternative names, the certificate authority, applicable organization, and valid dates are the most important fields.
+
+To troubleshoot, run `journalctl -u etcd.service -1` or (if set up with `kubeadm`), run `kubectl logs etcd-master`.
+
+### Certificates API
+
+The CA server is wherever the CA files are stored. By default, `kubeadm` stores CA files on the master node. Kubernetes can automate the certification process through its API. The admin can create a `CertificateSigningRequest` object which can review and approve requests to share certificates with users.
+
+The administrator creates the `CertificateSigningRequest` object as a YAML file and then encoded using the `base64` command. Then run `kubectl get csr` to get the request and run `kubectl certificate approve [name]` to approve it. View the certificate with `kubectl get csr jane -o yaml` and decode it with `echo [encrypted cert] | base64 --decode.`
+
+The controller manager carries out these tasks.
+
 ### Kubernetes Security
 ### Network Policies
 ### TLS Certificates for Cluster Components
