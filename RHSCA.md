@@ -369,7 +369,112 @@ To change `dd` processes, use `r` from `top` to reassign nice values. From the C
 `tuned` is a service that allows for performance optimization in an easy way. Different profiles are provided to match specific server workloads. To use `tuned`, first check that the `tuned` service is enabled and started. `tuned-adm list` will show a list of profiles. `tuned-adm profile <name>` will set a profile. `tunead-adm active` will show the current profile.
 
 
+### Lesson 10: Managing Software
+
+#### 10.1 Understanding RPM Packages ####
+
+RPM (Redhat Package Manager) is the foundation of software management. The package contains an archive of files compressed with `cpio` as well as metadata and a list of package dependencies. RPM packages may contain scripts as well. Repositories are used to install packages. Individual packages may be installed, but this is not recommended.
+
+
+#### 10.2 Setting up Repository Access ####
+
+Create a local repository to install packages from the RHEL 8 installation disk ISO image.
+
+1. Create an ISO image with `dd if=/dev/sr0 of=/rhel8.iso bs=1M`. The last option makes the command work with 1 MB of blocks for more efficiency.
+2. Create a directory /repo with `mkdir /repo`. 
+3. Edit `/etc/fstab` and add this line to the end ` /rhel8.iso   /repo   iso9660   defaults   0 0'.
+4. Use `mount -a` to mount the ISO.
+
+To access the local repository:
+1. Create the file `/etc/yum.repos.d/appstream.repo` with the following:
+```
+[appstream]
+name=appstream
+baseurl=file:///repo/AppStream
+gpgcheck=0
+```
+
+#### 10.3 Understanding Modules and Application Streams ####
+
+RHEL 8 introduces application streams and modules. Application streams separate user space packages from core kernel opeations. Application streams make it easier to work with different versions of packages. Base packages are provided through the BaseOS repository. AppSTream is provided as a separate repository. Application streams are delivered either as traditional RPMs or new modules.
+
+Modules can contain streams to make multiple versions of applications available. Enabling a module stream gives access to RPM packages in that stream. Modules can have profiles. A profile is a list of packages that bleong to a specific use-case. The package list of a module can contain packages outside the module stream. Use the `yum` module to manage modules.
+
+
+#### 10.4 Managing Packages with `yum` ####
+
+* Use `yum search` to search for software.
+* Use `yum install` to install software.
+* Use `yum remove` to remove software. This does not work on protected packages.
+* Use `yum update` to update installed packages. Can specify particular packages as well.
+* Use `yum provides` a deeper search functionality that goes into files to find matches.
+* Use `yum info` to get information about a package.
+* Use `yum list` to get information about various packages in a list. Append `installed` to find installed packages.
+
+
+#### 10.5 Managing Modules and Application Streams ####
+
+* Use `yum module list` to lsit modules.
+* Use `yum module provides httpd` to search the module and provide a specific package.
+* Use `yum module info` to get information about a package.
+* Use `yum module info --profile` to show profiles.
+* Use `yum module list` to show which streams are available.
+* Use `yum module install @[name]:[version}` to install a specific version.
+* Use `yum module install [name]:[version]/devel` to install a specific profile.
+* Use `yum module enable [name]:[version]` to enable a module but not install anything.
+
+To upgrade or downgrade packages from a previous module stream that are not listed in profiles that are installed with the module update, use `yum distro-sync`.
+
+
+#### 10.6 Using `yum` Groups ####
+
+`yum` groups are provided to give access to specific categories of software. 
+
+* `yum groups list` gives a list of the most common yum groups.
+* `yum groups list hidden` shows all yum groups.
+* `yum groups info <groupname>` shows which packages are in a group.
+* `yum groups install <groupname>` will install a specific yum group.
+
+
+#### 10.7 Managing `yum` updates and `yum` history ####
+
+* `yum history` gives a list of recently used commands.
+* `yum history undo` allows an undo of a specific command.
+* `yum update` updates all packages on the system.
+
+
+#### 10.8 Using RPM Queries ####
+
+`rpm` is the legacy command to manage RPM packages. Do not use `rpm` because it does not account for dependencies, but it is useful for package queries against the installation database.
+
+Examples:
+* `rpm -qf /any/file` - package name of the file name
+* `rpm -ql mypackage` - the files in a package
+* `rpm -qc mypackage` - configuration files
+* `rpm -qp --scripts mypackage-file.rpm` - to query packages on file that are not yet installed and see which scripts will be installed. Since scripts are installed with root privileges, it is good to review scripts included in the installation.
+
+
+#### 10.9 Using Red Hat Subscription Manager ####
+
+To work with RHEL repositories, a subscription is needed. A free developer subscription can be used to evaluate repositories. Use `subscription-manager register` to register the subscription. Use `subscription-manager attach --auto` to connect your current subscription.
 
 
 
-#### 9.8 
+### Lesson 11: Working with `systemd`
+
+#### 11.1 Understanding `systemd` units ####
+
+`systemd` is the master manager after the Linux kernel starts. Managed items are called units and can be services, mounts, timers, etc. `systemctl` is the management interface to work with `systemd`.
+
+
+#### 11.2 Managing `systemd` Services ####
+
+System administrators must be able to manage module states. Disabled/enabled determines if a module should be automatically started while booting. Start/stop manages the runtime state of a service.
+
+Use `systemctl status` to examine the state of a module. Services should be enabled on the exam otherwise they will not start on reboot.
+
+
+#### 11.3 Modifying `systemd` Service Configuration ####
+
+Default `systemd` unit files are in `/usr/lib/systemd/system`, but only customize unit files in `/etc/systemd/system`. Run-time automatically generated unit files are placed in `/run/systemd`. It is best to use `systemctl edit unit.service` to edit unit files. Use `systemctl show` to show available parameters. Use `systemctl daemon-reload` to ensure changes are implemented. Can use `killall` to terminate any processes with the old configuration.
+
