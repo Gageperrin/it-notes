@@ -728,6 +728,119 @@ The administrator creates the `CertificateSigningRequest` object as a YAML file 
 
 The controller manager carries out these tasks.
 
+### KubeConfig
+
+In a KubeConfig file one can specify certificates and the server. By default this is placed in `$HOME/.kube/config`.
+
+The config file has three sections: clusters, contexts, and users. Contexts bridge clusters and users, deciding how users access clusters.
+
+Example:
+```
+apiVersion: v1
+kind: Config
+
+clusters:
+- name: my-kube-playground
+    cluster:
+      certificate-authority: ca.crt
+      server: https://my-kube-playground:6443
+ 
+context:
+- name: my-kube-admin@my-kube-playground
+
+users:
+- name: my-kube-admin
+  user:
+    client-certificate: admin.crt
+    client-key: admin.key
+```
+
+Run `kubectl config view` to see the current configuration.
+To update context, run `kubectl config use-context [context-name]`.
+
+Certificate credentials can be specified by a path or by the `certificate-authority-data` field which passes in base64 encoded certificate data.
+
+
+### API Groups
+
+There are several API groups:
+* `/metrics`
+* `/healthz`
+* `/version`
+* `/api`
+* `/apis`
+* `/logs`
+
+Core: `/api`
+Named: `/apis`
+
+Core group contains namespaces, pods, events, endpooints, nodes, configmaps, secrets, services, etc. The named group is more organized with sub-groups that contain resources as a sub-category. Each resource contains several actions known as verbs:
+* `/apps` -> `/deployments`, `/replicasets`, `/statefulsets`
+* `/extensions`
+* `/networking.k8s.io` -> `/networkpolicies`
+* `/storage.k8s.io`
+* `/authentication.k8s.io`
+* `/certificates.k8s.io` -> `/certificatesigningrequests`
+
+To retrieve API groups in a cluster, run `curl http://localhost:6443 -k`.
+To retrieve resources in a group run `curl http://localhost:6443/apis -k | grep "name"`.
+
+To access cluster API, authentication is required by passing in certification files through the CLI or by launching a `kubectl` proxy process through `kubectl proxy `.
+
+Kube proxy is **not** `kubectl` proxy. Kube proxy is used to establish connectivity between parts and services across different nodes.  `kubectl` proxy is an HTTP proxy service created by the `kubectl` utility to access the `kube-api` server.
+
+
+### Authorization
+
+The Node authorizer grants privileges within a cluster. An ABAC (Attributes Based Access Control) gives users a set of permissions with a policy file written in JSON format. To update this, the file must be changed manually and the server restarted. RBAC (Role Based Access Control) is much more convenient and defines roles with certain permissions. Users are assigned to these roles. A modified role reflects on all users falling under that role. Webhook outsources authorization mechanisms to a third party such as Open Policy Agent. The last two modes of authorization are `AlwaysAllow` and `AlwaysDeny`.
+
+The mode is specified in the `kube-apiserver` file. By default, it is set to `AlwaysAllow`. Mechanisms are invoked sequentially according to the order specified in the config file.
+
+
+### Role Based Access Controls
+
+To create a role, create a role object YAML file.
+
+Example:
+```
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list", "get", "create", "update", "delete"]
+- apiGroups: [""]
+  resources: ["ConfigMap"]
+  verbs: ["create"]
+```
+
+Roles are linked to a user through a `RoleBinding` object.
+
+To see created roles, run `kubectl get roles`.
+To see role bindings, run `kubectl get rolebindings`.
+To get more information, run `kubectl describe role [name]`. or `describe rolebinding [name]`.
+
+To check for access, run `kubectl auth can-i [verb] [object] --as [role]`.
+
+
+### Cluster Roles
+
+Cluster roles and rolebindings are namespaced. Namespaces help group and divide resources. Cluster scope resources such as nodes cannot be namespaced. So there are cluster scoped and namespaced resources. `clusterroles` are roles for cluster scoped resources.
+
+### Image Security
+
+Images are stored in a registry. under an account and repository. A repository can be made private so that it can only be accessed with credentials.
+
+Login on docker with `docker login private-registry.io`.
+Then run the image with `docker run private-registry.io/apps/internal-app`.
+Create a secret with `kubectl create secret docker-registry regcred`.
+
+### Security Contexts
+
+Security context can be configured on containers and/or pods. Containers inherit security contexts from pods.
+
 ### Kubernetes Security
 ### Network Policies
 ### TLS Certificates for Cluster Components
