@@ -841,20 +841,121 @@ Create a secret with `kubectl create secret docker-registry regcred`.
 
 Security context can be configured on containers and/or pods. Containers inherit security contexts from pods.
 
-### Kubernetes Security
+
 ### Network Policies
-### TLS Certificates for Cluster Components
-### Images Securely
-### Security Contexts
-### Secure Persistent Value Store
+
+Web traffic comes into the web server at port 80, the web server sends the request to the API server at port 5000 which retrieves information from the database server at 3306. Ingress traffic comes into the server, egress traffic leaves the server. By default, all traffic is allowed between pods in a cluster.
+
+Network policies are another kind of object in Kubernetes that specifies rules for ingress and egress traffic. Labels and selectors are used to associate policies to pods.
+
+Not that Flannel does not support network policies.
+
+### Kubectx and Kubens
+
+Kubectx and Kubens are tools that streamline working in different namespaces and contexts. Kubectx switches between contexts without relying on the long `kubectl config` commands.
+
+To list all contexts, run `kubectx`. To switch to a new context, run `kubectx <context>`, and to switch back run `kubectx -`. To see the current context, run `kubectx -c`.
+
+Kubens allows users to switch between namespaces quickly. To switch to a new namespace, run `kubens <namespace>` and to switch back run `kubens -`.
+
 
 ## Storage
 
+### Storage in Docker
+
+Docker stores data by default in `/var/lib/docker`. Docker builds entities in a layered architecture. For example the base Ubuntu layer beneath changes in `apt` packages beneath changes in `pip` packages beneath the source code, etc.
+
+The container layer is read-write while the image layer beneath is read-only. Docker can have volumes that are mounted to a container.
+
+### Volume Driver Plugins in Docker
+
+Storage drivers manage storage on images in containers. Volume drivers are for persistent data and handled by volume driver plugins.
+
+### Container Storage Interface
+
+Kubernetes developed container runtime interface to orchestrate communication with containers such as Docker, rkt, and cri-o. To integrate various networking solutions, the container network interface was developed for Kubernetes. The container storage interface was developed to allow different storage solutions to work with Kubernetes.
+
+CSI is not Kubernetes exclusive but was intended to be a universal standard for any container orchestration tool. 
+
+### Volumes
+
+Kubernetes pods are transient, so volumes are attached to retain data permanently.
+
+A volume can be configured in the pod configuration file with a `hostPath` for storage.
+
 ### Persistent Volumes
-### Access Modes for Volumes
+
+In a large environment, it can become difficult to configure storage on each individual pod. Persistent volumes abstract this process out of the pod configuration file.
+
+Example:
+
+```
+pv-definition.yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    stroage: 1Gi
+  
+  awsElasticBlockStore:
+    volumeID: <volume-id>
+    fsType: ext4
+```
+
+Run `kubectl create -f pv-definition.yaml` to create the persistent volume.
+Run `kubectl get persistentvolume` to see which persistent volumes are available.
+
+
 ### Persistent Volume Claims
-### Kubernetes Storage Object
-### Configure Applications with Persistent Storage
+
+Persistent volumes and persistent volume claims are two separate objects. The claims are used to bind requests to volumes. Kubernetes matches volumes and volume claims by sufficient capacity, access modes, volume modes, and storage class. Labels and selectors can be used to pair specific volumes and claims.
+
+Example:
+```
+pvc-definition.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  
+  resources:
+    requests:
+      storage: 500Mi
+```
+
+Create it with `kubectl create -f pvc-definition.yaml`.
+Delete with `kubectl delete persistentvolumeclaim myclaim`.
+
+When a claim is deleted, by default the volume is set to retain until the user deletes it. It can be configured to delete the volume alongside the claim, or it can recycle the volume by scrapping the data when the claim is deleted. 
+
+Persistent volume claims can be specified in a podfile under `spec:` -> `volumes:` -> `persistentVolumeClaim:`.
+
+### Storage Class
+
+Static provisioning requires manual configuration of storage on the external service. Dynamic provisioning can automatically provision resources on cloud or other storage solutions using storage classe objects.
+
+Example:
+```
+sc-definition.yaml
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: google-storage
+
+provisioner: kubernetes.io/gce-pd
+```
+
+Parameters can also be passed in to customize the provisioned storage solution as well, but this depends on the provisioner's specifications.
 
 ## Networking
 
