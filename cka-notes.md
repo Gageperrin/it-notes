@@ -957,9 +957,64 @@ provisioner: kubernetes.io/gce-pd
 
 Parameters can also be passed in to customize the provisioned storage solution as well, but this depends on the provisioner's specifications.
 
+
+
 ## Networking
 
 ### Pre-Requisites
+#### Switching, Routing, Gateways ####
+
+When on the same network, System A connects to System B through a switch that is physical or logical. Run `ip link` to list host interfaces. To add a link, run ` ip addr add <IP> <link>`. To see IPs assigned to host interfaces, run `ip addr`.
+
+Routers connect systems on different networks. A router is assigned an IP address for each network it is connected to. To see existing routing configuration, run `route`. To add a route, run `ip route add <ip> via <route-ip>`. Routes must be configured on all systems.
+
+Gateways connect routers to the Internet and are helpful for organizing routers. If no gateway is needed, configure `0.0.0.0` for gateway. 
+
+Routing table configuration can be used to send packets through intermediate systems. By default, Linux does not forward packets unless explicitly specified. Run `cat /proc/sys/net/ipv4/ip_forward` which returns a Boolean to see if forwarding is enabled.
+
+#### DNS ####
+
+DNS assigns names to IP addresses. Locally this is done in `/etc/host` and is effective for small scale solutions. For larger systems, abstract DNS to a dedicated server. Specify the target server in `cat /etc/resolv.conf` as `nameserver     192.168.1.100`. 
+
+If there are conflicting names, by default the system will prioritize the local configuration over the DNS server.
+
+Domain names are broken down to several parts. `.` is the root, `.com` is the top level domain name, `google` is the domain name, `www.` is the sub-domain.
+
+Record types are stored in the DNS server. `A` maps a name to the IPv4 address. `AAAA` maps a name to the IPv6 address. `CNAME` maps to another name.
+
+`nslookup` looks up basic DNS information for a name. `dig` can do this as well in more detail.
+
+CoreDNS is a common solution for retrieving the most used DNS requests. The binary can be downloaded and by default it listens on port 53 (the default port for a DNS server).
+
+#### Network Namespaces ####
+
+Namespaces create isolation between containers. The underlying host however can still see other processes and containers. 
+
+To create a new network namespace, run `ip netns add [name]`. To list them, run `ipnetns exec [name] ip link` or `ip -n [name] link`. The same is true for an `arp` table or routing table.
+
+To create a cable, run `ip link add veth-[red] type veth peer name veth-[blue]` then `ip link set veth-[red] netns [red]` and `ip link set veth-[blue] netns blue`. To delete, run `ip -n [red] link del veth-[red]`. The other end of a link is automatically deleted.
+
+With multiple namespaces, create a virtual network switch within the host. There are multiple ways to do this. With Linux Bridge, run `ip link add v-net-0 type bridge` then `ip link set dev v-net-0 up`. Connect the namespaces to this bridge  with `ip link add veth-[red] type veth peer name veth-[red]-br`. Attach each end of the bridge with `ip link set veth-[red] netns [red]` and `ip link set veth-[red]-br master v-net-0`.
+
+The bridge gateway can be connected to a gateway as well to connect to the Internet.
+
+#### Docker Networking ####
+
+With a `--network none` the Docker container is entirely isolated. With a `--network host` then the container is available on the host by default. With a `--network bridge` the container connects to a bridge that adjudicates between various containers and allots containers an internal IP.
+
+Docker creates a namespace, a pair of interfaces and attaches them everytime a new container is created. To allow external applications to access a container, create port mappings from port 8080 to the appropriate container. Docker manages the IP tables as well.
+
+#### CNI ####
+
+A container networking interface (CNI) provides a universal standard for container bridge networking. CNI defines a set of responsibilities for container runtimes and what plugins must be invoked upon creation and deletion. The plugin also has specified requirements for supporting certain arguments, parameters, and manage IP address assignment.
+
+Supported plugins include bridge, vlan, ipvlan, macvlan, and windows as well as DHCP and host-local. Third party solutions include Weaveworks, Flannel, VMware NSX. Docker is not on this list because it is based on the container network model (CNM). Docker must be created without a network and then have the bridge plugin invoked. Kubernetes does this automatically.
+
+
+### Cluster Networking
+
+Kubernetes clusters have master and worker nodes The host must have a unique hostname and MAC address. Some ports must also be opened. The master must be able to listen on port 6443. The kubelets listen on the port 10250. Kube-scheduler requires 10251 and the kube-controller-manager requires 10252. The various services should have 30000-32767 open too. The ETCD server needs port 2379 open.
+
 ### Networking Configuration on Cluster Nodes
 ### Service Networking
 ### POD Networking Concepts
