@@ -567,3 +567,88 @@ There is built in log rotation on a monthly basis. The journal cannot grow beyon
 #### 13.5 Configuring `logrotate` ####
 
 `logrotate` is started through `cron.daily` to ensure log files to not grow too big. Main configuration is in `/etc/logrotate.conf`.
+
+
+### Lesson 14: Managing Storage
+
+#### 14.1 Understanding Disk Layout ####
+
+Partitioning a disk isolates data. A common disk name is `dev/sda` for the first SCSI disk on a system. In the exam, the system disk will be `/dev/vda`.
+
+A system can either be a BIOS or UEFI. BIOS is kind of outdated. BIOS comes with Master Boot Records. UEFI come with GUID Based Partition Tables. Master Boot Record has only 64 bytes to store partition information. GPT can go up to 128 partitions. MBR invented logical partitions to extend partitions to go beyond the 4 partition cap.
+
+There are multiple partition utilities such as `parted`.
+
+#### 14.2 Understanding Linux Storage Options ####
+
+Partitions are the classic solution for Linux storage. It is used to allocate dedicated storage to specific types of data. LVM Logical volumes are used at default installation of RHEL. It adds flexibility to storage (resize, snapshots and more). A third option is Stratis which is a next generation Volume Managing Filesystem that uses thin provisioning by default. It is implemented in user space which makes API access possible. A fourth option is Virtual Data Optimizer.
+
+#### 14.3 Understanding GPT and MBR Partitions
+
+Master Boot Record is part of the 1981 PC specification. It uses 512 bytes to store boot information, 64 bytes to store partitions, and has space for 4 partitions only with a maximum size of 2 TiB each. Extended and logical partitions must be used to create more partitions.
+
+GUID Partition Table is a newer partition table invented in 2010 with more space to store limitations and overcome MBR limitations. It has a maximum of 128 partitions.
+
+#### 14.4 Creating partitions with `parted` ####
+
+While creating a partition, you do not automatically create a file system. The `parted` file system attribute only writes some unimportant file system metadata. In RHEL 8, `parted` is the default utility. Alternatively, use `fdisk` to work with MBR and `gidsk` to use GUID partitions.
+
+Start with `parted /dev/sdb`. `print` will show if there is a current partition table. `mklabel msdos|gpt` creates a partition table. `mkpart [part-type] [name] [fs-type] [start] [end]` to create a partition. For example `mkpart primary 1024MiB 2048MiB`. Use `print` to verify the created partition and `quit` to exit the parted shell. `udevadm settle` ensures that hte new partition device is created. `cat /proc/partitions` or `lsblk` can also be used to verify the partition.
+
+#### 14.5 Creating MBR Partitions with `fdisk` ####
+
+While `parted` is the default, `fdisk` is still a very useful utility in RHEL 8. 
+
+Inside `fdisk`, run `m` to get a list of commands. Use `n` to create a new partition, `p` to print, `w` to write changes.
+
+#### 14.6 Understanding File System Differences ####
+
+XFS is the default file system in RHEL 8. It is fast, scalable, uses CoW to guarantee data integrity, and size can be increased (but not decreased).
+
+Ext4 was default in RHEL 6 and is still used. Backwards compatible back to Ext2 and uses Journal to guarantee data integrity. Size can be both increased and decreased.
+
+Btrfs is an experimental RHEL 7 solution that has not yet taken off.
+
+#### 14.7 Making and Mounting File Systems ####
+
+`mkfs.xfs` creates an XFS file system. Use `mkfs.[Tab][Tab]` to show a list of available file systems. Do not use `mkfs` by itself unless you intend to create an Ext2 file system. After making the file system, it can be mounted in runtime using the `mount` command. Use `umount` before disconnecting a device.
+
+To get a cleaner output of `mount`, use `grep` to pipe the argument with `'^/'.`
+
+#### 14.8 Mounting Partitions through `/etc/fstab` ####
+
+`/etc/fstab` is the main configuration file to persistently mount partitions. `/etc/fstab` content is used to generate systemd mounts by the `systemd-fstab-generator` utility. To update systemd, make sure to use `systemctl daemon-reload` after editing `/etc/fstab`.
+
+Use `mount -a` to mount file systems.
+
+#### 14.9 Managing Persistent Naming Attributes ####
+
+In datacenter environments, block device names may change. Different solutions exist for persistent naming. UUID is automatically generated for each device that contains a file system or anything similar. While creating the file system, `-L` can be used to set an arbitrary name (label) that can be used for mounting the file system. Unique device names are created in `/dev/disk`. `tune2fs` can be used to set a label too if it is not an xfs file system. For the RHCSA exam, UUID and label are most important to know.
+
+#### 14.10 Managing Systemd Mounts ####
+
+`/etc/fstab` mounts already are systemd mounts. Mounts can be created using systemd `.mount` files. Using `.mount` files allows you to be more specific in defining dependencies. Use `systemctl cat tmp.mount`. to see an example.
+
+Systemd mounts are easier to use than `/etc/fstab` because systemd has greater leeway for managing dependency relations.
+
+#### 14.11 Managing XFS File Systems ####
+
+The `xfsdump` utility can be used for creating backups of XFS formatted devices and considers specific XFS attributes. It only works on a complete XFS device and can make full backups (-l 0) or different levels of incremental backups. `xfsdump -l 0 -f /backupfiles/data.xfsdump /data` creates a full backup of the contents of the /data directory.
+
+The `xfsrestore` command is used to restore a backup made with `xfsdump`. `xfsrepair` can be manually started to repair broken XFS file systems.
+
+#### 14.12 Creating a Swap Partition ####
+
+Swap is RAM that is emulated on disk. It is a good supplement to available RAM. The amount of swap depends on server use. Swap can be created on any block device including swap files. While creating swap with `parted`, set the file system to `linux-swap`. After creating the swap partition, use `mkswap` to create the swap FS. Activate it using `swapon`.
+
+Swap partition mounts are not persistent unless there is a line in `etc/fstab`. (There is an example line in this file showing how to do it.)
+
+### Lesson 15: Managing Advanced Storage
+
+#### 15.1 Understanding LVM, Stratis, and VDO ####
+
+Logical volumes (LVM) add flexibility to storage. It is the default storage solution used during the RHEL installation. Stratis uses thin provisioning by default and is implemented in user space, making API access possible. Stratis is excellent for working with containers. Virtual Data Optimizer (VDO) focuses on efficiently storing files and manages deduplicated and compressed storage pools.
+
+#### 15.2 Understanding LVM Setup ####
+
+The volume group is the abstraction of all storage available on a system. Storage devices can be disks, partitions, etc. A volume group can be extended by adding more physical volumes. LV take disk space out of the volume group and do not have a direct relationship with physical volumes (unless configured otherwise).
