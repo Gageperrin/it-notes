@@ -1015,6 +1015,17 @@ Supported plugins include bridge, vlan, ipvlan, macvlan, and windows as well as 
 
 Kubernetes clusters have master and worker nodes The host must have a unique hostname and MAC address. Some ports must also be opened. The master must be able to listen on port 6443. The kubelets listen on the port 10250. Kube-scheduler requires 10251 and the kube-controller-manager requires 10252. The various services should have 30000-32767 open too. The ETCD server needs port 2379 open.
 
+
+### Pod Networking
+
+Kubernetes does not come with a pre-built solution for pod networking, it must be configured. Every pod should have an IP address and should be able to communicate with every other pod in the same and other nodes without NAT.
+
+Each node should get a bridge network with its own subnet. To attach a container to the bridge network, use `ip link add [veth-pair]`. Attach the pair and assign the IP address. Bring up the interface so the second container is connected to the first. 
+
+To reach other pods on other nodes, add IP routes between nodes. For larger network architectures, use a router as a default gateway between nodes.
+
+### CNI in Kubernetes
+
 ### Networking Configuration on Cluster Nodes
 ### Service Networking
 ### POD Networking Concepts
@@ -1038,6 +1049,30 @@ Kubernetes clusters have master and worker nodes The host must have a unique hos
 
 
 ## Install Kubernetes the kubeadm way
+
+`kubeadm` provides an easy, efficient process for provisioning individual components of a Kubernetes cluster.
+
+### Provision VMs with Vagrant
+
+1. Download the appropriate Vagrant file and ensure valid IPs are specified for the VM
+2. Run `vagrant up` to provision the containers.
+3. Run `vagrant status` to ensure the system is up.
+4. Run `vagrant ssh kubemaster` to SSH into the master node.
+5. Run `uptime` or some other command to test connectivity.
+6. Run `logout` and repeat steps 4-6 for other nodes.
+7. Proceed to bootstrap a cluster with `kubeadm` below.
+
+### `kubeadm` Deployment
+
+1. Ensure pre-requisites are met.
+2. Run `lsmod | grep br_netfilter` to see if the kernel module is loaded to bridge IP traffic. If not, run `sudo modprobe br_netfilter`.
+3. Run a set of commands [insert documentation link] to configure IP table mapping.
+4. Install container runtime.
+5. After installation, run `systemctl daemon-reload` and `systemctl restart docker` to restart with the proper configurations.
+6. Configure the `kubadm` cluster by initializing the `control-plane` node. Run `kubeadm init` with the appropriate parameters.
+7. Create a `.kube` directory and apply the right permissions.
+8. Add worker nodes to the cluster then check the status.
+9. Test by creating pods.
 
 ## Troubleshooting
 
