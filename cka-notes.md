@@ -1026,6 +1026,28 @@ To reach other pods on other nodes, add IP routes between nodes. For larger netw
 
 ### CNI in Kubernetes
 
+CNI plugin is configured in `kubelet.service`. View `kubelet` options in `/etc/cni/net.d`.
+
+### CNI WeaveWorks
+
+WeaveWorks is a CNI solution that is well suited for handling a wide array of routes. WeaveWorks places agents within each node. These agents intercept packet and, using their familiarity with the overall agent network, re-packages them to pass them along more effectively. 
+
+Weave can be deployed as services, daemons, or even pods. Deploying as a daemon-set ensures sufficient pods are always available.
+
+### `ipam weave`
+
+IP addresses and subnets are managed by the CNI plugin for bridge networks. The easiest way to do this is to store IPs in a text file.
+
+This configuration can be scripted in `cat /etc/cni/net.d/net-script.conf` under `ipam` by specifying the appropriate CNI plugin.
+
+### Service Networking
+
+When a service is created, it is accessible from all pods in a cluster regardless of their respective nodes. This is ClusterIP. NodePort is used for access outside the cluster by assigning the node an IP with an exposed port.
+
+Each kubelet service watches the changes in a cluster through the `kube-api`. If a pod is created, the CNI is invoked to provide the proper networking. Services are not provisioned this kind of networking service when they are created.
+
+When created, a service object is assigned an IP address from a pre-defined range. The proxy components on each node inherit an IP address and automatically generate port forwarding rules. `kube-proxy` creates and manages these rules. So service networking falls under this category of IP assignment through IP tables.
+
 ### Networking Configuration on Cluster Nodes
 ### Service Networking
 ### POD Networking Concepts
