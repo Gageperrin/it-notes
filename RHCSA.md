@@ -1,4 +1,4 @@
-# Red Hat Certified System Administrator Certification Notes
+# Red Hat Certified System Administrator Course Notes
 
 ##  Module 1: Performing Basic System Management Tasks
 
@@ -652,3 +652,17 @@ Logical volumes (LVM) add flexibility to storage. It is the default storage solu
 #### 15.2 Understanding LVM Setup ####
 
 The volume group is the abstraction of all storage available on a system. Storage devices can be disks, partitions, etc. A volume group can be extended by adding more physical volumes. LV take disk space out of the volume group and do not have a direct relationship with physical volumes (unless configured otherwise).
+
+#### 15.3 Creating an LVM Logical Volume ####
+
+Create a partition from `parted`, use `set n lvm on`. Use `pvcreate /dev/sdb1` to create the physical volume. Use `vgcreate vgdadta /dev/sdb1` to create the volume group. Use `lvcreate -n lvdata -L 1G vgdata` to create the logical volume. Use `mkfs /dev/vg/data/lvdata` to create a file system. Put it in `/etc/fstab` to mount it persistently.
+
+#### 15.4 Understanding Device Mapper and LVM Device Names ####
+
+Device mapper is the system that the kernel uses to interface storage devices. Device mapper generates meaningless names like `/dev/dm-0` and `/dev/dm-1`. Meaningful names are provided as symbolic links through `/dev/mapper/`. Alternatively use the LVM generated symbolic links such as `/dev/vgdata/lvdata`.
+
+#### 15.5 Resizing LVM Logical Volumes ####
+
+To grow a logical volume, run `lvextend -r`, this will pull storage from the volume group. Run `vgs` to see what storage is available. Run `vgextend` to add a physical volume to the volume group.
+
+`e2resize` is an independent resize utility for Ext file systems. `xfs_growfs` can be used to grow an XFS file system.
