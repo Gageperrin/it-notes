@@ -1048,26 +1048,72 @@ Each kubelet service watches the changes in a cluster through the `kube-api`. If
 
 When created, a service object is assigned an IP address from a pre-defined range. The proxy components on each node inherit an IP address and automatically generate port forwarding rules. `kube-proxy` creates and manages these rules. So service networking falls under this category of IP assignment through IP tables.
 
-### Networking Configuration on Cluster Nodes
-### Service Networking
-### POD Networking Concepts
-### Network Loadbalnacer
-### Ingress
-### Cluster DNS
-### CNI
+### DNS in Kubernetes
+
+Kubernetes deploys a built-in DNS server by default. Whenever a service is created, Kubernetes creates a DNS record for that service. If there are two separate namespaces, a subdomain is appended for a service (e.g. `web-service.apps`). Each namespace has its own subdomain, and each service within that subdomain are grouped within a further subdomain (`svc`).
+
+Pods do not have records created for them by default. The namespace for a pod is the IP address with the `.`'s replaced with `-`'s.
+
+### CoreDNS in Kubernetes
+
+Entries for pods are stored in a central DNS server with a reference added to the `/etc/resolv.conf` file of the pods to resolve to the DNS server.
+
+CoreDNS is deployed as a two pod replicaset (redundant) in the `kubesystem` namespace. CoreDNS requires a configuration file `/etc/coredns/Corefile/`. Plugins are needed to handle errors and other processing. Each record that cannot be resolved is forwarded to the nameserver specified in the CoreDNS configuration file which inherits the nameserver from the Kubernetes node.
+
+When CoreDNS is deployed, it creates a service to make it available to other components in the cluster. It is named `kube-dns` by default. The kubelet contains the IP and domain of the DNS server as well. The `resolv.conf` file has a search entry which is set to `default.svc.cluster.local`, `svc.cluster`, and `cluster.local`. This allows the user to find a service with any name, web-service, etc.
+
+### Ingress in Kubernetes
+
+Ingress simplifies configuration for load balancing by using a single externally accessible URL to access various services within the cluster alongside SSL security. It is a layer 7 load balancer built into Kubernetes.
+
+Ingress is implemented by first deploying an ingress controller and then specifying ingress resources (configuration). The ingress controller is not deployed by default.
+
+The ingress controller has several solutions such as Nginx, Contour HAProxy, traefik, Istio, and GCP's native solution. Nginx and GCP and maintained by the Kubernetes team. A Nginx-based deployment needs a ConfigMap, ServiceAccount, a deployment, a service, and authorization to function properly.
+
+An ingress resource specifies rules and needs a YAML file to specify where traffic should be routed to (name and port). It is then created with `kubectl create -f [name].yaml`. Rules are used for users who access the application through various domains. Paths are an array of various itmes, providing a name and port route for each subdomain. 
+
+Paths can be set up for URLs and domains. Splitting traffic by URL requires one rule and two paths. Splitting traffic by domain requires two rules and one path specification.
+
+Ingress controllers include different customization options such as the Rewrite target. This target rewrites the paths on URLs like a search and replace function. For example, `replace(path, rewrite-target)`.
 
 
 ## Design and Install a Kubernetes Cluster
 
-### Install Kubernetes Master and Nodes
-### Secure Cluster Communication
-### HA Kubernetes Cluster
-###
-### Provision Infrastructure
-### Choose a Network Solution
-###
-### Run and Analyze an end-to-end test
-### Node end-to-end tests
+### Designing a Kubernetes Cluster
+
+Important questions:
+* What is the purpose?
+* Cloud or self-hosted?
+* What workloads will be run?
+* How many and what kind of applications will be used?
+* What kind of network traffic will be used
+
+
+For learning purposes, minikube with a single node cluster is a good option. For development and testing purposes, a multi-node cluster with a single master and multiple worker nodes should be used. Set it up with `kubeadm` or provision from a cloud service provider. For hosting production applications, high availability with a multi-node cluster and multiple master nodes is recommended. With the right configuration, it is possible to have up to 5000 nodes, 150000 pods in the cluster, 300000 total containers, and up to 100 pods per node. 
+
+### Choosing Kubernetes Infrastructure
+
+Cloud and on-premises solutions are both available depending on project needs. On Linux, the binaries can be installed manually, but it can be automated. Windows cannot have Kubernetes set up natively but must rely upon virtualization.
+
+Minikube is a convenient solution to create a cluster and can deploy VMs. `kubeadm` can deploy a single or multi-node cluster quickly but requires the VMs to be ready.
+
+Turnkey solutions allow the user to provision, configure and maintain VMs and use scripts to deploy the cluster. Vendors include OpenShift from Red Hat, Cloud Foundry Container Runtime, VMware Cloud PKS, and Vagrant.
+
+Hosted solutions include GKE, OpenShift Online, AKS, and AWS EKS.
+
+### Configure High Availability
+
+To configure high availability, launch identical nodes but enable a load balancer to split the API traffic between two master nodes. The Kube controller manager locks onto an endpoint in one of the two nodes and renews the lease binding them every 10 seconds. Both the processes try to become the leader every two seconds. These intervals can be configured differently.
+
+ETCD has two possible topologies: stacked and external ETCD. Stacked topology puts ETCD in each master node. This is easier to setup and manage but has lower fault tolerance. The external ETCD topology places ETCD outside the node. It is harder to set up but has higher availability.
+
+### ETCD in HA
+
+To review, ETCD is a distributed reliable key-value store that is Simple, Secure, and Fast.  It can be distributed across multiple servers with identical, consistent databases. For write operations, one instance is the master node from which all other data is replicated. A write is only considered complete when it is completely replicated to a majority of the nodes in the cluster. A quorum is number of nodes / 2 + 1 and rounded up to the nearest integer.
+
+ETCD uses RAFT protocol to determine the leader node. Random timers are set on each node. When a timer expires on a node, it sends a request to the other nodes to be elected the leader. The other nodes respond with their votes. If the nodes do not receive a notification from the leader, then a re-election process is initiated to choose a new leader. 
+
+To execute this, donwload and run the binaries. Generate the necessary certificates. Pass in cluster peer information in the configuration file. Use ETCDCTL to retrieve data. Note that API version 2 and 3 have different commands. 
 
 
 ## Install Kubernetes the kubeadm way
@@ -1095,6 +1141,7 @@ When created, a service object is assigned an IP address from a pre-defined rang
 7. Create a `.kube` directory and apply the right permissions.
 8. Add worker nodes to the cluster then check the status.
 9. Test by creating pods.
+
 
 ## Troubleshooting
 
