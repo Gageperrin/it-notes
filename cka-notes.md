@@ -1170,3 +1170,15 @@ JSON PATH can be used in `kubectl` to deal with large data sets and complex crit
 
 JSON PATH can also use loops, ranges, sorts, and custom columns.
 
+## Important Aliases
+
+* `po` for pods
+* `rs` for ReplicaSets
+* `deploy` for Deployments
+* `svc` for Services
+* `ns` for Namespaces
+* `netpol` for Network policies
+* `pv` for Persistent volumes
+* `pvc` for Persistent volume claims
+* `sa` for service accounts
+
