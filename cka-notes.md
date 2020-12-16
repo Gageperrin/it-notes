@@ -1144,11 +1144,29 @@ To execute this, donwload and run the binaries. Generate the necessary certifica
 
 
 ## Troubleshooting
-
 ### Application Failure
-### Worker Node Failure
-### Control Plane Failure
-### Networking
 
-## Other Topics
+If a user reports application accessibility issues, start with the front-end and use `curl` to test the web-service and then the web service status with `kubectl describe service [name]`. Then check the pod and make sure it is in a running state with `describe` and `logs`. Then check the DB-service and if no error is there, then check the database itself.
+
+### Control Plane Failure
+
+Start by checking the status of the nodes in the cluster with `kubectl get nodes`. If the controlplane is deployed as pods, run `kubectl get pods -n [name]`. If it is deployed as a service, check the service, `service kube-apiserver status`.
+
+Next, check the service logs with `kubectl logs kube-apiserver-master -n kube-system` if configured with `kubeadm`. If configured natively, run `sudo journalctl -u kube-apiserver`.
+
+### Worker Node Failure
+
+Check node status first with `kubectl get nodes`.  Check the disk, memory, and process pressures. If the node is crashed, bring it up (use `top`). Check the `kubelet` status and certificiates.
+
+
+## Advanced `kubectl` Commands
+
+JSON PATH can be used in `kubectl` to deal with large data sets and complex criteria. `kubectl` reads and writes with `kube-apiserver` in JSON format.
+
+1. Identify the `kubectl` command.
+2. Familiarize with JSON output.
+3. Form the JSON PATH query
+4. Use the JSON PATH query with kubectl command enclosed in single braces.
+
+JSON PATH can also use loops, ranges, sorts, and custom columns.
 
