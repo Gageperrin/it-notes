@@ -107,3 +107,59 @@ Example Playbook file:
 ```
 
 ### Ansible Modules
+
+[Modules](https://docs.ansible.com/ansible/2.9/modules/modules_by_category.html) can be grouped into categories such as system, commands, files, database, cloud, Windows, etc. depending on their use cases and scope of action.
+
+`command` module can execute a command on a remote node through `tasks:` listed in the Playbook as a key-value pair.
+
+Important parameters include:
+* `chdir` - `cd` into this directory before running the command
+* `creates`
+* `executable`
+* `free_form`
+* `removes`
+* `warn`
+
+`script` runs a local script on a remote node after transferring it. `service` can be stated in either a one-line or dictionary format. The action is `started` not `start` because `httpd` is ensuring idempotency by checking if the the service has already started before attempting to start it. `lineinfile` searches for a line in a file and replaces it, and it adds it if it does not exist.
+
+### Ansible Variables
+
+[Variables](https://docs.ansible.com/ansible/2.3/playbooks_variables.html) can be stored in the inventory, playbook, or an independent file. They are called through double braces `{{ variable }}`.
+
+## Conditionals, Loops & Roles
+
+### Ansible Conditionals
+
+Conditionals can be used to determine appropriate playbooks or tasks. These are implemented through an `when: [condition]`. The `and` as well as `or` operators can also be used. Conditionals can also be used with `register` to chain conditionals based on previous task completed and its result.
+
+
+### Ansible Loops
+
+Loops can iterate through a list and repeat the same task. It is specified with `user: name='{{ i }}' state=present uid=1000` then `loop:` with a list `- name: bob` paired with `uid: 1000` etc.
+
+`with_items` and other `with_*` is more common in older configurations instead of `loop:`.
+
+### Ansible Roles
+
+Roles can be assigned to provide authentication and authorization for specific functions. Ansible roles are suitable for automating and abstracting repeatable tasks. Roles also help organize code into a directory structure. Ansible Galaxy can create role scaffolding by running `ansible-galaxy init [role]`.
+
+Roles can be stored in `/etc/ansible/roles` if they are not in the playbook directory. Configuration file is found in `/etc/ansible/ansible.cfg`. Roles can also be passed in as a dictionary to provide more detail and configuration.
+
+## Advanced Topics
+
+#### Preparing on Windows ####
+
+Ansible Control Machine can only be on Linux, not Windows. Windows machines can be targets of Ansible and be included in the automation process. Ansible connects to a Windows machine using `winrm`. It is required to have the `pywinrm` module installed on the Ansible Control Machine, to have WinRM setup in `examples/scripts/ConfigureRemotingForAnsible.ps1`, and different modes of authentication.
+
+
+#### Ansible Galaxy ####
+Ansible Galaxy is a sharing platform for automation templates and is especially useful for roles.
+
+#### Patterns ####
+Patterns can be used in a playbook for replicable hosts.
+
+#### Dynamic Inventory ####
+Inventories can be made dynamic by changing it from a text file to a script.
+
+#### Custom Modules ####
+Modules can be custom built using Python.
