@@ -105,6 +105,53 @@ Billing export enables granular billing data such as usage, cost details and pri
 
 Cloud APIs allow workflow automation using software libraries in a variety of programming languages.
 
+
+
+## Identity and Access Management
+
+### Cloud IAM 
+
+Principle of Least Privilege: A user, program or process should have the bare minimum privileges necessary to perform its function.
+
+Cloud IAM provides configuration options for identities, roles, and resources. A policy is a collection of bindings, metadata, and configuration. Binding configures how members and resources should be matched with permissions.
+
+A member can be a Google account, a service account attached to an application, a Google Group, G Suite Domains, Cloud Identity Domains, `AllAuthenticatedUsers`, or `AllUsers`.
+
+Permissions determine what operations are allowed on a resource and correspond to REST API methods. These permissions are not granted to users directly. Instead they are granted through roles which are a collection of permissions. 
+
+There are three kinds of roles in IAM: primitive, predefined, and custom. Primitive are roles alike Owner, Editor, or Viewer that are legacy options. They are no longer recommended. Predefined provide fine-grained access control. Custom roles are user-defined and managed.
+
+Conditions can be used to specify resource access based on certain identity attributes or other triggers. When a condition exists, the access is only granted if the expression is true.
+
+Policies are inheritted from organizations to folders to projects to resources.
+
+### Policies and Conditions
+
+Example policy statement:
+```
+bindings:
+- members:
+  - serviceAccount:service-733661073xxx@compute-system.iam.gserviceaccount.com
+  role: roles/compute.serviceAgent
+- members:
+  - serviceAccount:733661073xxx@cloudservices.gserviceaccount.com
+  - serviceAccount:7336610731xxx-compute@developer.gserviceaccount.com
+  role: roles/editor
+- members:
+  - user:example@mail.com
+  role: roles/owner
+etag: BwW2qo0_TVk=
+version: 1
+```
+Use version 1 if there is no condition statement. If there is a condition statement, it needs a version 3 policy. There is one policy per resource and up to 1500 members or 250 Google groups per policy. It takes up to 7 minutes for policy changes to fully propagate across GCP. Limit of 100 conditional role bindings per policy.
+
+Conditions are either based on the resources itself or details about the request such as timestamp or geolocation. Conditions are limited to specific services and cannot be applied to primitive roles. Members cannot be `allUsers` or `allAuthenticatedUsers`. Limit of 100 conditional role bindings per policy with 20 role bindings for same role and member.
+
+`AuditConfig` logs determine which features have logs generated for them.
+
+### Service Accounts
+
+
 ## Kubernetes Engine and Containers
 
 ### GKE and Kubernetes Concepts
