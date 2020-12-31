@@ -151,6 +151,65 @@ Conditions are either based on the resources itself or details about the request
 
 ### Service Accounts
 
+Service accounts can be user-managed, a default pre-configured account that automatically grants roles, and Google-managed.
+
+Service account keys can either be Google-managed or user-managed. The former is entirely managed by Google while the latter requires the user to manage key storage, distribution, revocation, rotation, protection, and recovery.
+
+Service account permissions can be granted at the project or service account level.
+
+Access scopes are the legacy method for permission authorization before IAM roles. These are used for default service accounts, but IAM roles should be used instead for custom service accounts.
+
+Best practices: audit service accounts and keys using either the `serviceAccount.keys.list()` method or with the Logs Viewer page. Delete service account external keys when not needed. Grant the service account only the minimum set of permissions needed. Create service accounts for each service. Take advantage of the IAM service account API to implement key rotation.
+
+### Cloud Identity
+
+Cloud Identity is Identity as a Service (IDaaS) that centrally manages users and groups. It provides options for user and group management as well as identity federation with active directory. Cloud Identity provides device management options to enforce secure permissions options. Security options include two step verification as well as single sign on (SSO) integration. Cloud Identity also offers auditing log and directory management options through Google Cloud Directory Sync (GCDS).
+
+### Cloud IAM Best Practices
+
+* Apply only the minimal access level required
+* Predefined roles should be chosen over primitive roles
+* Grant roles at the smallest scope
+* Child resources cannot restrict access granted on its parent
+* Restrict who can create and manage service accounts
+* Be cautious with owner roles
+
+**Resource Hierarchy**
+* Mirror the Google Cloud resource hierarchy structure to the organization structure
+* Use projects to group resources that share the same trust boundary
+* Set policies at the organization level and at the project level rather than at the resource level
+* Use the security principle of least privilege to grant IAM roles
+* Grant roles for users or groups at the folder level if it spans multiple projects
+
+**Service Accounts**
+* Treat each application as a separate trust boundary
+* Do not delete service accounts that are in use by running services
+* Rotate user managed service account keys
+* Name service account keys to reflect use and permissions
+* Restrict service account access
+* Do not insert service account keys into source code
+
+**Auditing**
+
+* Use Cloud Audit Logs to regularly audit IAM policy changes
+* Audit who can edit IAM policies on projects
+* Export audit logs to Cloud Storage for long term retention
+* Regularly audit service account key access
+* Restrict log access with logging roles
+
+**Policy Management**
+* Use an organization-level policy to grant access to all projects
+* Grant roles to a Google group instead of individual users wherever possible
+* Create a Google group if multiple roles are granted to particular task
+
+
+## Networking Services
+
+### Networking Refresher
+
+Information on the 7 layer OSI model. Lesson focuses on layers network (3), transport (4), and application (7) layers. Overview of IPv4 versus IPv6 addresses, CIDR ranges and prefixes, IP packets, etc.
+
+
 
 ## Kubernetes Engine and Containers
 
