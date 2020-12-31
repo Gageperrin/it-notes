@@ -209,7 +209,41 @@ Cloud Identity is Identity as a Service (IDaaS) that centrally manages users and
 
 Information on the 7 layer OSI model. Lesson focuses on layers network (3), transport (4), and application (7) layers. Overview of IPv4 versus IPv6 addresses, CIDR ranges and prefixes, IP packets, etc.
 
+### Virtual Private Cloud
 
+VPCs are virtualized networks within Google Cloud as global resources. They are encapsulated within a project. While they do not have any IP address ranges, they are associated with them. Firewall rules control traffic flowing in and out of the VPC.
+
+Resources within a VPC can communicate with one another using internal private IPv4 addresses. VPCs only support IPv4 address internally. Each VPC contains a default network. There are auto and custom mode VPCs. Automatically created VPCs have a subnet in each region.
+
+### Networks and Subnets
+
+A subnet is a subnetwork of a VPC. Each VPC network consists of one or more subnets and each subnet is associated with a region. The name or region of a subnet cannot be changed after you have created it. Primary and secondary ranges for subnets cannot overlap with any allocated range.
+
+GCP has a special feature to increase subnet IP space without considerable maintenance on the condition that the new subnet does not overlap with other subnets, that it is inside the RFC 1918 address space, and that the network range is larger than the original. A subnet expansion cannot be undone.
+
+There are always reserved IP addresses in a GCP subnet. The network is reserved in the first address. The default gateway is reserved in the second address. The penultimate address is for GCP future use, and the broadcast is the final address.
+
+### Routing and Private Google Access
+
+Routes define the network traffic path from one destination to the other. In a VPC, routes consist of a single destination (CIDR) and a single next hop. All routes are stored in the routing table for the VPC. Each packet leaving a VM is delivered to the next hop of an applicable route based on a routing order (lowest number means higher priority).
+
+There are two types of routing on GCP: system-generated and custom routes. System-generated routes can be default or for subnet routes while custom routes support static and dynamic routes. 
+
+The default route provides a path to the Internet and to private Google access. It can only be deleted by replacing it with a custom route. It is the lowest priority in routing order. A subnet route is a route that defines paths to each subnet in the VPC. Each subnet has at least one subnet route of whose destination matches the primary IP range of the subnet. When a subnet is created, a corresponding subnet route is created for both primary and secondary IP range. One cannot delete a subnet route unless you modify or delete the subnet.
+
+Static routes can use the next hop feature and be created manually. Static routes for the remote traffic selectors are created automatically when creating Cloud VPN tunnels. Dynamic routes are managed by one or more cloud routers. These dynamically exchange routes between a VPC and on-premises networks. Destination IP ranges are outside the VPC network. They are used with dynamically routed VPNs and Interconnect.
+
+Google VPC networks have special return paths that cannot be seen or configured in the route table. Private Google Access can be used to create secure routes to Google APIs and services.
+
+### IP Addressing
+
+The internal IP address is used only within a network and is not publicly advertized. Alias IP ranges can be configured to have multiple internal IP addresses for containers or VM applicatoins without a separate network interface. IP ranges can be assigned from the subnet's primary or secondary ranges. Alias IPs can be assigned from primary or secondary VPC network ranges.
+
+VPCs can have static or ephemeral IP addresses. Ephemeral IPs persist as long as the life of the application, and they are automatically assigned. Ephemeral IP addresses can be promoted to static as well. Static IPs remain attached until they are explicitly released.
+
+External IP addresses are needed to communicate with the Internet with resources in another network or a public GCP service. Sources from outside a Google Cloud VPC network can address a specific resource by the external IP address. Only resources with an external IP address can send and receive traffic directly to and from outside the network.
+
+Internal IP address reservations can reserve a specific address and then associate it with a specific resource. Specify an ephemeral internal IP address for a resoruce and then promote the address. External IP address reservations can be created by reserving a new static external IP and assigning it to a resource or by specifying an ephemeral external IP for a resource and then promoting it.
 
 ## Kubernetes Engine and Containers
 
