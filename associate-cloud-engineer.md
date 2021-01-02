@@ -245,13 +245,41 @@ External IP addresses are needed to communicate with the Internet with resources
 
 Internal IP address reservations can reserve a specific address and then associate it with a specific resource. Specify an ephemeral internal IP address for a resoruce and then promote the address. External IP address reservations can be created by reserving a new static external IP and assigning it to a resource or by specifying an ephemeral external IP for a resource and then promoting it.
 
+### Firewall and Firewall Rules
+
+GCP VPC Firewall rules are incoming or outgoing, not both. A firewall rule has a specified protocol, ports, sources, and destinations. Implied and pre-populated rules are blocking outgoing TCP traffic on port 25 and blocking TCP, UDP, ICMP, and GRE. The Metadata server (169.254.169.254) is always kept accessible
+
+The implied rules are allow egress and deny ingress. Firewall rules can only be applied to IPv4 address in CIDR format. A firewall rule must be associated with a VPC and cannot be shared between VPCs. Firewall rules are stateful, they cannot be configured to apply inconsistent rules to associated traffic.
+
+Firewall rules have several components: associated VPC, numerical priority, direction of the connection, action on match, defining the instance, source IP, source tags, source service account, protocols, and ports.
+
+### VPC Network Peering
+
+VPC Peering allows private connectivity across two VPC networks whether they are in the same or different projects and organizations. Peering reduces network latency, security, and costs. CIDR ranges cannot overlap between peering configurations. To allow ingress traffic from VM instances in a peer network, you must have ingress allow firewall rules. By default, there is an implied deny rule to ingress VM traffic. Transitive peering and internal DNS are not supported.
+
+### Shared VPC
+
+Shared VPCs span multiple projects while maintaining segmented billing and account management as needed. The Shared VPC admin has project-level and subnet-level permissions. Service projects connect to the host project through internal ephemeral or static IP addresses. Shared VPCs can be used for multiple host environments (production versus development), hybrid environments, and two tier web services.
+
+### VPC Flow Logs
+
+VPC Flow Logs monitor and analyze traffic coming in and out of VPCs from VM instances. Flow logs are exported in real-time for up to thirty days. They can be placed in Cloud Storage for long-term storage. One of every ten packets are captured, interpellating missing data from captured packets.
+
+VPC Flow Logs are used for network monitoring with real-time visibility into network throughput and performance. It can analyze network usage and optimize network traffic expenses. It can be used for network forensics when incidents occur. It can provide real-time security anlaysis and stream to pub/sub and integrate with SIEM.
+
+Flow Logs are recorded in necessary core fields while additional fields of metadata are presented in a multi-field format. These can be annotated with GKE annotations.
+
+### Cloud DNS
+
+Cloud DNS acts as an authoritative DNS server that allows authoritative DNS lookups. It is globally resilient. Zones are hosted through managed name servers either as public zones or private zones visible only within the network.
+
 ## Kubernetes Engine and Containers
 
 ### GKE and Kubernetes Concepts
 
 Kubernetes is an orchestration platform for containers that automates, schedules, and runs applications on clusters.
 
-Google Kubernetes Engine (GKE) is Google's public cloud environment for running Kubernetes. It offers cloud load balancing, node pools, automatic scaling, automatic upgrades, node auto-repair, as well as logging and monitoring.
+Google Kubernetes Engine (GKE) is Google's public cloud environment for running Kubernetes. It offers cloud load balancing, node pools, automatic scaling, automatic upgrades, node auto-repair, as well as logging and monitoring. 
 
 Each cluster has one or more control planes, one or more nodes, and the control plane manages scheduling and maintenance while the nodes run containerized apps. The nodes are also responsible for Docker runtime. The API server manages interaction with the cluster. The kube scheduler discovers and assigns newly created pods. Kube controller manager runs all controller processes. The cloud controller manager runs controllers specific to the cloud provider. Lastly, ETCD stores the state of the cluster as a HA key value store database.
 
