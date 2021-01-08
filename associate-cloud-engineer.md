@@ -273,6 +273,73 @@ Flow Logs are recorded in necessary core fields while additional fields of metad
 
 Cloud DNS acts as an authoritative DNS server that allows authoritative DNS lookups. It is globally resilient. Zones are hosted through managed name servers either as public zones or private zones visible only within the network.
 
+## Compute Engine
+
+### Compute Engine Overview
+
+Virtual machines launched in a VPC network. Host is available in a zone. Multi tenant host or solo tenant node. Per second billing. Each vCPU is implemented on a single hardware hyper thread on CPU. 2 GBps per CPU.
+
+Public images of Linux or Windows can be used or custom, private images. A third option is a marketplace solution that combines an OS with software pre-configured. 
+
+Storage configured can be Standard HDD, Balanced SSD, or SSD. Local SSD is physically attached swap disk and is the fastest. 
+
+Network configuration can be automatic default, or custom. They include ingress and egress firewall rules and network load balancing with regional load balancing. 
+
+
+### Compute Engine Machine Types
+
+There are general-purpose, compute-optimized, and memory-optized machine type families. Machine types have names like `e2-standard-32`. The first part is the series and generation. The second part is the type. The third is the number of vCPU's offered.
+
+General-purpose is used for basic computing at a low cost such as web serving, microservices, etc. They can support up to 32 vCPUs and 128 GB of memory. They have the lowest on-demand pricing. 
+
+* N1 machine types were the first general purpose machine type with up to 96 vCPUs and 624 GB of memory. Only machine type with GPU and TPU support. Larger sustained use discount than N2.
+* N2 machine types are the second generation with support up to 80 vCPUs and 640 GB of memory. Their workloads can take advantage of higher clock frequency with higher per-thread performance.
+* The N2D is the largest general purpose machine type with up to 224 vCPUs and 896 GB of memory. It also has a higher memory-to-core ratio than the other machine types.
+
+Compute-optimized machine types offer ultra-high performance for compute-intensive workloads such as HPC, gaming, etc. These have the highest performance per core but cannot use regional persistent disks. These consist of the C2 machine type.
+
+Memory-optimized machine types are best for ultra high-memory workloads that require large in-memory databases like SAP HANA. It has two generations: M1 and M2. M1 offers up to 160 vCPUs with 3844 GB while M2 offers up to 160 vCPUs with 11,776 GB of memory. These also cannot use regional persistent disks.
+
+The shared core machine type makes uses of burstable workloads as well as cost-effective and non-resource intensive applications. E2 has a physical core available for short periods of time for CPU bursting.
+
+Custom machine types can also be used with a user-specified number of vCPUs and memory load, but these are more expensive.
+
+### Managing Instances
+
+Instance lifecycle stages: provisioning, staging, running (reset), suspend -> resume, and stopping -> terminated.
+
+During provisioning, disks are mounted and the vCPUs and memory are loaded in. During staging, internal and external IPs are attached and the system image is used to boot the instance. When the instance is running, a startup script is run and can take in metadata. Access can be set up through SSH or RDP.
+
+Shielded VM's offer verifiable integrity of the OS to ensure there was no root or kernel sabotage. The boot process is run through Secure Boot. Virtual Trusted Platform Module (vTPM) loads in the policy to authenticate the bootup policy with a measured boot. Integrity Monitoring takes in measurements to ensure boots are secure.
+
+SSH and RDP can be used to access VMs. SSH requires the firewall rule allow tcp:22. RDP requires the firewall rule allow tcp:3389. 
+
+An instance can be modified, repaired, or migrated once logged in without shutting down the instance.
+
+### Compute Engine Billing
+
+Each vCPU and GB is billed separately based on the resource. All vCPUs, GPUs, and GB of memory are charged by the second with a one minute minimum threshold. Instance uptime is the number of seconds between when an instance is started and when it is terminated. Instances are not charged in the terminated state.
+
+Reservations ensure that resources are available when needed. These can serve future increases in demand, planned or unplanned spikes, backup and disaster recovery, or as a buffer. Reservations include sustained use and committed use discounts. They apply only to Compute Engine, Dataproc, and GKE VMs.
+
+Discounts can be sustained use, committed use, or pre-emptible VMs. Sustained use are automatic discounts applied to vCPU, GPU and memory usage. N2 and N2D can get up to 20% off while N1 can get up to 30% off. They are applied on incremental use over time. 
+
+Committed used discounts are 1 or 3 year contracts for predictable or steady workloads for up to 57% off on most resources (70% discount for memory-optimized machine types). Committed use discounts are applied at the project level and can be shared across multiple projects. 
+
+Pre-emptible VMs are up to 80% cheaper with fixed pricing. These are instances that are start or stopped depending on availability in Compute Engine, and they are always stopped within 24 hours. They have no charge if shut down in less than 10 minutes. Pre-emptible VMs have no access to live migration or auto restart, so they are useful fault-tolerant or serverless applications.
+
+### Storage Fundamentals
+
+The basic kinds of storage are block, file and object.
+
+Block storage is the fastest, most-efficient, and reliable storage type. It consists of uniquely identifiable evenly sized blocks that are usually delivered on mountable or bootable physical media such as spinning hard drive or solid state drives.
+
+File storage is the traditional network file system. Data is received through directory trees. This structure is mountable but not bootable. Cloud File Store is the GCP solution for this kind of storage following NFSv3.
+
+Object storage is unstructured key-value data and metadata with a globally unique identifier. It is infinitely scalable because it does not matter where an object is stored. The GCP solution for this is Cloud Storage buckets. It is neither mountable nor bootable.
+
+Storage performance can be described in terms of I/O block size, I/O queue depth, IOPS, throughput and latency. Performance can also depend on if data is accessed sequentially or randomly.
+
 ## Kubernetes Engine and Containers
 
 ### GKE and Kubernetes Concepts
