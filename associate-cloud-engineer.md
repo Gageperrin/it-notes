@@ -340,6 +340,47 @@ Object storage is unstructured key-value data and metadata with a globally uniqu
 
 Storage performance can be described in terms of I/O block size, I/O queue depth, IOPS, throughput and latency. Performance can also depend on if data is accessed sequentially or randomly.
 
+### Persistent Disks and Local SSDs
+
+Persistent disks and local SSDs are two kinds of block storage with different use cases. 
+
+Persistent disks can be standard, balanced, or SSD with either zonal or regional varieties. These are like physical disks in a computer. They provide network storage and are instance-independent and can be resized while they are running. They are encrypted by default and can have up to 64 TB in disk space. Shared core machine types are limited to 16 persistent disks and 3 TB. Zonal disks are available in one zone in one region. Regional disks are stored in two zones in the same region. Regional persistent disks cannot be used with compute or memory-optimized machine types.
+
+`pd-standard`are backed by standard hard disk drives HDD and have large data processing workloads that primarily use sequential I/Os. It is the lowest priced persistent disk but has a relatively high latency rat at the regional level. `pd-balanced` is the alternative to SSD persistent disks that balance performance and cost. It has the same maximum IOPS as ssd-pd with lower IOPS per GB. It is general purpose with a price in between standard and SSD persistent disks. `pd-ssd` is for enterprise applciations and high-performance databases that demand lower latency and more IOPS. they have single digit millisecond latency but are the highest priced persistent disk.
+
+Local SSDs are physically attached to the server as either SCI or NVME. It has a higher throughput and IOPS and lower latency. Data persists until instance is stopped or deleted. Each local SSD is 375 GB but partitions can be inserted to raise size to 9 TB per instance.
+
+SCSI is a classic solution but only has one queue for commands. NVME is a newer protocol designed for flash memory with 64,000 queues that can each have up to 64,000 concurrent processes. CPUs need to be scale with disk memory performance. This is because performance scales until it reaches either the limits of the disk or the limits of the VM instance to which the disk is attached.
+
+### Snapshots
+
+Snapshots backup and restore persistent disks and are global resources. They provide support for zonal and regional PDs, and they have incremental and automatically compressed options. Snapshots are stored in Cloud Storage. It is stored in regional or multi-regional location.
+
+The first successful snapshot of a persistent disk is a full snapshot. Subsequent snapshots only contain data missing from previous snapshots. If a snapshot is deleted, subsequent snapshots will draw reference from the most recent available snapshot.
+
+Snapshot schedules are the best practice for backups and must be in the same region as `pd`. Snapshot schedules can be created and then attached to a disk or they can be created attached to the disk. Schedules can be set with a retention policy and a source disk deletion rule (what happens if a source disk is deleted). A snapshot schedule cannot be edited after creation; a new one must be created.
+
+Other things to note:
+* At most there can be one snapshot every 10 minutes. 
+* It is possible to eliminate excessive snapshots by creating an image instead.
+* Set schedule to off-peak hours whenever possible
+* Can create VSS snapshots for Windows
+
+### Deployment Manager
+
+A configuration is written in YAML syntax and defines the structure of a deployment. It must contain a resources section with a list of resources to create. The three required components are name, type, and properties. A name is a user-defined string. Type can be a base or composite type. A base type lists the `API.VERSION.RESOURCE` while a composite type is written as `gcp-types/PROVIDER:RESOURCE`. Properties take certain parameters for the resource type such as the `zone`, `machineType`, `boot`, and `sourceImage`.
+
+Templates are individual building blocks of a configuration and can be written in Jinja and Python. They can be programmatically generated through abstracted template properties.
+
+A deployment is a collection of resources that are deployed, updated, managed and deleted together. The manifest file provides instructions for the deployment and cannot be edited after the deployment has been created.
+
+Best practices:
+* Break up configurations into logical units
+* Use references to enforce order when resources are created
+* Preview deployments using `--preview flag`.
+* Automate the creation of resources through IaaC
+* Use version control
+
 ## Kubernetes Engine and Containers
 
 ### GKE and Kubernetes Concepts
@@ -356,8 +397,7 @@ Groups of node in a cluster have the same configuration. Custom node pools are u
 
 Cluster versions can be automated to be upgraded through the release channels (rapid, regular or stable). A specific version can also be specified when creating a cluster. Control planes and nodes do not always run the same version at all times. A control pane is always upgraded before its nodes. Auto-upgrade is the best practice. Manual upgrades have more features but requires only one functionality to be upgraded at a time.
 
-Surge upgrades control the number of nodes that can be upgraded at a time. Use surge upgrade parameters to specify how many additional nodes can be added to the pool during the upgrade (`max-surge-upgrade` and how many 
-nodes can be available at one time `max-unavailable-upgrade`.
+Surge upgrades control the number of nodes that can be upgraded at a time. Use surge upgrade parameters to specify how many additional nodes can be added to the pool during the upgrade (`max-surge-upgrade` and how many nodes can be available at one time `max-unavailable-upgrade`.
 
 ### Pods and Object Management
 
