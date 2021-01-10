@@ -381,6 +381,36 @@ Best practices:
 * Automate the creation of resources through IaaC
 * Use version control
 
+## High Availability and Autoscaling
+
+### Cloud Load Balancers
+
+The cloud load balancer distributes user traffic across multiple instances and provides a single point of entry with multiple backends. It is fully distributed and software defined. Load balancers can be global or regional and are configured to serve content as close as possible to users. They provde autoscaling with health checks.
+
+Global load balancing is ideal for applications distributed across multiple regions. It provides external HTTP(S) load balancing with SSL and TCP Proxies as well. Regional load balancing handles Internal HTTP(S) and TCP/UDP traffic.
+
+Backend services include health checks, session affinity, service time out, traffic distribution, and backends (endpoints and service groups).
+
+The HTTP(S) load balancer distributes traffic using (1) rules based on cross-region load balancing through IP address requests or (2) content-based load balancing using URL maps. This kind of load balancer is global, proxy-based, and **Layer 7** behind a single external IP address. It is implemented on Google Front Ends (GFE) and provides HTTPS and SSL encryption in transit for both IPv4 and IPv6 traffic. IPv6 traffic terminates at the load balancer and is server as IPv4 to the back-end. Forwarding rules are in place to distribute defined targets to target pools. URL maps direct requests based on rules. SSL certificates (Google or self-managed) are required for HTTPS traffic. The ports used are 80, 8080 for HTTP and 443 for HTTPS.
+
+SSL Proxy is a rever proxy load balancer that distributes SSL traffic coming from the Internet to VMs. It is global and external and distributes traffic by location only. It is a single Unicast IP address and operates at Layer 4. It provides support for **TCP with SSL offload** and supports IPv4 and IPv6 in the same way as the HTTP(S) load balancer. It is used for other protocols that use SSL.
+
+TCP Proxy load balancer is a reverse proxy load balancer that distributes TCP traffic coming frmo the Internet to VMs. Client TCP sessions are terminated at the load balancer. It forwards traffic as SSL or TCP. It provides intelligent routing and routes to locations that have capacity. It has a single Unicast IP address, operates at Layer 4, is global and external, and it distributes traffic by location only. It is intended for non HTTP traffic. Supports IPv4 and IPv6 traffic in the same way as other load balancers. It supports many well-known TCP ports.
+
+The Network Load Balancer is a regional pass-through load balancer that distributes TCP and UDP traffic to VMs. It is not a proxy and responses from backend go directly to client. It is regional and external. It supports either TCP or UDP but not both. It supports traffic on ports that are not supported by TCP proxy and SSL proxy. SSL is decrypted by backends, not by the load baalancer. Traffic is distributed by protocol, scheme and scope. No TLS offloading or proxying. Multiple forwarding rules reference one target pool. Other protocols use target instances. It can only handle self-maanged SSL certificates (**not Google-managed**).
+
+The Internal Load Balancer is a pass-through load balancer that distributes TCP and UDP traffic to VMs. It is layer 4, regional internal, supports TCP or UDP (not both), balances internal traffic between instances, does **not balance Internet traffic** and only sends traffic to the backend directly. When using forwarding rules, it is necessary to specify at least one and up to five ports by number. It is necessary to specify `ALL` to forward traffic to all ports.
+
+### Instance Groups and Instance Templates
+
+An instance group is a collection of VM instances that you can manage as a single entitty. There are Managed Instance Groups (MIGs) and Unmanaged Instance Groups.
+
+MIGs are stateless (good for website front-end, servers, batch workloads) but can be useful for stateful workloads. It is HA by offering auto-healing and can be regional or zonal. It offers scalability through load balancing and auto-scaling. It also provides auto-update functionality. MIGs include pre-emptible instances, containers, and networking.
+
+UIGs offer load balancing for mixed types of instances but features no auto-healing, no multi-zone distribution, no autoscaling, and no auto-updating.
+
+Instance templates are a resource used to create VM instances and MIGs. They specify machine type, boot disk image, container image, labels, and can create a MIG or VM. An instance template is required to create a group of identical instances. Instance templates cannot be changed after creation, a new one must be implemented.
+
 ## Kubernetes Engine and Containers
 
 ### GKE and Kubernetes Concepts
@@ -397,7 +427,7 @@ Groups of node in a cluster have the same configuration. Custom node pools are u
 
 Cluster versions can be automated to be upgraded through the release channels (rapid, regular or stable). A specific version can also be specified when creating a cluster. Control planes and nodes do not always run the same version at all times. A control pane is always upgraded before its nodes. Auto-upgrade is the best practice. Manual upgrades have more features but requires only one functionality to be upgraded at a time.
 
-Surge upgrades control the number of nodes that can be upgraded at a time. Use surge upgrade parameters to specify how many additional nodes can be added to the pool during the upgrade (`max-surge-upgrade` and how many nodes can be available at one time `max-unavailable-upgrade`.
+Surge upgrades control the number of nodes that can be upgraded at a time. Use surge upgrade parameters to specify how many additional nodes can be added to the pool during the upgrade (`max-surge-upgrade` and how many nodes can be available at one time `max-unavailable-upgrade`).
 
 ### Pods and Object Management
 
@@ -418,3 +448,58 @@ Kubernetes networking is designed to outlast ephemeral pods and their assigned I
 ClusterIP is the default service that is used to access nodes in a cluster through ports and target-ports. NodePort is a static port that bridges two nodes. Other Kubernetes services include Ingress, Multi-port, ExternalName, and Headless.
 
 
+## Hybrid Connectivity
+
+### Cloud VPN
+
+Cloud VPN connects a peer network to a VPC through an IPsec VPN connection. It provides a IPsec tunnel over the public Internet. Traffic is encrypted by one VPN gateway and decrypted by the other. It is a **regional** service. It is site-to-site VPN only. No site to client option. It allows private Google Access for on-premises hosts.
+
+It supports up to 3 GBps per tunnel and offers dynamic and static routing. Cloud VPN supports IKEv1 and IKEv2 using Shared Secret.
+
+There are two types of Cloud VPN: Classic VPN and HA VPN.
+
+Classic VPN:
+* 99.9% SLA
+* Static and dynamic routing
+* One external IP address for a single interface
+* Functionality depreciates in October 2021.
+
+HA VPN:
+* 99.99% SLA
+* Dynamic routing only
+* Two external IPs to be configured for two instances. (Better HA)
+* New default VPN
+
+Use Cloud VPN if public Internet access is needed, if peering location is not available, when there are budget constraints, when high speeds / low latency are not necessary, and when it is egress traffic from GCP.
+
+### Cloud Interconnect
+
+Cloud Interconnect is a low-latency HA connection that does not travel over the public Internet. It is a low latency, highly available connection between an on-premises environment and Google Cloud VPN networks. It is directly accessible to internal IP addresses through Prviate Google Access. It travels through a dedicated connection from an on-premises network. It is **not encrypted**. It is also a relatively expensive service.
+
+Dedicated Interconnect provides a physical connection between an on-premises environment and GCP. There can be up to eight connections of 10 GBps or up to two 100 GBps connections.
+
+Partner Interconnect provides a connection through a service provider (via Peering Edges) with VLAN attachments between 50 MBps or 50 GBps. This is not a direct connection but is useful if a Google facility is out of reach or for workloads that do not require the Dedicated Interconnect setup.
+
+Direct Peering estabilshed a direct connection between an on-premises network and Google's edge network. It is available at 100 locations in 33 different countries. Direct egress pricing is available. Direct Peering connection is free as long as the technical requirements are met.
+
+CDN Interconnect enables select third-party CDN providers to establish direct peering links with Google's edge network. Direct traffic from VPC networks to the provider's network. It provides reduced pricing on egress costs.
+
+Use Cloud Interconnect to prevent traffic from traversing the public Internet. It offers a dedicated physical connection as an extension of a VPC network. It offers high speed and low latency and is suitable for heavy egress traffic from GCP. Private Google Access keeps the process secure.
+
+## Serverless Services
+
+### App Engine Overview
+
+App Engine is a PaaS full managed, serverless platform to develop and host web apps through code or containers using (Python, Java, Node.js, Go, Ruby, PHP, or .NET). It can autoscale based on loads, offer versioning, and support external storage.
+
+App Engine comes in Standard and Flexible environments. 
+
+In standard environments, apps run in a sandbox environment where only specific versions of runtimes can be used. They run for free or at very low cost, they are designed for sudden and extreme spikes of traffic. Their pricing is based on instance hours.
+
+In flexible environments, apps are run in docker containers, any version of runtimes can be used, no free quota is available, it is designed for consistent traffic, pricing is based on VM resources, and it hosts managed VMs.
+
+The topological hierarchy starts with the application at the top with one or more services beneath. These services have individual versions from which each instance is run. 
+
+App Engine automatically creates and shuts down instances. The YAML configuration file can specify a number of instances to run and a scaling type. Automatic scaling is based on request rate and response latencies. Basic scaling creates instances when the application receives requests. Manual scaling specifies the number of instances that continuously run. App Engine can migrate traffic between targeted versions (also supporting gradual "warm-up" traffic transitioning). It can also split traffic based on specified percentage loads.
+
+### Introduction to Cloud Functions
