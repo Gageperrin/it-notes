@@ -503,3 +503,95 @@ The topological hierarchy starts with the application at the top with one or mor
 App Engine automatically creates and shuts down instances. The YAML configuration file can specify a number of instances to run and a scaling type. Automatic scaling is based on request rate and response latencies. Basic scaling creates instances when the application receives requests. Manual scaling specifies the number of instances that continuously run. App Engine can migrate traffic between targeted versions (also supporting gradual "warm-up" traffic transitioning). It can also split traffic based on specified percentage loads.
 
 ### Introduction to Cloud Functions
+
+Cloud Functions is a serverless FaaS environment that can run Python, Java, Node.js, Go, .NET core. It is event-driven with triggers such as HTTP, Pub/Sub, Cloud Storage, Firestore, and Firebase. The functions themselves are stateless.
+
+Billing is based on time and resources. There is no free tier.
+
+Only one trigger can be bound to a function at a time. The code is stored in a storage bucket which is accessed by CodeBuild to deploy the container registry which is in turn accessed by Cloud Functions alongside the event data. Only one concurrent request can be run at a time. The results are passed along to a VPC or the public Internet.
+
+
+## Storage Services
+
+### Cloud Storage and Storage Types
+
+Cloud Storage is a consistent, scalable, large-capacity, highly durable object storage. It has worldwide accessibility and worldwide storage location. Use it for data files, text files, pictures, and videos. Excels for content delivery, big data sets, and backups.
+
+Cloud Storage buckets are the basic container unit that holds data and provides data organization and access control. Buckets cannot be nested. Upon creation, they are given a globally unique name and geographic location. The name cannot be changed after creation. They can be stored in one region, dual regions, or multi-regions for geo-redundancy. A bucket cannot be changed between dual and multi regions after creation.
+
+There is no limit to objects that can be stored in a bucket. An object contains both object data and metadata properties. Buckets can use file structure nomenclature to provide a sense of hierarchy when searching objects even though there is no explicit hierarchy.
+
+Storage classes can be standard, nearline, coldline, archive. Standard is best for hot data as it has maximum availability with no storage duration requirement and is good for analytical workloads and transcoding. Nearline is low-cost for infrequently accessed data. It has a 30 day minimum, provides data backup and data archiving. Coldline is very low-cost for infrequently accessed data of a 90 day minimum storage duration. It offers data backup and data archiving. Archive is the lowest cost archival storage with a 365 day minimum and provides data storage disaster recovery. Data retrieval becomes more expensive the more cold the storage class.
+
+Storage class costs:
+* Standard: $0.02 per GB per month
+* Nearline: $0.01 per GB per month
+* Coldine: $0.004 per GB per month
+* Archive: $0.0012 per GB per month
+
+Access can be uniform or fine-grained (IAM + ACLs). IAM offers standard permissions that can be inherited hierarchically. The Access Control List defines who has access to your buckets and objects as well as their level of access. Signed URLs offer time-limited read and write access for a specified duration of time. Signed Policy Documents specify what can be uploaded to a bucket.
+
+IAMs are recommended over ACLs and offer two levels of granularity at the project or bucket level. The roles available can be primitive, standard, or legacy. Legacy roles are equivalent to ACLs. By contrast, ACLs offer entry through a permissions with a specified scope. However, they must be used carefully as ACLs overlap IAM roles. Cloud Storage will grant the broader permission.
+
+Signed URLs allow users without credentials to perform specific actions on a resource. Action are taken as a user or service account. No account needed, just the URL.
+
+
+### Object Lifecycle Management and Versioning
+
+Objects are immutable and cannot be changed within its lifetime. Objects are instead replaced with a new version. Object versioning retains a non-current object version when a replaced object is created. 
+
+Because versioning can become expensive quickly, object lifecycle management can be used to maintain a manageable storage ecosystem. Objects can have a set TTL (time to live). It can delete or archive non-current versions or downgrade storage class. These features can be automated based on absolute and relative time conditions. Rules are used to create certain actions upon particular conditions.
+
+Changes are in accordance ot object creation date. A deleted object cannot be undeleted. Lifecycle rules can take up to 24 hours to take effect. It is important to test lifecycle ruels in development first.
+
+### Cloud SQL
+
+Cloud SQL is a fully managed relational database service RDBMS. It is a DBaaS. It is low latency, transactional, and suited for relational DB workloads. It is compatible with MySQL, PostgreSQL, and SQL Server. It offers replciation through Read Replicas.
+
+Cloud SQL offers on-demand and automatic backups as well as point in time recovery. It has 30TB storage capacity by default and can automatically increase storage. Data is encrypted at rest and in transit. It is billed for instance, persistent disk and egress traffic.
+
+The user can connect to Cloud SQL through a public or private IP. It is recommended to use a Cloud SQL proxy. It is possible authorize a network or external applications to access the data.
+
+Replication occurs from the primary instance from one zone to another. The Read Replica is read-only. Replicas can be generated in another region or in an external, on-premises environment. To create a Read Replica, the primary instance must have automated backups and binary logging enabled. One backup must have been created after logging was enabled. Replicas can be promoted through planned regional migration or for disaster recovery.
+
+Cloud SQL offers high availability through a multi-zonal configuration with synchronous replciation between zones. If the primary instance fails, failover is initiated to the secondary instance after 60 seconds. When the primary instance is restored, a failback is initiated to redirect traffic to the primary instance. The secondary instance charges twice the rate for usage and does not have read capabilities.
+
+Backups are stored both in the same region and another. Cloud SQL offers on-demand and automated backups. On-demand backups persist until deleted. Automated backups have a 4 hour window, occur everyday, and the seven most recent backups are retained by default. Point in time recovery allows the user to recover an instance to a specific point in time. This is done through creating a new instance.
+
+### Cloud Spanner
+
+Cloud Spanner is a fully managed relational database service that is both strongly consistent and horizontally scalable. It is a DBaaS that supports schemas, ACID transactions, and SQL queries. It is globally distributed and handles replicas and sharding. It provides synchronous data replication. Cloud Spanner provides automatic scaling and node redundancy. It has up to 99.999% availability.
+
+Cloud Spanner offers data layer encryption, audit logging, and IAM integration. It is designed for financial services, global supply chain, and gaming. Pricing consists of $0.90 per node per hour plus $0.30 per GB per month.
+
+Cloud Spanner consists of instances that are configured with a geographical location and a node count. A full copy of database is stored in each zone's node. A three node minimum is recommended. Cloud Spanner can create sharding to improve performance.
+
+Cloud Spanner can provide up to 10,000 queries per second of reads or QPS of writes. 2 TB of storage per node. It adds nodes to increase data throughput and QPS. It scales nodes automatically using Cloud Monitorign metrics triggered by Cloud Functions.
+
+### NoSQL Databases
+
+GCP has four options for NoSQL: Cloud Bigtable, Cloud Datastore (legacy), Firestore for Firebase, and Memorystore
+
+Cloud Bigtable is fully managed, wide-column NoSQL database designed for terabyte ot petabyte-scale workloads that offer low latency and high throughput. It is built for real time app serving and large scale analytical workloads. It is a regional service with automated replication that strores large amounts of single-keyed data. It adds nodes when you need them. It also offers cluster resizing and MapReduce operations. It is a relatively expensive service. Use cases include time-series data, marketing data, financial data, IoT data, and graph data. 
+
+Cloud Datastore is a fully managed, highly scalbale NoSQL document database built for automatic scaling, high performance, and ease of application deployment. It offers HA of reads and writes, has atomic transactions, automatic scaling, and SQL-like query language (GQL). It has strong and eventual consistency. There is encryption at rest. Cloud Datastore can provide local emulation of the production environment for developers. Datastore is being retired in 2021 in favor of Cloud Firestore. Can be used for product catalogs, user profiles, and transactions based on ACID properties.
+
+Firestore for Firebase is a flexible, scalable NoSQL cloud database to store and sync data for client and server-sdie deployment. It stores data in documents organized by collections. It is serverless and offers multi-region replication. Queries can be retrieved at the document level without having to go through the whole collection. It provides real-time updates and offline support and is a secure option. It is a realtime database. (Firebase is a mobile app development platform that provides tools and cloud services to help enable developers to complete their work more efficiently.)
+
+Memorystore is a fully managed service for either Redis or Memcached in-memory data store to build application caches. It is fully managed and serverless, highly available, can be scaled as needed, is secure, and it is always up to date. Use this for caching, gaming, and stream processing.
+
+## Operations Suite
+
+Operations suite is a suite of tools for logging, monitoring, error reporting, debugging, tracing, and profiling. It is available for GCP and AWS. It consists of VM monitoring with agents. It is available for on-premises environment and offers GCP native integration. It can be integrated with a wide ranging library of application performance technologies.
+
+Monitoring collects measurements or metrics to demonstrate how system services are performing. It can create dashboards and charts. Workspaces are needed to use cloud monitoring. Agents are recommended to monitor VMs. Cloud Monitoring is available for GKE. Workspaces can include up to 500 policies. Alerts can be sent through email, SMS, and other third-party tools.
+
+Cloud Logging is a central repository for log data from multiple sources. It provides real-time log management and analysis. It has tight integration with monitorign. It includes platform, system and application logs. It can export logs to other soruces. Logs Viewer only shows logs from one project. Log Entry records a status or event. Logs are a named collection of log entries within a GCP resource. Retention period how long are logs are kept. Types of logs include audito logs, access transparency, and agent logs.
+
+Error reporting counts, analyzes, and aggregates all the errors in the GCP environment. It alerts when a new applicatoin error occurs. It is integrated into Cloud Function and GAE Standard. It includes tracking issue integration.
+
+Debugger inspects the state of a running application in real time without stopping or slowing it down. It debugs a running application with no latency. It "snapshots" the call stack in the application. Logpoints allow you to inject logging into running services. It can be hooked into rmeote Git repos such as Github, GitLab, and Bitbucket. It can be installed on non-GCP environments.
+
+Trace collects latency data from App Engine, HTTPS load balancers and various application APIs. It helps to understand how long it takes your application to handle incoming requests (latency). It collects latency data from cloud resources and apps. It can be integrated with GAE Standard and installed on GCE, GKE, and GAE.
+
+Profiles continuously gathers CPU usage and memory allocation from applications without consuming a lot of memory. It needs profiling agent instead. Can be installed on GCE, GKE, and GAE. It can also be installed on non-GCP environments.
