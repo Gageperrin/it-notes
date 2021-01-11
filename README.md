@@ -20,4 +20,4 @@ Planned:
 * **AWS Advanced Networking Specialty**
 * **RHCE Ansible** *
 
-\*I plan to prepare for and take a mock exam because this official exam certification is too expensive for what I believe it offers. However, I will still learn the content and technology thoroughly.
+\*I plan to prepare for and take a mock exam because this official exam certification is too expensive for what I believe it offers. However, I will still learn the content and technology as thoroughly as required to pass the real exam.
