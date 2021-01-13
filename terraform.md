@@ -67,7 +67,7 @@ These can then be called in the configuration file with `var.[variable name]`.
 
 ### Understanding the Variable Block
 
-Variable blocks take three parameters: `default`, `type`, and `description`. Default is the default variable value while type is the data type. Description is optional. 
+Variable blocks take three parameters: `default`, `type`, and `description`. Default is the default variable value while type is the data type. Default and description are optional. 
 
 Supported variable types include:
 * string
@@ -80,5 +80,42 @@ Supported variable types include:
 * object
 * tuple
 
- #### Using Variables in Terraform
+ ### Using Variables in Terraform
 
+It is possible to pass in variables as flags using `terraform apply -var "filename=/root/pets.txt" -var "content=We love pets!"` or as environment variables `export TF_VAR_filename="/root/pets.txt"` and `export TF_VAR_content="We love pets!"`. 
+
+Variables can also be declared in variable definitions files with file type `.tfvars` or `.tfvars.json`.
+
+Variable definition precedence starts at the bottom with environment variables, then `terraform.tfvars` then `*.auto.tfvars` then lastly variable flags. Variable flags override everything else.
+
+### Resource Attributes
+
+Use resource attribute to draw from the output of one resource as input for another. In the configuration file this can be interpolated using `${resource-type.resource-name.attribute}`.
+
+### Resource Dependencies
+
+Terraform creates resource in the order of the implicit detected dependencies based on called resource attributes. Resource dependencies can be explicitly specified:
+`
+depends_on = [
+  resource-type.resource-name
+]
+`
+
+## Output Variables
+
+Output variables can be stored in an output block:
+`
+output pet-name {
+  value = random_pet.my-pet.id
+  description = "Record the pet ID"
+}
+`
+
+These can be printed in the command line with `terraform output`. 
+
+Output variables are not necessary within Terraform but can make reading configuration easier and are useful for integrating with third-party shell scripts or Ansible playbooks.
+
+
+## Terraform State
+
+### Introduction to Terraform State
