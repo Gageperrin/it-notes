@@ -44,3 +44,41 @@ When initialized, Terraform downloads plugins for hundreds of infrastructure pla
 
 Plugins are downloaded to `/root/terraform-local-file/.terraform`. Initialization syntax generally goes `[hostname]/[org namespace]/[type]: version = _____`.
 
+Terraform can support multiple providers in the same configuration. Each provider should be initialized as a plugin when `terraform init` is run.
+
+### Configuration Directory
+
+A configuration directory can contain more than one configuration (Terraform) file. It is best practice to build a `main.tf` file that builds the primary essential resource definitions. Other common files with larger directories include `variables.tf`, `outputs.tf`, and `provider.tf`.
+
+### Using Input Variables
+
+Hard-coded values are not best practice, it is better to use input variables that are specified in a variables file with the syntax:
+`
+variable "filename" {
+  default = "/root/pets.txt"
+}
+variable "content" {
+  default = We love pets!"
+}
+[etc.]
+`
+
+These can then be called in the configuration file with `var.[variable name]`.
+
+### Understanding the Variable Block
+
+Variable blocks take three parameters: `default`, `type`, and `description`. Default is the default variable value while type is the data type. Description is optional. 
+
+Supported variable types include:
+* string
+* number
+* bool
+* any
+* list
+* set (list without duplicate values)
+* map
+* object
+* tuple
+
+ #### Using Variables in Terraform
+
