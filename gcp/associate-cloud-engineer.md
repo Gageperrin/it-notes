@@ -1,12 +1,14 @@
 # Google Cloud - Associate Cloud Engineer
 
+These are my notes from Antoni Tzavelas' [training course for the Google Cloud Associate Cloud Engineer examination](https://training.antonit.com/). Other resources include the [official GCP documentation](https://cloud.google.com/docs/).
+
 ## Google Cloud Fundamentals
 
 ### Google Cloud Global Infrastructure
 
 A user request is sent to a Point of Presence edge network which is then passed over a private fiber network to a Google Data Center with the lowest amount of latency possible.
 
-A zone is a deployment area for Google Cloud in a region. It offers optimal latency because of its precise deployment proximity to users. A region is an independent geographic area that contains multiple zones. There is sub 5ms latency between zones in ar region which makes it useful for fault tolerance and high availability. Multi-regions contain two or more regions. It serves content to consumers outside of the Google network.
+A zone is a deployment area for Google Cloud in a region. It offers optimal latency because of its precise deployment proximity to users. A region is an independent geographic area that contains multiple zones. There is sub 5ms latency between zones in a region which makes it useful for fault tolerance and high availability. Multi-regions contain two or more regions. It serves content to consumers outside of the Google network.
 
 ### Compute Service Options
 
@@ -15,17 +17,17 @@ A zone is a deployment area for Google Cloud in a region. It offers optimal late
 * Chose the operating system and software to put on it
 * Public and private instances can be used to create instances
 
-Google Kubernetes Engine (GKE) is Google's container orchestration system for automating, deploying, scaling, and managing contaienrs. It is built on open source Kubernetes and has the flexibility to integrate with on-premises Kubernetes. It uses compute engine instances as nodes in a cluster. A cluster is a group of nodes or Compute Engine instances. It is CaaS.
+Google Kubernetes Engine (GKE) is Google's container orchestration system for automating, deploying, scaling, and managing contaienrs. It is built on open source Kubernetes and has the flexibility to integrate with on-premises Kubernetes. It uses compute engine instances as nodes in a cluster. A cluster is a group of nodes or Compute Engine instances. It is considered CaaS.
 
 App Engine is a fully managed, serverless platform for developing and hosting web applications at scale (PaaS). It provisions servers and scales your app instances based on demand. It connects with other Google services seamlessly as well as Web Security Scanner. It is PaaS.
 
-Cloud Functions is a serverless execution environment for building and connecting cloud services. It consists of single, simple-purpose functions that are closed upon completion. It is FaaC.
+Cloud Functions is a serverless execution environment for building and connecting cloud services. It consists of single, simple-purpose functions that are closed upon completion. It is considered FaaC.
 
-Cloud Run is a fully managed compute platform for deploying and scaling containerized applications quickly and securely. It is built upon an open standard Knative. It abstracts away all infrastructure management. It is known as serverless for containers. It is FaaC.
+Cloud Run is a fully managed compute platform for deploying and scaling containerized applications quickly and securely. It is built upon an open standard Knative. It abstracts away all infrastructure management. It is distinctively serverless for containers. It is considered FaaC.
 
 ### Storage and Database Options
 
-Cloud Storage is consistent, scalable, large-capacity, highly durable **objcet** storage. It has 11 9's of durability. Unlimited storage with no minimum object size. Use Cloud Storage for content delivery, data lakes, and backup. It is available in different storage classes and availability.
+Cloud Storage is consistent, scalable, large-capacity, highly durable **object** storage. It has 11 9's of durability. Unlimited storage with no minimum object size. Use Cloud Storage for content delivery, data lakes, and backup. It is available in different storage classes and availability.
 
 Storage Classes:
 * Standard: Maximum availability, no limitations
@@ -33,7 +35,7 @@ Storage Classes:
 * Coldline: Even lower cost archival storage accessed less than once a quarter
 * Archive: Lowest cost archival storage for less than once a year
 
-Availability: Region, Dual-region, and multi-region
+Availability: Region, dual-region, and multi-region
 
 Filestore is a fully managed NFS file server that is NFSv3 compliant to store data from running applications to use with VM instances or Kubernetes clusters.
 
@@ -43,7 +45,7 @@ Database options include Cloud SQL and Cloud Spanner for relational database ser
 
 ### Networking Services
 
-VPC is virtualized network within Google Cloud, and it is a core networking service. It is a global resource.
+VPC is a virtualized private network within Google Cloud, and it is a core, global networking service.
 
 Firewall Rules and Routes govern traffic coming into instances as well as provide advanced networking functions.
 
@@ -51,7 +53,7 @@ There is HTTP(S) Load Balancing and Network Load Balancing. The former distribut
 
 Google DNS publishes and maintains DNS records by using the same infrastrucutre that Google uses.
 
-Advanced connectivity options include Clodu VPN and Direct Interconnect. Direct Peering exchanges Internet traffic between the business network and Google while Carrier Peering connects the infrastructure to Google's network edge.
+Advanced connectivity options include Cloud VPN and Direct Interconnect. Direct Peering exchanges Internet traffic between the business network and Google while Carrier Peering connects the infrastructure to Google's network edge.
 
 ### Big Data Services
 
@@ -63,7 +65,7 @@ Composer is a fully managed orchestration service built on Apache Airflow.
 
 Dataflow is a fully managed processing service for executing Apache Beam pipelines for batch and realtime data streaming. It takes data in from a source and read transforms it into a PCollection, transformed and processed again, before it is write-transformed into a sink. A DataFlow job runs through this pipeline.
 
-Dataproc is a fully managed spark and hadoop service that can be used to replace on-premise Hadoop infrastructure.
+Dataproc is a fully managed spark and Hadoop service that can be used to replace on-premise Hadoop infrastructure.
 
 Dataproc is managed, dependencies to Hadoop ecosystem tools while Dataflow is serverless and built on an Apache Beam runtime. 
 
@@ -106,12 +108,11 @@ Billing export enables granular billing data such as usage, cost details and pri
 Cloud APIs allow workflow automation using software libraries in a variety of programming languages.
 
 
-
 ## Identity and Access Management
 
 ### Cloud IAM 
 
-Principle of Least Privilege: A user, program or process should have the bare minimum privileges necessary to perform its function.
+Principle of Least Privilege: A user, program, or process should have the bare minimum privileges necessary to perform its function.
 
 Cloud IAM provides configuration options for identities, roles, and resources. A policy is a collection of bindings, metadata, and configuration. Binding configures how members and resources should be matched with permissions.
 
@@ -163,10 +164,11 @@ Best practices: audit service accounts and keys using either the `serviceAccount
 
 ### Cloud Identity
 
-Cloud Identity is Identity as a Service (IDaaS) that centrally manages users and groups. It provides options for user and group management as well as identity federation with active directory. Cloud Identity provides device management options to enforce secure permissions options. Security options include two step verification as well as single sign on (SSO) integration. Cloud Identity also offers auditing log and directory management options through Google Cloud Directory Sync (GCDS).
+Cloud Identity is Identity as a Service (IDaaS) that centrally manages users and groups. It provides options for user and group management as well as identity federation with active directory. Cloud Identity provides device management options to enforce secure permissions options. Security options include two step verification as well as single sign on (SSO) integration. Cloud Identity also offers audit logs and directory management options through Google Cloud Directory Sync (GCDS).
 
 ### Cloud IAM Best Practices
 
+**General**
 * Apply only the minimal access level required
 * Predefined roles should be chosen over primitive roles
 * Grant roles at the smallest scope
@@ -190,7 +192,6 @@ Cloud Identity is Identity as a Service (IDaaS) that centrally manages users and
 * Do not insert service account keys into source code
 
 **Auditing**
-
 * Use Cloud Audit Logs to regularly audit IAM policy changes
 * Audit who can edit IAM policies on projects
 * Export audit logs to Cloud Storage for long term retention
@@ -213,7 +214,7 @@ Information on the 7 layer OSI model. Lesson focuses on layers network (3), tran
 
 VPCs are virtualized networks within Google Cloud as global resources. They are encapsulated within a project. While they do not have any IP address ranges, they are associated with them. Firewall rules control traffic flowing in and out of the VPC.
 
-Resources within a VPC can communicate with one another using internal private IPv4 addresses. VPCs only support IPv4 address internally. Each VPC contains a default network. There are auto and custom mode VPCs. Automatically created VPCs have a subnet in each region.
+Resources within a VPC can communicate with one another using internal private IPv4 addresses. VPCs only support IPv4 addresses internally. Each VPC contains a default network. There are auto and custom mode VPCs. Automatically created VPCs have a subnet in each region.
 
 ### Networks and Subnets
 
@@ -247,11 +248,11 @@ Internal IP address reservations can reserve a specific address and then associa
 
 ### Firewall and Firewall Rules
 
-GCP VPC Firewall rules are incoming or outgoing, not both. A firewall rule has a specified protocol, ports, sources, and destinations. Implied and pre-populated rules are blocking outgoing TCP traffic on port 25 and blocking TCP, UDP, ICMP, and GRE. The Metadata server (169.254.169.254) is always kept accessible
+GCP VPC Firewall rules are either incoming or outgoing but cannot be both. A firewall rule has a specified protocol, ports, sources, and destinations. Implied and pre-populated rules are blocking outgoing TCP traffic on port 25 and blocking TCP, UDP, ICMP, and GRE. The Metadata server (169.254.169.254) is always kept accessible.
 
 The implied rules are allow egress and deny ingress. Firewall rules can only be applied to IPv4 address in CIDR format. A firewall rule must be associated with a VPC and cannot be shared between VPCs. Firewall rules are stateful, they cannot be configured to apply inconsistent rules to associated traffic.
 
-Firewall rules have several components: associated VPC, numerical priority, direction of the connection, action on match, defining the instance, source IP, source tags, source service account, protocols, and ports.
+Firewall rules have several components: the associated VPC, numerical priority, direction of the connection, action on match, defining the instance, source IP, source tags, source service account, protocols, and ports.
 
 ### VPC Network Peering
 
@@ -277,7 +278,7 @@ Cloud DNS acts as an authoritative DNS server that allows authoritative DNS look
 
 ### Compute Engine Overview
 
-Virtual machines launched in a VPC network. Host is available in a zone. Multi tenant host or solo tenant node. Per second billing. Each vCPU is implemented on a single hardware hyper thread on CPU. 2 GBps per CPU.
+Virtual machines launched in a VPC network. Host is available in a zone. Multi tenant host or solo tenant node. Per second billing. Each vCPU is implemented on a single hardware hyper thread on CPU. 2 GB/s per CPU.
 
 Public images of Linux or Windows can be used or custom, private images. A third option is a marketplace solution that combines an OS with software pre-configured. 
 
@@ -330,7 +331,7 @@ Pre-emptible VMs are up to 80% cheaper with fixed pricing. These are instances t
 
 ### Storage Fundamentals
 
-The basic kinds of storage are block, file and object.
+The basic kinds of storage are block, file, and object.
 
 Block storage is the fastest, most-efficient, and reliable storage type. It consists of uniquely identifiable evenly sized blocks that are usually delivered on mountable or bootable physical media such as spinning hard drive or solid state drives.
 
@@ -572,9 +573,9 @@ Cloud Spanner can provide up to 10,000 queries per second of reads or QPS of wri
 
 GCP has four options for NoSQL: Cloud Bigtable, Cloud Datastore (legacy), Firestore for Firebase, and Memorystore
 
-Cloud Bigtable is fully managed, wide-column NoSQL database designed for terabyte ot petabyte-scale workloads that offer low latency and high throughput. It is built for real time app serving and large scale analytical workloads. It is a regional service with automated replication that strores large amounts of single-keyed data. It adds nodes when you need them. It also offers cluster resizing and MapReduce operations. It is a relatively expensive service. Use cases include time-series data, marketing data, financial data, IoT data, and graph data. 
+Cloud Bigtable is a fully managed, wide-column NoSQL database designed for terabyte to petabyte-scale workloads that offers low latency and high throughput. It is built for real time app serving and large scale analytical workloads. It is a regional service with automated replication that strores large amounts of single-keyed data. It adds nodes when you need them. It also offers cluster resizing and MapReduce operations. It is a relatively expensive service. Use cases include time-series data, marketing data, financial data, IoT data, and graph data. 
 
-Cloud Datastore is a fully managed, highly scalbale NoSQL document database built for automatic scaling, high performance, and ease of application deployment. It offers HA of reads and writes, has atomic transactions, automatic scaling, and SQL-like query language (GQL). It has strong and eventual consistency. There is encryption at rest. Cloud Datastore can provide local emulation of the production environment for developers. Datastore is being retired in 2021 in favor of Cloud Firestore. Can be used for product catalogs, user profiles, and transactions based on ACID properties.
+Cloud Datastore is a fully managed, highly scalable NoSQL document database built for automatic scaling, high performance, and ease of application deployment. It offers HA of reads and writes, has atomic transactions, automatic scaling, and SQL-like query language (GQL). It has strong and eventual consistency. There is encryption at rest. Cloud Datastore can provide local emulation of the production environment for developers. **Datastore is being retired in 2021 in favor of Cloud Firestore.** Can be used for product catalogs, user profiles, and transactions based on ACID properties.
 
 Firestore for Firebase is a flexible, scalable NoSQL cloud database to store and sync data for client and server-sdie deployment. It stores data in documents organized by collections. It is serverless and offers multi-region replication. Queries can be retrieved at the document level without having to go through the whole collection. It provides real-time updates and offline support and is a secure option. It is a realtime database. (Firebase is a mobile app development platform that provides tools and cloud services to help enable developers to complete their work more efficiently.)
 
@@ -586,7 +587,7 @@ Operations suite is a suite of tools for logging, monitoring, error reporting, d
 
 Monitoring collects measurements or metrics to demonstrate how system services are performing. It can create dashboards and charts. Workspaces are needed to use cloud monitoring. Agents are recommended to monitor VMs. Cloud Monitoring is available for GKE. Workspaces can include up to 500 policies. Alerts can be sent through email, SMS, and other third-party tools.
 
-Cloud Logging is a central repository for log data from multiple sources. It provides real-time log management and analysis. It has tight integration with monitorign. It includes platform, system and application logs. It can export logs to other soruces. Logs Viewer only shows logs from one project. Log Entry records a status or event. Logs are a named collection of log entries within a GCP resource. Retention period how long are logs are kept. Types of logs include audito logs, access transparency, and agent logs.
+Cloud Logging is a central repository for log data from multiple sources. It provides real-time log management and analysis. It has tight integration with monitoring. It includes platform, system and application logs. It can export logs to other soruces. Logs Viewer only shows logs from one project. Log Entry records a status or event. Logs are a named collection of log entries within a GCP resource. Retention period how long are logs are kept. Types of logs include audito logs, access transparency, and agent logs.
 
 Error reporting counts, analyzes, and aggregates all the errors in the GCP environment. It alerts when a new applicatoin error occurs. It is integrated into Cloud Function and GAE Standard. It includes tracking issue integration.
 
