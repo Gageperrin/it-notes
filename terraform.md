@@ -118,4 +118,40 @@ Output variables are not necessary within Terraform but can make reading configu
 
 ## Terraform State
 
-### Introduction to Terraform State
+When `terraform apply` is run, a `terraform.tfstate` file is generated that provides the built-in infrastructure for Terraform. This takes truth priority over regular `.tf` files. In effect, a state file is a blueprint for real-world infrastructure. The state file also tracks metadata dependencies. If resources are deleted from a configuration file, Terraform uses state metadata to track deleted configuration resources and will delete the corresponding resources accordingly. 
+
+In larger infrastructures, Terraform uses caching to save performance and use the meta-data as a reference of truth. With developer teams, it is important to ensure no one else is working with Terraform at the same time and that the latest configuration file is used. It is best to backup the `.tfstate` file in a remote directory.
+
+The `.tfstate` file contains senstivie information and should not be stored or distributed without security measures. Remote State Backends should be stored in private repositories such as Amazon S3 or Terraform Cloud while version control can be uploaded to GitHub or BitBucket.
+
+Do not manually edit the `terraform.tfstate` file manually but use commands instead.
+
+## Working with Terraform
+
+### Terraform Commands
+
+* `terraform validate` can be used to check if a configuration is valid with specific information if there is a problem.
+* `terraform fmt` formats local configuration files into a more readable, standardized format.
+* `terraform providers` to show provider plugins required by the present configurations.
+* `terraform output` shows output variables.
+* `terraform refresh` syncs state files and resources.
+* `terraform graph` generates a graph of configuration data that can be viewed through software such as `graphviz`.
+
+### Mutable vs Immutable Infrastructure
+
+Mutable infrastructures can be modified or updated while accounting for their various dependencies. Within a pool, servers can develop different software or OS versions. This is called configuration drift.
+
+
+### Lifecycle Rules
+
+By default, an updated resource is deleted before the new one is provisioned. This can be changed with lifecyle rules:
+
+`
+lifecycle  {
+  create_before_destroy - true
+}
+`
+
+Other options include `prevent_destroy` for databases (this **does not** override `terraform destroy`), `ignore_changes` to prevent `terraform apply` from reverting tags or other changes in a configuration file that conflict with a server, among other lifecycle rules.
+
+Immutable infrastructure cannot be updated without provisioning new infrastructure. This allows for more stringent oversight of infrastructure maintenance and prevents configuration drift.
