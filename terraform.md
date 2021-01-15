@@ -155,3 +155,32 @@ lifecycle  {
 Other options include `prevent_destroy` for databases (this **does not** override `terraform destroy`), `ignore_changes` to prevent `terraform apply` from reverting tags or other changes in a configuration file that conflict with a server, among other lifecycle rules.
 
 Immutable infrastructure cannot be updated without provisioning new infrastructure. This allows for more stringent oversight of infrastructure maintenance and prevents configuration drift.
+
+### Datasources
+
+Datasources allow Terraform to read attributes of resources provisioned outside its control. A data block can be specified in the configuration file with syntax:
+`
+data "local_file" "dog" {
+  filename = "root/dog.txt"
+}
+`
+
+It is written like a resource block but with data specified instead. A data source can only read infrastructure and cannot be created, update, or destroyed like other Terraform resources. 
+
+Data can be then be called through `data.local_file.filename`.
+
+### Meta-Arguments
+
+Meta-arguments can be used to replicate commands in the same way as shell scripting is used. Previous examples have been `depends_on` and `lifecycle`.
+
+`count` is another popular meta-argument. If `count = 3` is specified within a resource block, three resources will be generated. However, these will be identical and is not a best practice. It is better to specify a list of variable defaults for Terraform to cycle through and specify these in the main configuration file. For example, `filename = var.filename[count.index]`. For an abstracted count of variables, use `count = length(var.filename)` for example to generate a count based on how many items are in the variable array.
+
+`for_each` is a better argument to use instead of `count` for navigating maps or sets. However it cannot sort through strings. However a list of strings can be converted to a set mid-process using `for_each = toset(var.filename)`.
+
+### Version Constraints
+
+Inconsisent versioning can cause problems for maintaining configurations. It is possible to use earlier versions of a plugin provider using `terraform` code blocks with `source` and `version` arguments within the object. The `version` argument can also take comparative operators to specify certain version ranges including pessimistic constraint operator `~`.
+
+## Terraform with AWS
+
+(I skipped several of these lessons as I am already proficient in these features of AWS.)
