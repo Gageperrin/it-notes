@@ -183,4 +183,97 @@ Inconsisent versioning can cause problems for maintaining configurations. It is 
 
 ## Terraform with AWS
 
-(I skipped several of these lessons as I am already proficient in these features of AWS.)
+(I skipped several of these lessons as I am already proficient in many of these conceptual and technical aspects of AWS.)
+
+### IAM with Terraform
+
+To create an IAM user with Terraform, create a resource block like so:
+`
+resource "aws_iam_user" "admin-user" {
+  name = "kevin"
+  tags = {
+    Description = "IT Director"
+  }
+}
+`
+Even though IAM resources are global, Terraform expects a region to be specified when provisioning an IAM resource. This can be done through:
+`
+provider "aws" {
+  region = "us-east-1"
+}
+`
+
+IAM policies can be provisioned through Terraform with a resource like:
+`
+resource "aws_iam_policy" "adminUser" {
+  name = "AdminUsers"
+  policy = <<EOF
+  [JSON document]
+  EOF
+}
+`
+
+`EOF` (end of file) can import a JSON document that reads in the IAM policy. This needs to be implemented alongside the `<<DELIMITER` and `DELIMITER` commands (Heredoc syntax). This can also be done through `policy = file("file-name.json")`.
+
+To attach a policy create a resource of type `"aws_iam_user_policy_attachment"` with the `user` and `policy_arn` as arguments.
+
+
+### S3 with Terraform
+
+Example S3 bucket Terraform syntax:
+`
+resource "aws_s3_bucket" "finance" {
+  bucket = "finance-17012021"
+  tags = {
+    Description "Payroll"
+  }
+}
+
+resource "aws_s3_bucket_object" "finance-2020" {
+  content = "/root/finance/finance-2020.doc"
+  key = "finance-2020.doc"
+  bucket = aws_s3_bucket.finance.id
+}
+
+data "aws_iam_group" "finance-data" {
+  group_name = "finance-analysts"
+}
+
+resource "aws_s3_bucket_policy" "finance-policy" {
+  bucket = aws_s3_bucket.finance.id
+  policy = <<EOF
+  [JSON file]
+  EOF
+}
+`
+
+The first resource provisions a bucket, the second resource uploads a file to the bucket, the third creates a IAM group, and the fourth assigns a bucket policy. (Inside the bucket policy the IAM group can be assigned.)
+
+### DynamoDB with Terraform
+
+Example of DynamoDB provisioning with Terraform:
+`
+resource "aws_dynamodb_table" "cars" {
+  name = "cars"
+  hash_key = "VIN"
+  billing_mode = "PAY_PER_REQUEST"
+  attribute {
+    name = "VIN"
+    type = "S"
+  }
+}
+
+resource "aws_dynamodb_table_item" "car-items" {
+  table_name = aws_dynamodb_table.cars.name
+  hash_key = aws_dynamodb_table.cars.hash_key
+  item = <<EOF
+  
+  {
+    "Manufacturer: {"S": "Toyota"},
+    "Make": {"S": "Corolla"},
+    "Model": {"N": "2001"},
+    "VIN" : {"S": "XXXXXXXX"},
+  }
+EOF
+}
+`
