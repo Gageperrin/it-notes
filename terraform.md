@@ -277,3 +277,29 @@ resource "aws_dynamodb_table_item" "car-items" {
 EOF
 }
 `
+
+## Remote State
+
+State files map configruations to real world resources, it tracks meta-data, improves performance, and enables collaboration. However, it does not need to only be stored locally but can be implemented remotely. Remote state backends are best practice to protect sensitive data and better enforce version control.
+
+With local state files, Terraform can lock the state file to prevent concurrent change corruptions. The remote back end will remove the state file from access every time an operation occurs, automatically implementing state locking as needed.
+
+To create a remote backend with Amazon S3, here is an example configuration:
+`
+terraform {
+  backend "s3" {
+    bucket = "gageperrin-terraform-state-bucket01"
+    key = "finance/terraform.tfstate"
+    region = "us-east-1"
+    dynamodb_table = "state-locking"
+  }
+}
+`
+
+Again, state files should not be edited directly but through commands.
+
+* `terraform state list` lists resources.
+* `terraform state show` will get detailed information about a matching resource.
+* `terraform state mv` will move items in a Terraform state file.
+* `terraform state pull` to pull the state file from the backend.
+* `terraform state rm` to remove a resource.
