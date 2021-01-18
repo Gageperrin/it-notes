@@ -303,3 +303,37 @@ Again, state files should not be edited directly but through commands.
 * `terraform state mv` will move items in a Terraform state file.
 * `terraform state pull` to pull the state file from the backend.
 * `terraform state rm` to remove a resource.
+
+## Terraform Provisioners
+
+Terraform provisioners provides the ability to run scripts or commands through the configuration file on the provisioned resources. This is done via Remote Exec. Inside a resource block, the following argument would be inserted:
+`
+provisioner "remote-exec" {
+  inline = [ "sudo apt update",
+             "sudo apt install nginx -y",
+             "sudo systemctl enable nginx",
+             "sudo systemctl start nginx",
+           ]
+  }
+`
+
+Local Exec provisioner can be used to run tasks on the machine where the Terraform binary is installed.
+
+The Remote and Local Exec provisioners run tasks when a resource is created by default. However, this can be configured to run before a resource is destroyed or when a `terraform apply` fails, for example.
+
+Use Terraform provisioners sparingly because there is no provisioner information in a plan, it requires pre-established network connectivity and authentication, and it scaffolds around the configuration. Bake necessary configuration into the container image beforehand, not in a Terraform provisioner.
+
+## Terraform Import, Tainting Resources and Debugging
+
+**Terraform Taint**
+
+Whenever a resource creation fails, Terraform marks the resource as tainted. The next time a `terraform apply` is run, Terraform will attempt to replace the tainted resource. A taint can be reverse using `terraform untaint`.
+
+**Debugging**
+
+Logs provide the best deeper detail for investigating issues. Run `export TF_LOG=[LEVEL]`. There are five form levels: info, warning, error, debug, and trace. Trace includes internal Terraform malfunctioning that can be reported as a bug.
+
+**Terraform Import**
+
+Use `terraform import <resource_type>.<resoruce_name> <attribute>` to bring a third party resource under Terraform's jurisdiction. Terraform does not update the configuration during an import, only the state file.
+
