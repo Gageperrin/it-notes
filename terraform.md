@@ -337,3 +337,39 @@ Logs provide the best deeper detail for investigating issues. Run `export TF_LOG
 
 Use `terraform import <resource_type>.<resoruce_name> <attribute>` to bring a third party resource under Terraform's jurisdiction. Terraform does not update the configuration during an import, only the state file.
 
+
+## Terraform Modules
+
+Terraform modules organize large infrastructural projects into discrete groups that are useful for configuration resource sorting and collaborative workloads. To invoke a module in a configuration file, use the following syntax:
+`
+module "dev-webserver" {
+  source = "../aws-instance"
+}
+`
+
+To create a re-usable module for an AWS configuration for instance, generate a directory, with individual Terraform files for each AWS service. The instance-type should be hard-coded while the AMI and region tags should be variable dependent.
+
+To invoke this module, create a `main.tf` Terraform file in another directory to invoke the module as a resource with arguments `source = "../[directory]"`, `app_region = us-xxxx-x`, and `ami = xxxxxx`.
+
+Many modules are stored in the Terraform Registry and can provide configurations for many common scenarios alongside provisioning instructions. Submodules are also contained within the Module Registry for different kinds of traffic or other basic variations.
+
+
+## Terraform Functions, Conditional Expressions and Workspaces
+
+**More Terraform Functions**
+
+`terraform console` boots a console to test values, functions, and interpellations. Commands available in the Terraform console include `max`, `min`, `ceil`, `split`, `lower`, `upper`, `title`, `substr`, `join`, `length`, `index`, `element`, `contains`, `keys`, `values`, and `lookup(map, key)`.
+
+**Conditional Expressions**
+
+The Terraform console can also take in conditional expressions that can include operators of equality, comparison, or logical types.  If statements are also available as well as ternary expressions.
+
+**Terraform Workspaces**
+
+Terraform workspaces can be used to replicate project use cases within a single directory rather than having to replicate to an entirely separate directory.
+
+To start a workspace, run `terraform workspace new [project]`. Run `terraform workspace list` to see workspaces available in the directory. To get the name of the current workspace, run `terraform.workspace`. 
+
+`terraform.workspace` can be added as the name tag in the configuration file. The AMI can be specified through `ami = lookup(var.ami, terraform.workspace)`.
+
+
