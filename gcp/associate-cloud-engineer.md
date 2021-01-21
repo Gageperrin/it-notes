@@ -1,6 +1,6 @@
 # Google Cloud - Associate Cloud Engineer
 
-These are my notes from Antoni Tzavelas' [training course for the Google Cloud Associate Cloud Engineer examination](https://training.antonit.com/). 
+These are my notes from Antoni Tzavelas' [course for the Google Cloud Associate Cloud Engineer exam](https://training.antonit.com/). 
 
 I used [Sarat Gutha's Practice Exams on Udemy](https://www.udemy.com/course/gcp-ace-practice-tests-latest/) to prepare for the exam.
 
