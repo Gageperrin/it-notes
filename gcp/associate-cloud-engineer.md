@@ -1,6 +1,10 @@
 # Google Cloud - Associate Cloud Engineer
 
-These are my notes from Antoni Tzavelas' [training course for the Google Cloud Associate Cloud Engineer examination](https://training.antonit.com/). Other resources include the [official GCP documentation](https://cloud.google.com/docs/).
+These are my notes from Antoni Tzavelas' [training course for the Google Cloud Associate Cloud Engineer examination](https://training.antonit.com/). 
+
+I used [Sarat Gutha's Practice Exams on Udemy](https://www.udemy.com/course/gcp-ace-practice-tests-latest/) to prepare for the exam.
+
+Other resources include the [official GCP documentation](https://cloud.google.com/docs/).
 
 ## Google Cloud Fundamentals
 
@@ -23,7 +27,7 @@ App Engine is a fully managed, serverless platform for developing and hosting we
 
 Cloud Functions is a serverless execution environment for building and connecting cloud services. It consists of single, simple-purpose functions that are closed upon completion. It is considered FaaC.
 
-Cloud Run is a fully managed compute platform for deploying and scaling containerized applications quickly and securely. It is built upon an open standard Knative. It abstracts away all infrastructure management. It is distinctively serverless for containers. It is considered FaaC.
+Cloud Run is a fully managed compute platform for deploying and scaling containerized applications quickly and securely. It is built upon an open standard Knative. It abstracts away all infrastructure management. It is distinctively serverless for containers. It is considered FaaC. Cloud Run does not support Websockets (Cloud Run for Anthos does). Cloud Run is serverless.
 
 ### Storage and Database Options
 
@@ -32,7 +36,7 @@ Cloud Storage is consistent, scalable, large-capacity, highly durable **object**
 Storage Classes:
 * Standard: Maximum availability, no limitations
 * Nearline: Low-cost archival storage, accessed less than once a month
-* Coldline: Even lower cost archival storage accessed less than once a quarter
+* Coldline: Even lower cost archival storage, accessed less than once a quarter
 * Archive: Lowest cost archival storage for less than once a year
 
 Availability: Region, dual-region, and multi-region
@@ -57,21 +61,23 @@ Advanced connectivity options include Cloud VPN and Direct Interconnect. Direct 
 
 ### Big Data Services
 
-BigQuery is a fully managed petabyte scale, low cost analytics data warehouse. It can ingest data through streaming and batch as well as through free bulk loading. It provides real time analytics, autoamtic high availability, automatic backup and restore, standard SQL, and a big data ecosystem integration. It includes IAM, VPC managemnet, and data encryption.
+BigQuery is a fully managed petabyte scale, low cost analytics data warehouse. It can ingest data through streaming and batch as well as through free bulk loading. It provides real time analytics, autoamtic high availability, automatic backup and restore, standard SQL, and a big data ecosystem integration. It includes IAM, VPC managemnet, and data encryption. BigQuery flat-rate pricing allows customers to predict cost and purchase pre-defined resources.
 
 Pub/Sub is a real-time fully-managed messaging service. Send and receive messages between independent applications. A publisher creates a messages and sends them to a topic which contains the messages that are passed along to those contianed in a subscription.
 
 Composer is a fully managed orchestration service built on Apache Airflow.
 
-Dataflow is a fully managed processing service for executing Apache Beam pipelines for batch and realtime data streaming. It takes data in from a source and read transforms it into a PCollection, transformed and processed again, before it is write-transformed into a sink. A DataFlow job runs through this pipeline.
+Dataflow is a fully managed processing service for executing Apache Beam pipelines for batch and realtime data streaming. It takes data in from a source and read transforms it into a PCollection, transformed and processed again, before it is write-transformed into a sink. A DataFlow job runs through this pipeline. Dataflow is best for streaming analytics while BigQuery is often a simpler solution and is ideal for storing results and querying streaming dat in real time.
 
-Dataproc is a fully managed spark and Hadoop service that can be used to replace on-premise Hadoop infrastructure.
-
-Dataproc is managed, dependencies to Hadoop ecosystem tools while Dataflow is serverless and built on an Apache Beam runtime. 
+Dataproc is a fully managed spark and Hadoop service that can be used to replace on-premise Hadoop infrastructure. Dataproc is managed, dependencies to Hadoop ecosystem tools while Dataflow is serverless and built on an Apache Beam runtime. 
 
 Cloud Datalab is an easy-to-use interactive tool for data exploration, analysis, visualization, and machine learning. It is built on notebooks.
 
 Cloud Dataprep is a serverless, intelligent data service for visually exploring, cleaning, and preapring structured or unstructured data for analysis, reporting, and machine learning.
+
+Cloud Transfer is an upload service best used for transferring petabytes of data to GCP. It is not ideal for smaller workloads where parallel uploads can be used instead.
+
+Data Catalog is a fully managed and scalable metadata management service that empowers organizations to discover quickly, understand, and manage all their data. It offers a simple and easy-to-use search interface for data discovery, a flexible and powerful cataloguing system for capturing both technical and business metadata, and a strong security and compliance foundation with Cloud Data Loss Prevention (DLP) and Cloud Identity and Access Management (IAM) integrations. The service automatically ingests technical metadata for BigQuery and Cloud Pub/Sub. It allows customers to capture business metadata in schematized format via tags, custom APIs, and the UI, offering a simple and efficient way to catalogue their data assets. You can perform a search for data assets from the Data Catalog home page in the Google Cloud Console.
 
 ### Machine Learning Overview
 
@@ -116,11 +122,11 @@ Principle of Least Privilege: A user, program, or process should have the bare m
 
 Cloud IAM provides configuration options for identities, roles, and resources. A policy is a collection of bindings, metadata, and configuration. Binding configures how members and resources should be matched with permissions.
 
-A member can be a Google account, a service account attached to an application, a Google Group, G Suite Domains, Cloud Identity Domains, `AllAuthenticatedUsers`, or `AllUsers`.
+A member can be a Google account, a service account attached to an application, a Google Group, G Suite Domains, Cloud Identity Domains, `AllAuthenticatedUsers`, or `AllUsers`. Note that service accounts do not have passwords.
 
 Permissions determine what operations are allowed on a resource and correspond to REST API methods. These permissions are not granted to users directly. Instead they are granted through roles which are a collection of permissions. 
 
-There are three kinds of roles in IAM: primitive, predefined, and custom. Primitive are roles alike Owner, Editor, or Viewer that are legacy options. They are no longer recommended. Predefined provide fine-grained access control. Custom roles are user-defined and managed.
+There are three kinds of roles in IAM: primitive, predefined, and custom. Primitive are roles alike Owner, Editor, or Viewer that are legacy options. They are no longer recommended. Predefined provide fine-grained access control. Custom roles are user-defined and managed and they are sub-divided into `SUPPORTED`, `TESTING`, and `NOT_SUPPORTED` level of support. Custom roles are best to prevent any automatic changes in role scope or permissions.
 
 Conditions can be used to specify resource access based on certain identity attributes or other triggers. When a condition exists, the access is only granted if the expression is true.
 
@@ -230,11 +236,11 @@ Routes define the network traffic path from one destination to the other. In a V
 
 There are two types of routing on GCP: system-generated and custom routes. System-generated routes can be default or for subnet routes while custom routes support static and dynamic routes. 
 
-The default route provides a path to the Internet and to private Google access. It can only be deleted by replacing it with a custom route. It is the lowest priority in routing order. A subnet route is a route that defines paths to each subnet in the VPC. Each subnet has at least one subnet route of whose destination matches the primary IP range of the subnet. When a subnet is created, a corresponding subnet route is created for both primary and secondary IP range. One cannot delete a subnet route unless you modify or delete the subnet.
+The default route provides a path to the Internet and to Private Google Access. It can only be deleted by replacing it with a custom route. It is the lowest priority in routing order. A subnet route is a route that defines paths to each subnet in the VPC. Each subnet has at least one subnet route of whose destination matches the primary IP range of the subnet. When a subnet is created, a corresponding subnet route is created for both primary and secondary IP range. One cannot delete a subnet route unless you modify or delete the subnet.
 
 Static routes can use the next hop feature and be created manually. Static routes for the remote traffic selectors are created automatically when creating Cloud VPN tunnels. Dynamic routes are managed by one or more cloud routers. These dynamically exchange routes between a VPC and on-premises networks. Destination IP ranges are outside the VPC network. They are used with dynamically routed VPNs and Interconnect.
 
-Google VPC networks have special return paths that cannot be seen or configured in the route table. Private Google Access can be used to create secure routes to Google APIs and services.
+Google VPC networks have special return paths that cannot be seen or configured in the route table. Private Google Access can be used to create secure routes to Google APIs and services. A VM cannot access resources outside the VPC if it only has an internal IP address and if Private Google Access is disabled.
 
 ### IP Addressing
 
@@ -394,11 +400,11 @@ Backend services include health checks, session affinity, service time out, traf
 
 The HTTP(S) load balancer distributes traffic using (1) rules based on cross-region load balancing through IP address requests or (2) content-based load balancing using URL maps. This kind of load balancer is global, proxy-based, and **Layer 7** behind a single external IP address. It is implemented on Google Front Ends (GFE) and provides HTTPS and SSL encryption in transit for both IPv4 and IPv6 traffic. IPv6 traffic terminates at the load balancer and is server as IPv4 to the back-end. Forwarding rules are in place to distribute defined targets to target pools. URL maps direct requests based on rules. SSL certificates (Google or self-managed) are required for HTTPS traffic. The ports used are 80, 8080 for HTTP and 443 for HTTPS.
 
-SSL Proxy is a rever proxy load balancer that distributes SSL traffic coming from the Internet to VMs. It is global and external and distributes traffic by location only. It is a single Unicast IP address and operates at Layer 4. It provides support for **TCP with SSL offload** and supports IPv4 and IPv6 in the same way as the HTTP(S) load balancer. It is used for other protocols that use SSL.
+SSL Proxy is a reverse proxy load balancer that distributes SSL traffic coming from the Internet to VMs. It is global and external and distributes traffic by location only. It is a single Unicast IP address and operates at Layer 4. It provides support for **TCP with SSL offload** and supports IPv4 and IPv6 in the same way as the HTTP(S) load balancer. It is used for other protocols that use SSL. SSL Proxy should not be used for HTTP(S) traffic.
 
 TCP Proxy load balancer is a reverse proxy load balancer that distributes TCP traffic coming frmo the Internet to VMs. Client TCP sessions are terminated at the load balancer. It forwards traffic as SSL or TCP. It provides intelligent routing and routes to locations that have capacity. It has a single Unicast IP address, operates at Layer 4, is global and external, and it distributes traffic by location only. It is intended for non HTTP traffic. Supports IPv4 and IPv6 traffic in the same way as other load balancers. It supports many well-known TCP ports.
 
-The Network Load Balancer is a regional pass-through load balancer that distributes TCP and UDP traffic to VMs. It is not a proxy and responses from backend go directly to client. It is regional and external. It supports either TCP or UDP but not both. It supports traffic on ports that are not supported by TCP proxy and SSL proxy. SSL is decrypted by backends, not by the load baalancer. Traffic is distributed by protocol, scheme and scope. No TLS offloading or proxying. Multiple forwarding rules reference one target pool. Other protocols use target instances. It can only handle self-maanged SSL certificates (**not Google-managed**).
+The Network Load Balancer is a regional pass-through load balancer that distributes TCP and UDP traffic to VMs. It is not a proxy and responses from backend go directly to client. It is regional and external. It supports either TCP or UDP but not both. It supports traffic on ports that are not supported by TCP proxy and SSL proxy. SSL is decrypted by backends, not by the load baalancer. Traffic is distributed by protocol, scheme and scope. No TLS offloading or proxying. Multiple forwarding rules reference one target pool. Other protocols use target instances. It can only handle self-managed SSL certificates (**not Google-managed**).
 
 The Internal Load Balancer is a pass-through load balancer that distributes TCP and UDP traffic to VMs. It is layer 4, regional internal, supports TCP or UDP (not both), balances internal traffic between instances, does **not balance Internet traffic** and only sends traffic to the backend directly. When using forwarding rules, it is necessary to specify at least one and up to five ports by number. It is necessary to specify `ALL` to forward traffic to all ports.
 
@@ -440,13 +446,13 @@ Pods have a lifecycle of pending, then running, and end either in succeeded or f
 
 A deployment can run multiple replicas of pods created from a template to abstract pod configuration. Deployments are recommended over replica sets.
 
-Workloads allow you to define the rules of replicas. Deployments run multiple replicas, StatefulSets are useful to persistent storage applications. DaemonSets ensure that every node in the cluster runs a copy of a pod. Jobs are used to run a finite task, and CronJobs run until completion on a schedule. ConfigMaps provide configuration information for any workload to reference.
+Workloads allow you to define the rules of replicas. Deployments run multiple replicas, StatefulSets are useful to persistent storage applications. DaemonSets ensure that every node in the cluster runs one copy of a pod, and so horizontal pod autoscaling cannot be enabled for DaemonSets. Jobs are used to run a finite task, and CronJobs run until completion on a schedule. ConfigMaps provide configuration information for any workload to reference.
 
 ### Kubernetes Services
 
 Kubernetes networking is designed to outlast ephemeral pods and their assigned IPs. A service is an abstraction that provides a persistent IP address for internal and external traffic, load balancing, and scaling. Service components help determine endpoints through labels and selectors.
 
-ClusterIP is the default service that is used to access nodes in a cluster through ports and target-ports. NodePort is a static port that bridges two nodes. Other Kubernetes services include Ingress, Multi-port, ExternalName, and Headless.
+ClusterIP is the default service that is used to access nodes in a cluster through ports and target-ports internally. NodePort is a static port that bridges two nodes and can be publicly available if the compute instance is public. The LoadBalancer service it publicly available. Other Kubernetes services include Ingress, Multi-port, ExternalName, and Headless.
 
 
 ## Hybrid Connectivity
@@ -491,13 +497,13 @@ Use Cloud Interconnect to prevent traffic from traversing the public Internet. I
 
 ### App Engine Overview
 
-App Engine is a PaaS full managed, serverless platform to develop and host web apps through code or containers using (Python, Java, Node.js, Go, Ruby, PHP, or .NET). It can autoscale based on loads, offer versioning, and support external storage.
+App Engine is a PaaS full managed, serverless platform to develop and host web apps through code or containers using (Python, Java, Node.js, Go, Ruby, PHP, or .NET). It can autoscale based on loads, offer versioning, and support external storage. App Engine is regional, it cannot change the region of an application after it has been created.
 
 App Engine comes in Standard and Flexible environments. 
 
-In standard environments, apps run in a sandbox environment where only specific versions of runtimes can be used. They run for free or at very low cost, they are designed for sudden and extreme spikes of traffic. Their pricing is based on instance hours.
+In standard environments, apps run in a sandbox environment where only specific versions of runtimes can be used. They run for free or at very low cost, they are designed for sudden and extreme spikes of traffic. Their pricing is based on instance hours. App Engine Standard cannot connect to an on-premises network with just Cloud VPN since it is servrerless, more networking configuration is required.
 
-In flexible environments, apps are run in docker containers, any version of runtimes can be used, no free quota is available, it is designed for consistent traffic, pricing is based on VM resources, and it hosts managed VMs.
+In flexible environments, apps are run in docker containers, any version of runtimes can be used, no free quota is available, it is designed for consistent traffic, pricing is based on VM resources, and it hosts managed VMs. App Engine Flexible is **not** serverless, therefore it can use Cloud VPN as it is located in a VPC.
 
 The topological hierarchy starts with the application at the top with one or more services beneath. These services have individual versions from which each instance is run. 
 
@@ -510,6 +516,10 @@ Cloud Functions is a serverless FaaS environment that can run Python, Java, Node
 Billing is based on time and resources. There is no free tier.
 
 Only one trigger can be bound to a function at a time. The code is stored in a storage bucket which is accessed by CodeBuild to deploy the container registry which is in turn accessed by Cloud Functions alongside the event data. Only one concurrent request can be run at a time. The results are passed along to a VPC or the public Internet.
+
+### Cloud Build
+
+Cloud Build is used for building and deploying services to serverless CI/CD platforms. It cannot be used to automate VM creation. Google Cloud Deployment Manager is the right tools for application creation from YAML, Python, or Jinja2.
 
 
 ## Storage Services
@@ -547,13 +557,13 @@ Changes are in accordance ot object creation date. A deleted object cannot be un
 
 ### Cloud SQL
 
-Cloud SQL is a fully managed relational database service RDBMS. It is a DBaaS. It is low latency, transactional, and suited for relational DB workloads. It is compatible with MySQL, PostgreSQL, and SQL Server. It offers replciation through Read Replicas.
+Cloud SQL is a fully managed relational database service RDBMS. It is a DBaaS. It is low latency, transactional, and suited for relational DB workloads. It is compatible with MySQL, PostgreSQL, and SQL Server. It offers replciation through Read Replicas. Cloud SQL can handle only upt to 30TB in data.
 
 Cloud SQL offers on-demand and automatic backups as well as point in time recovery. It has 30TB storage capacity by default and can automatically increase storage. Data is encrypted at rest and in transit. It is billed for instance, persistent disk and egress traffic.
 
 The user can connect to Cloud SQL through a public or private IP. It is recommended to use a Cloud SQL proxy. It is possible authorize a network or external applications to access the data.
 
-Replication occurs from the primary instance from one zone to another. The Read Replica is read-only. Replicas can be generated in another region or in an external, on-premises environment. To create a Read Replica, the primary instance must have automated backups and binary logging enabled. One backup must have been created after logging was enabled. Replicas can be promoted through planned regional migration or for disaster recovery.
+Replication occurs from the primary instance from one zone to another. The Read Replica is read-only. Replicas can be generated in another region or in an external, on-premises environment. To create a Read Replica, the primary instance must have automated backups and binary logging enabled (thus allowing for point-in-time recovery). One backup must have been created after logging was enabled. Replicas can be promoted through planned regional migration or for disaster recovery.
 
 Cloud SQL offers high availability through a multi-zonal configuration with synchronous replciation between zones. If the primary instance fails, failover is initiated to the secondary instance after 60 seconds. When the primary instance is restored, a failback is initiated to redirect traffic to the primary instance. The secondary instance charges twice the rate for usage and does not have read capabilities.
 
@@ -573,7 +583,7 @@ Cloud Spanner can provide up to 10,000 queries per second of reads or QPS of wri
 
 GCP has four options for NoSQL: Cloud Bigtable, Cloud Datastore (legacy), Firestore for Firebase, and Memorystore
 
-Cloud Bigtable is a fully managed, wide-column NoSQL database designed for terabyte to petabyte-scale workloads that offers low latency and high throughput. It is built for real time app serving and large scale analytical workloads. It is a regional service with automated replication that strores large amounts of single-keyed data. It adds nodes when you need them. It also offers cluster resizing and MapReduce operations. It is a relatively expensive service. Use cases include time-series data, marketing data, financial data, IoT data, and graph data. 
+Cloud Bigtable is a fully managed, wide-column NoSQL database designed for terabyte to petabyte-scale workloads that offers low latency and high throughput. It is built for real time app serving and large scale analytical workloads. It is a regional service with automated replication that stores large amounts of single-keyed data. It adds nodes when you need them. It also offers cluster resizing and MapReduce operations. It is a relatively expensive service; cheaper ooptions include Cloud Storage and BigQuery. Use cases include time-series data, marketing data, financial data, IoT data, and graph data. 
 
 Cloud Datastore is a fully managed, highly scalable NoSQL document database built for automatic scaling, high performance, and ease of application deployment. It offers HA of reads and writes, has atomic transactions, automatic scaling, and SQL-like query language (GQL). It has strong and eventual consistency. There is encryption at rest. Cloud Datastore can provide local emulation of the production environment for developers. **Datastore is being retired in 2021 in favor of Cloud Firestore.** Can be used for product catalogs, user profiles, and transactions based on ACID properties.
 
@@ -583,7 +593,7 @@ Memorystore is a fully managed service for either Redis or Memcached in-memory d
 
 ## Operations Suite
 
-Operations suite is a suite of tools for logging, monitoring, error reporting, debugging, tracing, and profiling. It is available for GCP and AWS. It consists of VM monitoring with agents. It is available for on-premises environment and offers GCP native integration. It can be integrated with a wide ranging library of application performance technologies.
+Operations suite is a suite of tools for logging, monitoring, error reporting, debugging, tracing, and profiling. It is available for GCP and AWS. It consists of VM monitoring with agents. It is available for on-premises environment and offers GCP native integration. It can be integrated with a wide ranging library of application performance technologies. All GCP projects (and AWS projects too) can be linked to a single Stackdriver account.
 
 Monitoring collects measurements or metrics to demonstrate how system services are performing. It can create dashboards and charts. Workspaces are needed to use cloud monitoring. Agents are recommended to monitor VMs. Cloud Monitoring is available for GKE. Workspaces can include up to 500 policies. Alerts can be sent through email, SMS, and other third-party tools.
 
