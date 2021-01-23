@@ -45,3 +45,52 @@ Chef client is a local agent on each node that ensures that its resident node co
 All Cookbooks share a basic file structure. The `recipes` directory stores all the recipes with a `default.rb` configuration. The default path for the cookbooks directory can be found in the `.chef` directory and changed inside that directory's `knife.rb` file.
 
 Run `chef generate cookbook [NAME]` to create a cookbook. A cookbook can follow the same creation process as a recipe. Use `chef-client --local-mode` to run a cookbook locally.
+
+### Chef Runlists
+
+RunLists provide a sequence of recipes to be run on each node. Syntax: `chef-client --runlist "recipe[Cookbook-Name::Recipe-Name]"`.
+
+A RunList could, for example, generate a cookbook skeleton, check the syntax, conduct a dry-run test, then a real-run test before provisioning from the recipe. Runlists can also run multiple recipes at once.
+
+### Other Topics
+
+**Include Recipe**
+
+For larger recipes, it may be better to split a recipe up into multiple files and invoke each component with the `include_recipe` directive in the main recipe file.
+
+**Dependencies**
+
+Dependencies can be used to link other cookbooks through using the directive `depends '[cookbook]'`.
+
+**Server-Client Model**
+
+Code is developed on the individual Workstation before it is uploaded to the Chef server where cookbooks and recipes are stored. Knife is the utility on the individual workstation that interacts with the server, and it uploads the code when properly configured to communicate with the server.
+
+Runlists are created on the server to provide an explicit sequence for recipe and cookbook implementation. These are generated through the command `knife node run_list add NODE_NAME RUN_LIST_ITEM`.
+
+These runlists are then deployed on the nodes by executing `knife ssh 'name:*' 'chef-client'` to provision the runlist on each node.
+
+Other commands:
+* `knife ssl check` checks chef-server connectivity from the workstation
+* `knife cookbook upload cookbook names` to upload the cookbook onto the Chef server
+* `knife cookbook list` to check all uploaded cookbooks.
+
+**Ohai**
+
+Ohai is a tool used to collect system configuration data that is run by the chef client to determine the current system state. Data from Ohai is returned in JSON format.
+
+**Kitchen**
+
+Kitchen can be used for testing by creating a virtual machine, installing chef tools, copying and applying the cookbooks, before cleaning it up.
+
+**Roles**
+
+Runlists can be grouped into roles that provide greater abstraction and organization for recycled processes.
+
+**Environment**
+
+Environments can provide mirroring between development and production spheres while also providing isolation between them. Chef can be used to provision environments with specific attributes that can be used to filter node placement.
+
+**Supermarket**
+
+Chef Supermarket is the marketplace for Chef cookbooks, plugins, and other resources.
