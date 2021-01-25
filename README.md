@@ -15,16 +15,16 @@ Exam date log:
 
 Planned:
 
-* **GCP Associate Cloud Engineer**
 * **Certified Kubernetes Administrator**
-* **RHCSA** *
 * **Hashicorp Certified Terraform Associate**
 * **AWS Developer Associate**
 * **AWS SysOps Administrator Associate**
-* **AWS DevOps Professional**
+* **RHCSA** *
 * **GCP Cloud Architect**
+* **AWS DevOps Professional**
 * **AWS Machine Learning Specialty**
 * **AWS Advanced Networking Specialty**
 * **RHCE Ansible** *
+* **Red Hat OpenShift Specialty**
 
 \*I plan to prepare for and take a mock exam because this official exam certification is too expensive for what I believe it offers. However, I will still learn the content and technology as thoroughly as required to pass the real exam.
