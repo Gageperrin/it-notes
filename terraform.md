@@ -122,7 +122,7 @@ When `terraform apply` is run, a `terraform.tfstate` file is generated that prov
 
 In larger infrastructures, Terraform uses caching to save performance and use the meta-data as a reference of truth. With developer teams, it is important to ensure no one else is working with Terraform at the same time and that the latest configuration file is used. It is best to backup the `.tfstate` file in a remote directory.
 
-The `.tfstate` file contains senstivie information and should not be stored or distributed without security measures. Remote State Backends should be stored in private repositories such as Amazon S3 or Terraform Cloud while version control can be uploaded to GitHub or BitBucket.
+The `.tfstate` file contains sensitive information and should not be stored or distributed without security measures. Remote State Backends should be stored in private repositories such as Amazon S3 or Terraform Cloud while version control can be uploaded to GitHub or BitBucket.
 
 Do not manually edit the `terraform.tfstate` file manually but use commands instead.
 
