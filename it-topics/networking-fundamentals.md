@@ -156,4 +156,31 @@ Static NAT: The router maintains a NAT table, it maps PrivateIP : PublicIP (1:1)
 
 Dynamic NAT: The router maintains a NAT table, it maps Private IP: Public IP in the same way as Static NAT, but the allocations are temporary. Multiple devices can use the same allocation over time if there is no overlap. In the public Internet, only one private IP will be mapped to the the public IP at any time, it is still 1:1 for the duration of the allocation. If the Public IP pool is exhausted then external access can fail.
 
-PAT: The NAT Device records the soruce IP and source port. It replaces the source IP with the single public IP and a public source port allocated from a pool which allows IP overloading (many to one). Return traffic has the public IP of the Nat device and the destination port. Public Port and Public IP are translated to Private Port and Private IP.
+PAT: The NAT Device records the source IP and source port. It replaces the source IP with the single public IP and a public source port allocated from a pool which allows IP overloading (many to one). Return traffic has the public IP of the Nat device and the destination port. Public Port and Public IP are translated to Private Port and Private IP.
+
+## Subnetting
+
+The IPv4 standard was standardized in 1981 through the RFC791 document. They occupy ranges between 0.0.0.0 and 255.255.255.255. This contains 4,294,967,296 IP addresses. It was originally managed by IANA but has since been delegated to regional authorities. All public IPv4 addresses are allocated, but there are private addresses that can be used freely.
+
+It was historically divided into multiples classes such as class A (0.0.0.0 -> 127.255.255.255) with 128 networks for large networks and businesses. This has been largely handed over to regional authorities. Class B starts at 128.0.0.0 and ends at 191.255.255.255 and contains 16,384 for smaller businesses but this was also handed over to regional authorities. Class C (192.0.0.0 -> 223.255.255.255) with 2,097,152 networks for even smaller businesses. Class D (multi-cast) and Class E (reserved) were also set up.
+
+IPv4 is now defined by the standard RFC1918. The first private range (10.0.0.0 - 10.255.255.255) contains 16,777,216 IP addresses. The next private range runs from 172.16.0.0 to 172.31.255.255 with 16 networks that contain 65,536 IPv4 addresses each. 192.168.0.0 - 192.168.255.255 is the third group with 256 networks with 256 IPv4 addresses each (used for home routing). It is best practice to never configure overlapping CIDR ranges.
+
+A subnet is a prefix value `/` after the IPv4 address. For example, 10.16.0.0 starts at 10.16.0.0 and ends at 10.16.255.255. This can be sub-netted to create four smaller networks by splitting the network into two by making it `/17` with ranges 10.16.0.0/17 and 10.16.128.0/17. This second netowrk can then be split again `/18` into 10.16.128.0/18 and 10.16.192.0/18.
+
+## DDoS
+
+DDoS are attacks designed to overload websites and compete against legitimate connections. They are often distributed so blocking individual IP ranges does not work. There are several types of attacks. Application Layer HTTP Floods push overwhelming traffic at Layer 7. Protocol attacks are SYN floods spoof a source IP address and initiate a connection attempt. The server tries to perform the handshake but is unable to locate the spoofed IP and so waits a specified duration to try to find it. Volumetric attacks rely on DNS amplification push a large amount of data to DNS server to overwhelm them with requests. Botnets are the machines that execute these attacks, usually installed as malware.
+
+These attacks cannot be defended against using standard network protections.
+
+## SSL and TLS
+
+Secure Sockets Layer (SSL) and Transport Layer Security (TLS) essentially do the same thing but TLS is newer. They provide privacy and data integrity between the client and server. They ensure that communications are encrypted. TLS starts with asymmetric encryption and then moves to symmetric encryption to save computation resources. TLS also provides server and client identity verification and ensures a reliable connection to prevent tampering.
+
+There are three phases: cipher suites, authentication, and then key exchange. Cipher Suite is a group of algorithms for the communication process. The client and server need the same Cipher Suite available in order to communicate securely. This first phase is how they agree to communicate. 
+
+In the second phase, the client validates the server certificate. The server should have a publicly trusted Certificate Authority signing their certificate. At this point, the client makes sure that the server certificate is both valid and matches DNS name. Then the client verifies the server has the private key.
+
+In the third phase, the client provides an encrypted master key to the server which is then decrypted and used to generate a master secret. This master secret is used to generate symmetric session keys to encrypt and decrypt data.
+
