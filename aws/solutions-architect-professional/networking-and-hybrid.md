@@ -184,7 +184,7 @@ Zone files in AWS are called hosted zones. They can either be public or private 
 
 `enableDnsHostnames` indicates whether the instances launched in the VPC get public DNS hostnames. If this attribute is true , instances in the VPC get public DNS hostnames, but only if the enableDnsSupport attribute is also set to true. `enableDnsSuport` Indicates whether the DNS resolution is supported for the VPC. If this attribute is false, the Amazon-provided DNS server in the VPC that resolves public DNS hostnames to IP addresses is not enabled. If this attribute is true , queries to the Amazon provided DNS server at the 169.254.169.253 IP address, or the reserved IP address at the base of the VPC IPv4 network range plus two ( *.*.*.2 ) will succeed.
 
-
+While CNAME and ALIAS seems similar, they have different use cases. CNAME is invalid for naked/apex domains, but many AWS services use a DNS names, so aliases are necessary. An alias record maps a name to an AWS resource (and not just a name). It can be used for both naked/apex and normal records. There is no chrage for alias requests for AWS resources, it is the default option. The type of alias should match the kind of record it is pointing to.
 
 ### Route 53 Public Hosted Zones
 
@@ -192,9 +192,13 @@ A R53 Hosted Zone is a DNS database for a domain. A public hosted zone is hosted
 
 It hosts DNS records (A, AAAA, MX, NS, TXT), and the hosted zones are authoritative since the DNS system references them. However, Route 53 does not support DNSSEC services. These must be integrated through a third party.
 
+### Route 53 Private Hosted Zones
+
+A R53 private hosted zone is associated with VPCs, only accessible in VPC through different account (supported by CLI/API). It is possible to have a split-view for the same zone name with overlapping public and private zones for public and internal use. To access a private hosted zone, the service must be running inside the VPC and associated with the zone.
+
 ### Route 53 Health Checks
 
-Health checks are separate from but are used by records. Health checkers are located globally and can check anything (even non-AWS) with an IP address over the public Internet. They can be set to check every 10s or 30s or even more frequently at an increased cost. Can check:
+Health checks are separate from but are used by records. Health checkers are located globally and can check anything (even non-AWS) with an IP address over the public Internet. They can be set to check every 10s or 30s or even more frequently at an increased cost. It can check:
 * TCP
 * HTTP/S
 * HTTP/S with String Matching
@@ -204,15 +208,27 @@ Types of checks:
 * CloudWatch Alarm
 * Check of other checks
 
+
 ### Route 53 Routing Policies
 
-* Simple: Route to a single resource
-* Failover: One record is set to be primary, one is set to backup in case of primary failure
-* Weighted: Records are given weight value to distribute routing traffic
-* Latency-based: Checks database for latency and routes traffic accordingly
-* Geo-location: Routes based on continent/country record
-* Multi-value: Routing traffic to multiple resources, creating more than one record of the same name and type
+* Simple: Route to a single resource (does not support health checks)
+* Failover: One record is set to be primary, one is set to backup in case of primary failure. Use for active/passive
+* Weighted: Records are given weight value to distribute routing traffic. Use for simple load balancing or testing new software versions
+* Latency-based: Checks database for latency and routes traffic accordingly. Use for performance and user experience.
+* Geolocation: Routes based on continent/country record, not about closest record. Use for content restriction
+* Geoproximity: Routes based on geographic coordinates, defined by rules with a plus or minus bias for region zoning
+* Multi-value: Routing traffic to multiple resources, creating more than one record of the same name and type. Improves availability as each record is indpeendent and can have an associated health check
 
+
+### Route 53 Interoperability
+
+Route 53 can act as domain registrar and/or domain hosting. It can also be paired with another service to do one of the two jobs. R53 accepts the domain registration fee. For domain hosting, it allocates 4 Name Servers and creates a zone file based on the name server. As domain registrar, R53 communicates with the registry of the TLD.
+
+When R53 does both roles, the domain registrar liaises with domain hosting to createa a public hosted zone. The registration fee, domain name and name servers are provided to the registry. The registrar then adds an entry in TLD using NS delegation records in the public hosted zone (DNS hosting role).
+
+When R53 does registrar only, the NS records for the domain are sent to externally hosted Name Servers. Records are managed, but the domain is managed by R53. Not very common.
+
+When R53 does domain hosting only, R53 creates a public hosted zone for the domain. It passes the allocated NS details to the registrar. Using the registrar, NS records for the domain can be updated after registration if it is decided to host records via R53. The name servers are provided to the 3rd party registrar and an entry is added in TLD using NS delegation records back in R53.
 
 ## VPC Endpoints
 
