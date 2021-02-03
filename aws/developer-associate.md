@@ -85,3 +85,14 @@ Change sets can be used to preview how changing configured resources in a stack 
 ### Custom Resources
 
 Custom resources allow the user to write custom provisioning logic that runs anytime a stack is created, updated, or deleted. For example, a Lambda function can be invoked to receive events and upload them to a S3 bucket.
+
+
+## CI/CD using AWS Code
+
+CI/CD in AWS consists of four stages: Code, Build, Test, and Deploy. These stages often overlap but constitute the best practice development pipeline. Legacy solutions include Github, Bitbucket, Jenkins, etc.
+
+Code is supported by CodeCommit. Build and Test are supported by CodeBuild. Deploy is supported by CodeDeploy. A pipeline is linked to only one branch in a repository. A team could therefore have a Development pipeline and a Master pipeline that deploy to test and production environments respectively.
+
+`buildspec.yml` and `appspec.yml/json` are important for this process. The first is a series of commands and specifications used in CodeBuild to shape the build process. The second provides specification for application deployment in CodeDeploy. They could also refer to CodePipeline. 
+
+CodeDeploy can be used to deploy an application onto EC2, into AWS Elastic Beanstalk (environment name needed, AWS OpsWorks (stack needed), AWS CloudFormation, Amazon ECS (and ECS Blue/Green), AWS Service Catalog, Alexa Skills Kit, and Amazon S3.
