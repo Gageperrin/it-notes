@@ -17,7 +17,7 @@
 
 CloudFront is a content delivery network (CDN) which has an (S3 or custom) origin. The distribution is the configuration unit. The edge location is the local cache of data. There is also a regional edge cache which is a larger version of an edge location.
 
-CloudFront behaviors control the TTL, protocol and privacy settings in CloudFront. The price class is based on which edge lcoations are used. WAF web ACLs are configured at the distribution level. Alternate domain names and custom SSL are configured here as well. Can select the security policy to use (balance between security and browser accessibility). A single distribution can have multiple behaviors with one default. Behavior precendence based on priority numbers which starts at 0 as the default.
+CloudFront behaviors control the TTL, protocol and privacy settings in CloudFront. The price class is based on which edge lcoations are used. WAF web ACLs are configured at the distribution level. Alternate domain names and custom SSL are configured here as well. Can select the security policy to use (balance between security and browser accessibility). A single distribution can have multiple behaviors with one default. Behavior precendence based on priority numbers which starts at 0 as the default. Higher numbers have higher priority.
 
 Behavior configuration includes:
 * Origin
@@ -40,18 +40,18 @@ It is better to use versioned file names instead. Objects cached in a customer's
 
 ## CloudFront, SSL and SNI
 
-Each CloudFront distribution receives a default domain name (CNAME record). SSL supported by default `*.cloudfront.net` Can have alternate domain names. CloudFront verifies ownerhsip using a matching certificate. It generates or imports from ACM (**always in us-east-1**) for CloudFront. Can faciliatate HTTP/S, HTTP -> HTTPS, or HTTPS only.
+Each CloudFront distribution receives a default domain name (CNAME record). SSL supported by default `*.cloudfront.net` Can have alternate domain names. CloudFront verifies ownership using a matching certificate. It generates or imports from ACM (**always in us-east-1**) for CloudFront. Can faciliatate HTTP/S, HTTP -> HTTPS, or HTTPS only.
 
-There are two SSL connections through CloudFront: Viewer -> Cloudfront and CloudFront -> Origin. Both connections need valid public certificates (self-signed certifications do not work). Historically (before 2003) every SSL-enabled site needed its own IP. Encryption starts at the TCP connection. Most headers happen after that Layer 7 / Applicatoin. For TLS, this encryption is before the header happens.
+There are two SSL connections through CloudFront: Viewer -> Cloudfront and CloudFront -> Origin. Both connections need valid public certificates (self-signed certifications do not work). Historically (before 2003) every SSL-enabled site needed its own IP. Encryption starts at the TCP connection. Most headers happen after that Layer 7 / Application. For TLS, this encryption is before the header happens.
 
-In 2003 a TLS extension named SNI was added to allow a host to be included. Results in many SSL Certs/Hosts using a shared IP. Old browser don't support SNI. CloudFront charges extra for a dedicated IP ($600/month).
+In 2003, a TLS extension named SNI was added to allow a host to be included. Results in many SSL Certs/Hosts using a shared IP. Old browser don't support SNI. CloudFront charges extra for a dedicated IP ($600/month).
 
 Architecture: Viewer protocol is the connection between the user and the edge location. The certificate used by the edge location must be a trusted certificate authority such as Comodo, DigiCert, Symantec, or ACM (us-east-1) which matches the DNS name. Origin protocol must also use publicly trusted certificates. ALB can use ACM but no self-signed certificates. S3 Origins handles certificates natively. Custom origin EC2 or on-premises is not supported by ACM, so it is necessary to apply certificates manually.
 
 
 ## Origin Types and Architecture
 
-When there are two or more origins in a distribution, they can be put into an origins group to provide re-routing in case of a failover event. Origins are selected from a behavior. They are split between S3, Media Package, Media Store, and everything else (web servers). If S3 is configured as a static website, CloudFRont will treat it as a web server.
+When there are two or more origins in a distribution, they can be put into an origins group to provide re-routing in case of a failover event. Origins are selected from a behavior. They are split between S3, Media Package, Media Store, and everything else (web servers). If S3 is configured as a static website, CloudFront will treat it as a web server.
 
 S3 Origins is the simplest to integrate. It can configure origin domain name, path, bucket access restrictions, origin access identity (CloudFRont can be given an identity to access S3 Origins), read permissions on a bucket, and origin custom headers. S3 matches viewer and origin protocols.
 
@@ -94,7 +94,7 @@ The client and origin relationship can be encrypted using HTTPS. Information is 
 
 ## Lambda@Edge
 
-Lambda@Edge allows CloudFront to run Lambda functions at Edge locations to modify traffic between the viewer and edge location as well as between the edge locations and origins. It currently supports Node.js and Python. It is run in the AWS public space (not a VPC). Layers are not supported though.
+Lambda@Edge allows CloudFront to run Lambda functions at Edge locations to modify traffic between the viewer and edge location as well as between the edge locations and origins. It currently oonly supports Node.js and Python. It is run in the AWS public space (not a VPC). Layers are not supported though, and they have different time limits than normal Lambda functions.
 
 There are four stages for when a Lambda function can be run:
 1. Viewer request
