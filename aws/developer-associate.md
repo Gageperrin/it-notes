@@ -96,3 +96,74 @@ Code is supported by CodeCommit. Build and Test are supported by CodeBuild. Depl
 `buildspec.yml` and `appspec.yml/json` are important for this process. The first is a series of commands and specifications used in CodeBuild to shape the build process. The second provides specification for application deployment in CodeDeploy. They could also refer to CodePipeline. 
 
 CodeDeploy can be used to deploy an application onto EC2, into AWS Elastic Beanstalk (environment name needed, AWS OpsWorks (stack needed), AWS CloudFormation, Amazon ECS (and ECS Blue/Green), AWS Service Catalog, Alexa Skills Kit, and Amazon S3.
+
+
+## AWS Lambda
+
+Lambda is a function-as-a-service. A function is a piece of code that Lambda runs. Functions use a runtime and they are loaded and run in a runtime environment. The environment has a direct memory (indirect CPU) allocation, and they are only billed for the duration that the function runs for.
+
+Python, Ruby, Java, Go, C# supported but Docker is not supported (anti-pattern). Custom runtimes such as Rust are possible using layers. Can directly control the memory allocated for Lambda functions whereas vCPU is allocated indirectly. 512MB storage avialable at /tmp. Functions can only run up to 900 seconds (15 minutes).
+
+Common uses: Serverless applications (S3, API Gateway, Lambda), file processing (S3, S3 Events, Lambda), database triggers (DynamoDB streams, Lambda), serverless CRON (EventBridge/CWEvents, Lambda), real-time stream data processing (Kinesis, Lambda).
+
+By default, Lambda functions are given public networking. They can access public AWS services and the public Internet. Public networking offers the best performance because no customer specific VPC networking is required, but Lambda functions will have no access to VPN-based services unless public IPs are provided and security controls allow external access. Lambda functions running in a VPC have to obey all VPC networking rules. VPC Endpoints can provide access to public AWS service. NAT gateway and IGW are required for VPC Lambdas to access Internet resoruces. Lambda will also need EC2 networkign permissions.
+
+VPC-based Lambda functions do not run in the VPC, but they are like Fargate. AWS automatically sets up an ENI for every unique combination of security groups and subnets for Lambda functions. This ENI has 90 second initial setup with no invocatoin delay. The new design makes VPC-baesd Lambdas a viable solution.
+
+Lambda execution roles are IAM roles attached to functions which control the permissions the function receives. Lambda resource policy controls which services and accoutns can invoke Lambda functions. Lambda uses CloudWatch, CloudWatch Logs & X-Ray. Logs from Lambda executions are CloudWatch Logs. Metrics are stored in CloudWatch. Lambda can be integrated with X-Ray for distributed tracing of user/application pathing. CloudWatch Logs requires permisssions via exceution role for Lambda function.
+
+For synchronous invocation, the CLI/API invokes a Lambda function, passing in data and wait for a response. Lambda function responds with data or fails. Clients communicate with API gateway, proxied to Lambda function. The function responds or fails and the response is sent back to the client. With a synchronous invocation, the result is returned during the request. Errors or retries ahve to be handled within the client.
+
+For asynchronous invocation, the event is generated and the requester stops tracking it. Lambda is responsible for re-processing (between zero and two times).
+
+Lambda function needs to be idempotent re-processing a result should have the same end state. Events can be sent to dead letter queues after repeated failing processing. Lambda supports destination like SQS, SNS, and EventBridge where successful or failed events can be sent.
+
+Event source mappings are typicallly used on streams or queues which do not support event generation to invoke Lambda (Kinesis, DynamoDB streams, SQS). Event soruce mapping read/poll from the steam or queue and deliver event batches to Lambda. Event batches are processsed OK or FAIL as a batch. Permissions from the Lambda execution role are used by the event source mapping to interact wiht the event source.
+
+SQS queues or SNS topics can be used for any discarded failed event batches. Lambda functions have versions, but they are immutable once published with their own ARN. $Latest points at the latest. Aliases (DEV, STAGE, PROD) point at a version that can be changed.
+
+An execution context is the environment a Lambda function runs in. A cold start is a full creation and configuration including code download (~100 ms). A warm start already has the execution context and can re-use it. A new event is passed in but the event context creation can be skipped (~1-2 ms). A Lambda invocation can re-use an execution context but has to assume it cannot. If used, infrequently contexts will be removed. Concurrent executions will use multiple context. Provisioned concurrency can be used. AWS will create and keep x context warm and ready to use which improves starting speeds.
+
+
+## API Gateway
+
+API Gateway is a fully managed service that creates and manages APIs, including endpoint/entry-point for applications. Sits between the applications and the integrated services. It is HA, scalable, handles authorization, offers throttling, caching, CORS, transformations, OpenAPI spec, and direct integration. It can connect to service/endpoints in AWS or on-premises. Uses HTTP, REST, and WebSocket APIs.
+
+Steps:
+
+Request phase: authorize, validate, transform.
+Integrations
+Response: Transform, prepare, and return.
+CloudWatch logs can store and manage full stage request and response logs. CloudWatch can store metrics for client and integration sides. API Gateway Cache can be used to reduce the number of calls made to backend integrations and improve client performance. Authentication with Cognito and authorization through Lambda authorizer.
+
+Endpoint types include edge-optimized routed to the nearest CloudFront POP (point of presence). It is regionally routed to clients in the same region, and it is private, acccessibly only wihtin a VPC via an interface endpoints.
+
+APIs are deployed to stages that have one deployment each. Stages can be enabled for canary deployments where deployments are made to the canary, not the stage. Stages enabled for the canary deployments can be configured so do a certain percentage of traffic is sent to the canary. This can be adjusted over time or the canary can be promoted to make it the new base stage.
+
+Errors: 400 series are client errors: 400 - generic bad request 403 - access denied error or filtered 429 - API gateway throttling, exceeded amount 502 - bad gateway exception (bad output returned by Lambda) 503 - service unavailable 504 - integration failure/timeout 29 second limit
+
+Caching is defined per stage. The cache TTL default is 300 seconds, configurable to be between 0 and 3600 seconds. It can be encrypted, and the cache size is between 500 MB to 237 GB. Calls are only made to backend integratoins if request is a cache miss.
+
+
+## Elastic Beanstalk
+
+Elastic Beanstlak is a platform as a service vendor that handles infrastructure, while the user handles the code. It is developer focused and provides managed applicatoin environmnets. User provides the code and Elastic Beanstalk handles the environment. Fully customizable and uses AWS products under the hood. Requires application changes so it is not free.
+
+Built-in languages:
+
+Go
+Java SE
+Tomcat
+.NET Core (Linux)
+.NET (Windows)
+Node.js
+PHP
+Python
+Ruby
+Docker: Single container docker option, multi-container docker, or pre-configured docker (e.g. supports Glassfish Java 8). Custom platforms via packer.
+
+EB application is not code but a collection of things relating to an application. Application versions are a specific labeled version of deployable code for an application. The source bundle is stored on S3. Environments are containers of infrastructure and configuration for a specific application version. Each environment is either a web server tier or a worker tier--it controls the structure and function of the environment. App versions can be deployed to environmnets. Web and worker tiers communciate via SQS queues. Each environment has its own CNAME which can be swapped to exchange two environment DNS.
+
+Blue/green deployment is where a green environment is created for testing. When it is ready, the CNAME is swapped from blue to green. The blue environment is only deleted when green is fully functional.
+
+Elastic Beanstalk is not free but is great for small development teams. Use Docker for anything unsupported. Databases should be outside Elastic Beanstalk. Databases in an environment are lost if the environment is deleted.
