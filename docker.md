@@ -84,8 +84,9 @@ COPY . /opt/source-code
 ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
 ```
 
-It is also possible to build a custom image using `docker commit` from an existing container. Commit the state of a container using `docker conatiner commit -a "message" [container-name] [new-name]`. This is not recommended because this process is not maintainable.
+It is also possible to build a custom image using `docker commit` from an existing container. Commit the state of a container using `docker container commit -a "message" [container-name] [new-name]`. This is not recommended because this process is not maintainable.
 
+Build contexts determine where the Docker build configuration comes from. Essentially it is the path for the build configuration. This can be a local file or a remote URL. Build caching can save layers of the build for subsequent executions. Packages can be combined in a single line to make the build more clear. The `ADD` directive has more features than the `COPY` but `COPY` is still best practice in most cases.
 
 
 
