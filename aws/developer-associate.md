@@ -124,6 +124,12 @@ SQS queues or SNS topics can be used for any discarded failed event batches. Lam
 
 An execution context is the environment a Lambda function runs in. A cold start is a full creation and configuration including code download (~100 ms). A warm start already has the execution context and can re-use it. A new event is passed in but the event context creation can be skipped (~1-2 ms). A Lambda invocation can re-use an execution context but has to assume it cannot. If used, infrequently contexts will be removed. Concurrent executions will use multiple context. Provisioned concurrency can be used. AWS will create and keep x context warm and ready to use which improves starting speeds.
 
+### Lambda Function Handler
+
+Lambda executions have lifecycles. It starts with an `INIT` state that creates or unfreezes the executions environment. Then it enters `INVOKE` which is either a slow, cold start that runs the function handler, or on subsequent tries a warm start with the same environment. `SHUTDOWN` terminates the environment, requiring a cold start for the next start-up. The code is divided between an initialization component and a handler component, the former is executed once every cold start (or in advance if using provisioned concurrency).
+
+
+
 
 ## API Gateway
 
