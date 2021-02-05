@@ -128,8 +128,21 @@ An execution context is the environment a Lambda function runs in. A cold start 
 
 Lambda executions have lifecycles. It starts with an `INIT` state that creates or unfreezes the executions environment. Then it enters `INVOKE` which is either a slow, cold start that runs the function handler, or on subsequent tries a warm start with the same environment. `SHUTDOWN` terminates the environment, requiring a cold start for the next start-up. The code is divided between an initialization component and a handler component, the former is executed once every cold start (or in advance if using provisioned concurrency).
 
+### Lambda Versions
 
+Unpublished functions can be changed and deployed to just use the latest version. Functions can be published to create an immutable version. It is locked and there can be no editing of that published version. A version includes funtion code, dependencies, runtime, settings, and environment variables. It has a unique ARN for that function version. A qualified ARN points at a specific version while an unqualified ARN points at the function (`$LATEST`) and not a specific version.
 
+### Lambda Aliases
+
+An alias is a pointer to a function version. Each alias has a unique ARN fixed for the alias, but they can be updated to change which version they reference. This is very useful for labeling production and development environments by pointing to different versions. Alias routing also allows weight routed to different versions for testing. However, they need the same role, same DLQ, and cannot be `$LATEST` for this to work. Aliases can be static 1 version at a time.
+
+### Lambda Environment Variables
+
+An environment variable is a key and value pair. By default, these are associated with `$LATEST` in Lambda. They can be associated with a version so that the variables become immutable. They can be accessed within the execution environment. They can be encrypted with KMS. They allow code execution to be adjusted based on variables.
+
+### Lambda Layers
+
+Lambda can pull in additional code and content as layers. A layer is a .zip archive with libraries, a custom runtime, and other dependencies. Layers allow the user to use libraries without needing to embed them in the deployment package.
 
 ## API Gateway
 
