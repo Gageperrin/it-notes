@@ -88,5 +88,25 @@ It is also possible to build a custom image using `docker commit` from an existi
 
 Build contexts determine where the Docker build configuration comes from. Essentially it is the path for the build configuration. This can be a local file or a remote URL. Build caching can save layers of the build for subsequent executions. Packages can be combined in a single line to make the build more clear. The `ADD` directive has more features than the `COPY` but `COPY` is still best practice in most cases.
 
+The `CMD` determines the default command run in the container upon launch. By contrast, `ENTRYPOINT` appends the command line parameters to the CLI rather than merely replacing the command. A default value can be configured by combining the `ENTRYPOINT` instruction with `CMD` as the parameter in a JSON format.
+
+Images can be built on top of parent images, in an ongoing parent-child relationship until it reaches the base image which is the image built from scratch.
+
+Multi-stage builds build from a Dockerfile before extracting data from the first image to populate a second-stage build. This second build is then containerized for production. A multi-stage build will have multiple `FROM`'s in a single Dockerfile. The `COPY` command is used to copy information from the first image to the second. Multi-stage builds optimize Dockerfiles and keep them easy to read and maintain. They help reduce image size, avoid maintaining muliple Dockerfiles, and removes intermediate images.
+
+Best practices tips:
+* Do not build images that combine multiple applications, use modular images that each solve one specific problem.
+* Do not store persistent data in a container but in an external volume or caching service.
+* Create slim and minimal images.
+* Only install necessary packages.
+* Maintain different images for different environments.
+* Use multi-stage builds to create lean production ready images.
+* Avoid sending sensitive data to the build context.
+
+## Docker Engine - Security
+
+Someone with access to the Docker daemon can delete existing containers hosting applications, delete volumes storing data, and run containers to run tehir applications.
+
+
 
 
