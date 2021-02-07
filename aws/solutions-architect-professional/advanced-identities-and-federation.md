@@ -10,7 +10,7 @@ SAML 2.0 allows on-premises identities to use AWS.
 AWS use cases:
 1. Enterprise Identity Provider (SAML 2.0 Compatible)
 2. Existing identity management team
-3. Single soruce of truth for more than 5,000 users
+3. Single source of truth for more than 5,000 users
 
 [SAML 2.0 Identity Federation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html) uses IAM Roles & AWS Temporary Credentials (12 hour validity).
 
@@ -48,7 +48,7 @@ Use cases: Data synchronization, identity merging, managed login UI.
 
 > [Amazon WorkSpaces](https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html) enables you to provision virtual, cloud-based Microsoft Windows or Amazon Linux desktops for your users, known as WorkSpaces. Amazon WorkSpaces eliminates the need to procure and deploy hardware or install complex software. You can quickly add or remove users as your needs change. Users can access their virtual desktops from multiple devices or web browsers.
 
-Amazon Workspaces is a Desktop-As-A-Service similar to Citriz or Remote Desktop-A. Consistent desktop from anywhere with Windows and Linux OS's of various sizes.
+Amazon Workspaces is a Desktop-As-A-Service similar to Citrix or Remote Desktop-A. Consistent desktop from anywhere with Windows and Linux OS's of various sizes.
 
 * Billing: Monthly or hourly pricing + base infrastructure cost.
 * Uses Directory Service (Simple AD, AD Connector).
