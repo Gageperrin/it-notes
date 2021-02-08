@@ -172,6 +172,26 @@ Methods are where integrations are configured which provide the functionality of
 
 Resources are points in the API tree or bits of functionality within the API.
 
+### Integrations
+
+API Gateway is an intermediary between clients and integrations. The request phase authorizes, validates, and then transforms data. The response phase transforms, prepares, and returns data in relation to the backend endpoint. The request phase is split into the (1) method and (2) integration request. The response phase is split into the (3) integration response and (4) method response. The integration request can either pass data straight through (proxy) or with some tinkering.
+
+API methods are integrated with a backend endpoint. There are several types of integrations. `MOCK` is used for testing, no backend involvement. `HTTP` exposes backend HTTP endpoints. `HTTP Proxy` passes data through to integration unmodified, returns to the client unmodified (backend needs to use a support format). `AWS` lets an API expose AWS service actions. `AWS_PROXY` (LAMBDA) is a low admin overhead Lambda endpoint which means that Lambda must be able to understand the passed along data. `HTTP` and `AWS` means you configure integration request and reponse through mapping templates. `AWS_PROXY` passes the request straight throguh to Lambda. The function is responsible for formats because no mapping template can be used. `HTTP_PROXY` uses no mapping templates as the request is passed through as is.
+
+A mapping template is used for `AWS` and `HTTP` non proxy integrations. It can modify or rename parameters. It can modify the body or headers of the request. It filters the request as well. It uses Velocity Template Langauge (VTL). Common use case scenario is converting a REST API on API Gateway to a SOAP API, transforming the request using a mapping template.
+
+### Stages and Deployments
+
+Changes made in API Gateway are not live. To make stages live, the current API state needs to be deployed to a stage. Stages can be named like environments or versions (this one is helpful if each version has breaking changes). Each stage has its own configuration, but it is not immutable and can be rolled back.
+
+Stage variables can be used to point integrations to different Lambda aliases depending on the stage. The dev alias usually points to `$LATEST` since it is mutable and refers to most recent saved state of code.
+
+### Open API & Swagger
+
+OpenAPI (OAS) otherwise known as swagger. Swagger is technically OpenAPI v2. Open API v3 is a more recent version.
+
+It is an API description format for REST API's. It contains endpoints, operations, input and output parameters, authentication methods, and non technical information such as contact information and terms of use. API Gateway can export to Swagger/OpenAPI can import from them.
+
 
 ## Elastic Beanstalk
 
