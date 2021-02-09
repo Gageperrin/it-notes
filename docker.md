@@ -105,7 +105,17 @@ Best practices tips:
 
 ## Docker Engine - Security
 
-Someone with access to the Docker daemon can delete existing containers hosting applications, delete volumes storing data, and run containers to run tehir applications.
+Someone with access to the Docker daemon can delete existing containers hosting applications, delete volumes storing data, and run containers to run their applications. It is also possible to gain root access to the host by running a privileged container. And they can target the other systems in the network and the network itself.
+
+Add the host function to the `daemon.json` and expose the Daemon host properly only on private interfaces. Communication can be configured iwth certificates using a CA authority. Set Docker environment variables to target these certificates. When the required components are ready, set `DOCKER_TLS` to true. 
+
+Docker uses namespaces to isolate workspaces. PID is a process namespace, and when processes start in a child container system, they also have the same PID. But because there is a namespace separating the parent and child systems, the PID is not confused.
+
+Docker uses a set of Linux security protocols to ensure that the container root does not have root privileges on the host. The `cap-add` option can allow the container root to access the host with all privileges enabled.
+
+Resource limits can be used to restrict CPU usage or create reservations depending on computing resources. When a kernel detects that there is not enough CPU, it will start killing processes even native processes on the host. When there are two processes running in parallel that need the same CPU processor, the first process runs for a few cycles then it switches to the second one, etc. These are concurrent processes. The process scheduler manages this. 
+
+Docker v1.13 and later supports a Realtime scheduler which handles restricting resources to containers. In the CLI this can be managed with the `--cpu-shares` option. The host can also restrict individual container CPU usage with`--cpuset-cpus=`.
 
 
 
