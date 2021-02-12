@@ -131,6 +131,28 @@ Commands:
 * `docker network rm` to remove a network
 * `docker network prune` removes unused networks.
 
+### Namespaces
+
+Namespaces provide isolated networking interface for work environments. Namespaces can be linked with a virtual cable. A virtual network switch is used when there are multiple containers. Linux Bride and OpenvSwitch can be used as this switch.
+
+Commands:
+* `ip netns add` to add a network namespace.
+* `ip netns` to list namespaces.
+* `ip netns exec [ns] ip link` to execute `ip link` in a namespace. Can also do `ip -n [ns] link`.
+* `ip link add [veth] type veth peer name [veth2]` to create a virtual ethernet cable. 
+* `ip link set [veth] netns [name]` to set a virtual ethernet link point on a namespace.
+* `ip -n [ns] link del [veth]` to delete one end of the link (and automatically the other end).
+* `ip link add [v-net-0] type bridge` to set a virtual network switch.
+* `ip link set dev [v-net-0] up` to enable the switch. Then set virtual ethernet cables between the namespaces and the network switch.
+
+
+
+
+
+
+
+
+
 
 
 
