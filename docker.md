@@ -109,13 +109,27 @@ Someone with access to the Docker daemon can delete existing containers hosting 
 
 Add the host function to the `daemon.json` and expose the Daemon host properly only on private interfaces. Communication can be configured iwth certificates using a CA authority. Set Docker environment variables to target these certificates. When the required components are ready, set `DOCKER_TLS` to true. 
 
-Docker uses namespaces to isolate workspaces. PID is a process namespace, and when processes start in a child container system, they also have the same PID. But because there is a namespace separating the parent and child systems, the PID is not confused.
+Docker uses namespaces to isolate workspaces. PID is a process namespace, and when processes start in a child container system, they also have the same PID. But because there is a namespace separating the parent and child systems, the PID is not confused. CGroups can allocate CPU, memory, network bandwidth, and block I/O.
 
 Docker uses a set of Linux security protocols to ensure that the container root does not have root privileges on the host. The `cap-add` option can allow the container root to access the host with all privileges enabled.
 
-Resource limits can be used to restrict CPU usage or create reservations depending on computing resources. When a kernel detects that there is not enough CPU, it will start killing processes even native processes on the host. When there are two processes running in parallel that need the same CPU processor, the first process runs for a few cycles then it switches to the second one, etc. These are concurrent processes. The process scheduler manages this. 
+CGroups can allocate CPU, memory, network bandwidth, and block I/O, and these can be used to restrict resource consumption. Resource limits can be used to restrict CPU usage or create reservations depending on computing resources. When a kernel detects that there is not enough CPU, it will start killing processes even native processes on the host. When there are two processes running in parallel that need the same CPU processor, the first process runs for a few cycles then it switches to the second one, etc. These are concurrent processes. The process scheduler manages this. 
 
 Docker v1.13 and later supports a Realtime scheduler which handles restricting resources to containers. In the CLI this can be managed with the `--cpu-shares` option. The host can also restrict individual container CPU usage with`--cpuset-cpus=`.
+
+## Docker Engine - Networking
+
+Bridge is the default network that a container is attached to. It can also be attached to `none` and `host`. Bridge is an internal private network created on the host with IPs usually in the 172.17.0.0 series. They can reference each other using their internal IPs. To communicate outside the container they can be mapped to ports or associate the container to the `host` network. The latter removes any network isolation. When this happens multiple containers cannot be run on the same port. `none` means they are completely isolated with no networking.
+
+User-defined networks can be used to create interanl networks with `docker network create --driver [driver] --subnet [subnet range] [name]`. Inspect the network settings with `docker inspect [container]`. Use embedded DNS to resolve connections between containers. Network namespaces are used with virtual ethernet pairs to network containers.
+
+Commands:
+* `docker network create -d bridge [name]` to create a bridge network. `-d` is short for `--driver`.
+* `docker network ls` lists available networks.
+* `docker network inspect` provides more information such as IP subnet and gateway and driver.
+* `docker network connect [network] [container]` connects a container to a custom network.
+* `docker network rm` to remove a network
+* `docker network prune` removes unused networks.
 
 
 
