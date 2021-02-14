@@ -166,6 +166,42 @@ Commands:
 * `docker volume remove` to remove a volume, this can only be done if it is umounted.
 * `docker volume prune` can remove unused volumes.
 
+## Docker Compose
+
+`docker compose` builds a Docker container out of a YAML file to bring up an entire application stack in one command. This only works for running Docker on a single Docker host. Example:
+```
+// docker-compose.yml
+
+redis:
+  image: redis
+db:
+  image: postgres:9.4
+vote:
+  build: ./vote <- builds the container from another file
+  ports:
+   - 5000:80
+  links:
+   - redis
+result:
+  image: result-app
+  ports:
+   - 5001:30
+  links:
+   - redis
+worker:
+  image: worker
+  links:
+   - redis
+   - db
+ ```
+
+Docker compose has multiple versions which must be specified at the top of the file. Version 2 automatically creates a bridge network and connects container to that network without any links or other networking specification. Version 2 also introduces a `depends on` feature to explicitly formulate dependencies.
+
+Version 3 is the most recent version (February 2021) with support for Docker Swarm and has functionality for Docker stacks.
+
+Commands:
+* `docker-compose up` to bring up a Docker compose file stack.
+* 
 
 
 
