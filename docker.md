@@ -133,7 +133,7 @@ Commands:
 
 ### Namespaces
 
-Namespaces provide isolated networking interface for work environments. Namespaces can be linked with a virtual cable. A virtual network switch is used when there are multiple containers. Linux Bride and OpenvSwitch can be used as this switch.
+Namespaces provide isolated networking interface for work environments. Namespaces can be linked with a virtual cable. A virtual network switch is used when there are multiple containers. Linux Bride and OpenvSwitch can be used as this switch. A route needs to be set up from the switch for external connectivity to a NAT gateway.
 
 Commands:
 * `ip netns add` to add a network namespace.
@@ -144,6 +144,32 @@ Commands:
 * `ip -n [ns] link del [veth]` to delete one end of the link (and automatically the other end).
 * `ip link add [v-net-0] type bridge` to set a virtual network switch.
 * `ip link set dev [v-net-0] up` to enable the switch. Then set virtual ethernet cables between the namespaces and the network switch.
+* `iptables -t nat -A POSTROUTING -s [source-IP] -j MASQUERADDE` to set up a NAT gateway for external connectivity.
+* `iptables -t nat -A PREROUTING --dport 80 --to-destination [destination-IP] -j DNAT` to set up port forwarding rules for ingress traffic.
+
+
+## Docker Storage
+
+Docker creates a file structure at `/var/lib/docker` with subdirectories such as `aufs`, `containers`, `image`, and `volumes`. 
+
+To recap, Docker has a layered architecture consisting of (1) the base OS layer, (2) changes in `apt` packages, (3) changes in `pip` packages, (4) source code, and (5) to update the entrypoint. Layers 1-5 are read-only. Docker only builds the layers that have not already been provisioned in the cache.
+
+The sixth layer is the container layer where changes are both read/write, but the information persists only as long as the container is alive.
+
+Create a Docker volume to persist data beyond the container's lifecycle. Docker uses storage drivers such as AUFS, ZFS, Overlay, and others to configure storage. Docker automatically chooses the best storage driver based on the configured OS. Volumes can be specified to be mounted as read only if desired.
+
+Commands:
+* `docker volume create` to create the volume
+* `docker run -v [vol-name]:/var/lib/[file-path] [image-name]` to create a container with a mounted volume. Note this is legacy syntax.
+* `docker run --mount type=bind,source=[source-container],target=/var/lib/[path] [image` also mounts the volume and is preferred because it is more verbose.
+* `docker volume inspect` to inspect the volume.
+* `docker volume remove` to remove a volume, this can only be done if it is umounted.
+* `docker volume prune` can remove unused volumes.
+
+
+
+
+
 
 
 
