@@ -201,8 +201,33 @@ Version 3 is the most recent version (February 2021) with support for Docker Swa
 
 Commands:
 * `docker-compose up` to bring up a Docker compose file stack.
-* 
+* `docker-compose down` to bring it down.
 
+## Docker Swarm
+
+Docker swarm combines multiple docker hosts into a single cluster to provide better orchestration. It features simplified setup, declarative files, scaling, rolling updates, self healing, security, load balancing, and service discovery.
+
+Swarm uses port TCP 2377 for cluster management communications, TCP and UDP 7946 for communication among nodes, and UDP 4789 for overlay network traffic.
+
+Node availability can be `Active`, `Pause`, or `Drain` and the manager status for each node can be `Leader`, `Reachable`, or `Unavailable`.
+
+Manager nodes are responsible for managing cluster state. Multiple manager nodes are recommended for fault tolerance and high availability. With multiple manager nodes, there is a need for conflict resolution. One node is designated as the leader to override other management decisions.
+
+Docker solves the problem of distributed consensus by deploying the RAFT consensus algorithm. RAFT uses random timers for initiating requests to other nodes. The first one to finish the timer sends a request to the other nodes for votes to be made the leader. The node that receives a majority of yes votes first is designated as the leader. If the leader node is unavailable for a decision, then a quorum must be reached by available managers to resolve the decision. Docker recommends no more than 7 manager nodes for a cluster and always an odd number in case of nodes being partitioned between different networks and unable to form a quorum. It is best practice to bring failed nodes back online if possible instead of creating new nodes and a new cluster.
+
+A TLS key can be used to lock a cluster by storing the key in a password manager.
+
+Commands:
+* `docker swarm init` to initiate swarm on the master node.
+* `docker system info | grep -i swarm` says if swarm is active.
+* `docker node ls` lists Docker nodes.
+* `docker node promote [node]` to promote a node from a worker to a manager.
+* `docker node demote [node]` to demote a node to worker.
+* `docker node update --availability drain [node]` to drain and update a node.
+* `docker node update --availability active [node]` to make a node active again.
+* `docker swarm leave [node]` to take a node out of the cluster.
+* `docker swarm init --autolock=true` to start a node locked with a TLS key.
+* `docker swarm unlock` to unlock the cluster.
 
 
 
