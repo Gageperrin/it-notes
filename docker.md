@@ -285,9 +285,68 @@ Commands:
 
 This has already been covered more in-depth in my CKA notes.
 
-## Docker Enterprise Engine
+## Docker Enterprise Edition (Mirantis Container Runtime)
 
+Enterprise edition is managed by Mirantis and offers expanded features for business-critical applications including security and access control functions, trusted registry, a universal contorl plane, access to Kubernetes and Docker Swarm, and Mirantis Container Runtime.
 
+Within Docker enterprise there are several layers: at the bottom is Docker Certified Infrastructure, Docker Enterprise Engine, Mirantis Kubernetes Engine, then Mirantis Secure Registry on top. The pre-requisites are Linux Kernel version 3.10 or higher, a static IP and persistent host name, network connectivity between all servers, time sync, an duser namespaces should not be configured on any node.
+
+Since being acquired by Mirantis in 2019, Docker Enterprise Edition is transitioning some feature names:
+* Docker Trusted Registry -> Mirantis Secure Registry
+* Universal Control Plane -> Mirantis Kubernetes Engine
+* Docker Enterprise Edition -> Mirantis Container Runtime
+
+The MKE (Mirantis Kubernetes Engine) provides a single centralized management console for monitoring usage, security, among other things. Its minimum requirements are 8 GB of RAM for manager nodes, 4 GB of RAM for owrker nodes, 2 vCPUs for manager nodes, 10 GB of free disk space for the `/var` partition for manager nodes, 500 MB of free disk space for the `/var` partition for worker nodes. `ucp-agent` is installed on each node in a cluster. When another node is added to the cluster, it is automatically provided with a `ucp-agent`.
+
+MKE setup steps:
+1. Ensure Docker EE is up and running.
+2. Run a container with `docker/ucp` image.
+3. Set the admin username and password for the MKE console.
+4. Log into the browser.
+5. Download and provide the Mirantis Contaimer Runtime.
+6. Add more manager and workers as per requirement.
+
+The MSR (Mirantis Secure Registry) minimum requirements include 16 GB of RAM, 2 vCPUs, 10 GB of free disk space, and port 80 and 443 exposed. It ensures containers and their images are secure and do not contain any features that would threaten the system. When nodes are added to a cluster, they are automatically configured with a `ucp-proxy` that provides these security features. Three nodes are needed for fault-tolerance and high availability. When there are multiple instances, external storage needs to be configured whether NFS or AWS S3.
+
+Docker EE can be deployed through the web GUI or the CLI. A client bundle is a group of certificates downloaded directly from the MKE and allows the user to authoirze remote Docker user permissions with RBAC.
+
+### RBAC
+
+Docker EE EBAC:
+
+Verbs:
+* View
+* Create
+* Delete 
+* Update
+
+Objects:
+* Config
+* Container
+* Image
+* Network
+* Secret
+* Service
+* Volume
+
+Built-in Roles:
+* None
+* View Only
+* Restricted Control
+* Scheduler
+* Full Control
+
+Resource sets determine what permissions a user can have certain objects.
+
+RBAC general steps:
+* Configure subjects
+* Configure custom roles
+* Configure resource sets
+* Configure grants = subjects + roles + resource sets
+
+Best practice is to configure a team with the right privilegs and add or remove users to it during organizational changes. Create users from the MKE console or integrate MKE with LDAP or AD. This integration can be done in the dashboard by specifying the LDAP server and other parameters for synchronization.
+
+## Docker Trusted Registry (Mirantis Secure Registry)
 
 
 
