@@ -6,7 +6,7 @@ These are my personal notes that I have drafted to...
 2. Prepare for IT certification exams.
 3. Demonstrate and share what I have learned as resources for others to use.
 
-They are taken from a variety of courses and documentation which are cited in each respective folder and file. These notes are purely for learning purposes and demonstration of knowledge. The holder(s) of the intellectual property rights to these courses may request for me to make the notes for their course content private if they so desire.
+They are taken from a variety of courses and documentation which are cited in each respective folder and file. These notes are purely for learning purposes and demonstration of knowledge.
 
 Exam date log:
 * **AWS Solutions Architect Associate C02** - August 12, 2020 - **PASSED**
