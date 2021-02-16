@@ -348,12 +348,30 @@ Best practice is to configure a team with the right privilegs and add or remove 
 
 ## Docker Trusted Registry (Mirantis Secure Registry)
 
+To recap, image addressing convention follows this `[registry]/[user]/[image/repository]`. An image can be built and pushed to a remote repository in Docker Enterprise where it can be stored securely. Repositories can be set to public private to determine if users can access the repository when they attempt to access it. By default users can only work on their own repositories unless otherwise grouped into teams and organizations. Teams have three levels of permissions: `read`, `read-write`, and `admin`.
 
+Mirantis Secure Registry can scan for vulnerabilities in any OS packages, images, or dependencies. Vulnerability criteria can be pulled from a variety of databases. The scan report divides vulnerabilities into critical, major, and minor categories. To fix vulnerabilities, one can usually check depenencies, upgrade packages, and rebuild the Docker image.
 
+Images can be promoted from one environment to another through MSR. This can follow the standard development pipeline from Development to Test to Staging to Production. By default, a new build is generated across environments. Scripts can automatically promote the same image and build across environments based on certain specifications.
 
+MSR has an automate garbage collection process that can remove untagged and/or unused images based on certain time-based triggers. It is disabled by default and, because it is CPU intensive, be scheduled for low-activity maintenance windows. During garbage collection, MSR becomes read-only.
 
+## Disaster Recovery
 
+Docker swarm has three major components to protect itself in case of disaster: (1) cluster recovery, (2), backup, and (3) restore.
 
+Cluster recovery has to ensure that consistency and stability is maintained across nodes and containers for their workloads. If the manager node goes down and cannot be restored, a worker node should be promoted. If all else fails, force launch a new cluster.
+
+A backup stores raft keys, cluster membership, services, networks, configs, secrets, but not swarm unlock keys. The keys must be stored securely somewhere else.
+
+MKR can be backed up with whatever is configured from the console. Swarm configuration is backed up with the Docker swarm while Kubernetes objects are backed up with MKR. MKR can be restored to a Docker host if one has not already been configured there. There can only be one backup at a time. There cannot be a backup of a cluster that has already crashed. It is only possible to restore to the same Docker version as the one used during the backup. If restored to the same swarm cluster or to a Docker host, the swarm will be initialized automatically.
+
+MSR can be backed up to back up and restore, but this should be done across three nodes saved to external storage. This information includes configurations, repository metadata, access control, notary data, scan results, and certificates. Before a restore can be executed, any pre-existing registries must be destroyed.
+
+Commands:
+* `docker service update --force` forces a restart.
+* `tar cvzf /tmp/[path] [source]` to take a backup of a Docker swarm node. This must be done by after stopping the node.
+* `tar xvzf [backup-source] -C` to initiate a restore. This must be done on a stopped node.
 
 
 
