@@ -229,6 +229,64 @@ Commands:
 * `docker swarm init --autolock=true` to start a node locked with a TLS key.
 * `docker swarm unlock` to unlock the cluster.
 
+### Docker Service
+
+Docker swarm orchestration depends on a service to schedule tasks on worker nodes. Replicated services are most common kind of service with replicated instances across nodes. The alternative is global which does not specify a replica count but only deploys one instance in each node of the cluster. Global services are good for monitoring agents.
+
+Commands:
+* `docker service create --replicas=3 httpd` example of creating a service.
+* `docker service ls` lists services.
+* `docker service inspect` to inspect a service.
+* `docker service logs` to get the logs.
+* `docker service rm` to delete a service.
+* `docker service update --replicas=(3)` to scale the deployment to three replicas.
+* `docker service update --image=(nginx)` to update a service to a new image.
+* `docker service update --update-parallelism=3` to update three at a time.
+* `docker service update --rollback` to roll back an update to a previous version.
+
+### Docker Node Management
+
+Labels and constraints can be used to specify and restrict container placement for different kinds of nodes.
+
+Commands:
+* `docker node update --label-add type=cpu-optimized [node]` to specify a label that the node is CPU-optimized.
+* `docker service create --constraint=node.labels.type=cpu-optimized batch-processing` to ensure that the service only deploys tasks to the properly labeled node.
+
+### Docker Config Objects
+
+A Docker config object can be used to replicate configurations across different Docker hosts.
+
+Commands: 
+* `docker config create [object-name] [path]` creates a configuration file that is accessible by all Docker hosts across the swarm.
+* `docker service update --config-rm [config-object]` to remove a configuration from a service.
+* `docker config rm [config-object` to delete a config object.
+* `docker service update --config-rm [config-1] --config-add [config-2]` to rotate configuration objects in and out.
+
+### More Docker Networks
+
+Overlay networks (`ingress`) are an alternative to the standard bridge and host networks by creating a distributed network across multiple Docker daemon hosts. The ingress overlay network has a load balancer that can redirect traffic across containers in the Docker host. This is automatically configured with the Docker service. Overlay network traffic typically happens on port UDP 4789. Ports can be published on a service with the `-p` flag or the more verbose `--publish published=[port],target=[port] [protocol]`. 
+
+Default MACVLAN networks assign a MAC address to a virtual network interface to make it seem like a physical network interface. This can be done with `docker network create --driver mcvlan -o parent=[veth] [network]`. This can enable multiple containers to communicate across different docker hosts at Layer 3 traffic.
+
+Docker service discovery happens through a custom network's DNS server.
+
+### Docker Stack
+
+Docker compose is limited to a single host, so Docker Stack is used to deploy containers across multiple hosts in a Docker swarm cluster. A stack groups containers and services within one ecosystem.
+
+Commands:
+* `docker stack deploy --compose file docker compose.yml` to deploy a Docker compose file as a stack.
+* `docker stack ls` to list Docker stacks.
+* `docker stack services` to list services in a stack.
+* `docker stack ps` to list processes in a stack.
+* `docker stack rm` to remove a stack.
+
+## Kubernetes
+
+This has already been covered more in-depth in my CKA notes.
+
+## Docker Enterprise Engine
+
 
 
 
