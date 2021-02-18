@@ -530,13 +530,149 @@ volumes:
   * Placement constraints
 223. What is the command to deploy a service named webapp on a node which has a 'type=cpu-optimized' label.
   * `docker service create --constraint=node.labels.type==cpu-optimized webapp`
-224. What is the command to apply 'disk=ssd' label to worker1 in a swarm cluster.
+224. What is the command to apply `'disk=ssd'` label to worker1 in a swarm cluster.
   * `docker node update --label-add disk=ssd worker1`
+225. When you create a swarm service and do not connect it to a user-defined overlay network, it connects to the *** network by default.
+  * `ingress`
+226. Which network will be created when you initialize a swarm or join a Docker host to an existing swarm?
+  * `bridge`
+  * `ingress`
+227. What is the command to create an overlay network driver called `my-overlay`?
+  * `docker network create -d overlay my-overlay`
+228. Create an overlay network driver called my-overlay with subnet 10.15.0.0/16 using a docker command.
+  * `docker network create --driver overlay --subnet 10.15.0.0/16 my-overlay`
+229. Create an overlay network that can also be connected by standalone containers that were not created as part of a swarm service.
+  * `docker network create --driver overlay --attachable my-overlay-network`
+230. By default, all swarm service management traffic is encrypted using *** algorithm.
+  * AES
+231. Encrypt the application data and enable IPSEC encryption while creating the overlay network called my-overlay-network using a docker command.
+  * `docker network create --driver overlay --opt encrypted my-overlay-network`
+232. Delete an overlay network driver called `my-overlay`.
+  * `docker network rm my-overlay`
+233. Which port should be opened to allow the overlay and ingress network traffic?
+  * 4789
+234. The *** port should be opened to allow communication among nodes/Container Network Discovery.
+  * 7946
+235. Map UDP port 80 in the container to port 5000 on the overlay newtork using the `my-web-server` image.
+  * `docker service create -p 5000:80/udp my-web-server`
+  * `docker service create --publish published=5000,target=80,protocol=udp my-web-server`
+236. The routing mesh enables each node in the swarm to accept connections on published ports for any service running in the swarm, even if there’s no task running on the node.
+  * True
+237. Docker requires an external DNS server to be configured during installation to help the containers resolve each other using the container name.
+  * False
+238. The built-in DNS server in Docker always runs at IP address...
+  * 127.0.0.11
+239. Attach the application my-web-server to a service so that we can access it using its name with the existing overlay network driver my-overlay.
+  * `docker service create --name=web-server --network=my-overlay my-web-server`
+240. Attach the application my-web-server to a service so that we can access it using its name with the existing overlay network driver my-overlay and the custom DNS 8.8.8.8
+  *  `docker service create --name=my-web-server --dns=8.8.8.8 --network=my-overlay my-web-server`
+250. Which command can be used to deploy the STACKDEMO stack from a compose file?
+  * `docker stack deploy --compose-file docker-compose.yml STACKDEMO
+  *  `cat docker-compose.yml | docker stack deploy --compose-file - STACKDEMO`
 
 
+```
+version: 3
+services:
+  redis:
+    image: "redis:alpine"
+    deploy:
+      replicas: 3
+  db:
+    image: postgres:9.4
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.role==manager"
+  web:
+    image: webapp
+    deploy:
+      replicas: 5
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+```
+
+251. How many containers would be created in total for all services together?
+  * 9
+252. Which statement is true?
+  * The postgres container will only be deployed on the manager node
+  * The web container may be deployed on any node - manager or worker
 
 
 ## Kubernetes
+
+253. Which statement best describes a control plane component?
+  * The control plane's components decide how workloads are placed across the nodes in the cluster.
+  * `kube-scheduler` is one of the control plane components
+  * `kube-controller` is one of the control plane components
+254. Which statement best describes the worker node component?
+  * `kubelet` and container runtime are the worker node components
+  * `kube-proxy` is one of the worker node components
+255. Which of the following best describes ETCD?
+  * ETCD serves as the backing datastore for Kubernetes cluster data
+  * ETCD is a distributed reliable key-value store
+256. ETCD by default listens on port 2780
+  * False
+257. Which of the following are components deployed only on a master node in a Kubernetes cluster?
+  * Kube scheduler
+  * Kube controller manager
+  * Kube api-server
+258. Which of the following is the ETCD command line tool?
+  * `etcdctl`
+259. Which component on the worker node is responsible for maintaining network rules on nodes?
+  * `kube-proxy`
+260. Which statement best describes multi-container pods.
+  * Multi-container pods can share resources and dependencies, communicate with one another, and coordinate when and how they are terminated.
+  * A single pod can have multiple containers.
+261. What are the four top level fields for a Kubernetes definition file?
+  * `apiVersion`
+  * `metadata`
+  * `kind`
+  * `spec`
+262. Which statements best describe replication controllers and replica sets? 
+  * Replication controller is the older technology that is being replaced by a ReplicaSet.
+  * The replication controller supports equality based selectors whereas the replica set supports equality based as well as set based selectors.
+  * ReplicaSet is the new way to set up replication.
+263. What is the command to list all the labels of a ReplicaSet?
+  * `kubectl get rs --show-labels`
+264. What is the command to delete a replication controller `nginx`?
+  * `kubectl delete rc nginx`
+265. Where do you configure the selector labels in the deployment YAML file?
+  * `spec.selector`
+266. Where do you configure the pod images in the deployment YAML file?
+  * `spec.template.spec.containers.image`
+267. What is the command to check the status of a deployment rollout named nginx-deploy?
+  * `kubectl rollout status deployment/nginx-deploy`
+268. Which of the following statements are correct about NodePort?
+  * NodePort exposes a service to make it externally accessible on a port on the nodes.
+269. What is the default range of ports that Kubernetes uses for NodePort if one is not specified?
+  * Ports 30000 - 32767
+270. A NodePort service exposes a deployment only on the nodes on which the PODs of that deployment are running.
+  * False
+271. ClusterIP is the default service type for Kubernetes service.
+  * True
+272. Which field of Kubernetes pod definition file corresponds to the entrypoint instruction in the Dockerfile?
+  * `ENTRYPOINT` instruction in Dockerfile corresponds to command in Kubernetes definition file.
+  * `CMD` instruction in Dockerfile corresponds to arguments in Kubernetes definition file.
+273. Where is the env instruction set in a Kubernetes pod definition file?
+  * `spec.containers.env`
+274. What is the command to create config maps?
+  * `kubectl create configmap CONFIGMAP-NAME --from-literal=KEY1=VALUE1 --from-literal=KEY2=VALUE2`
+275. How do you inject configmap into a pod?
+  * Using `envFrom` and `configMapRef`
+276. Where do you configure the configMapKeyRef in a pod to use environment variables defined in a ConfigMap?
+  * `spec.containers.env.valueFrom`
+277. How do you configure all key-value pairs in a Secret as container environment variables?
+  * `envFrom.secretRef`
+278. What is the default Secret type if omitted from a Secret configuration file?
+  *  Opaque
+
+
 ## Docker Engine Enterprise
 ## Docker Trusted Registry
 ## Disaster Recovery
