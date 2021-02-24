@@ -136,5 +136,21 @@ Dev Server mode should be used for proof of concept, testing and experimenting w
 
 Deploy one or more persistent nodes via a configuration file. Use a storage backend that meets the requirements. `MultipleVault` nodes should be configured as a cluster. Deploy close to applications. Most likely this provisioning process will be automated.
 
+### Configuring Consul Storage Backend
+
+Consul provides durable key-value storage for Vault, supports high availability, can independently scale the back-end, is a distributed system, easy to automate, and includes built-in snapshot functionality. It includes built-in integration between Consul and Vault and is officially supported by Hashicorp.
+
+Consul is deployed using multiple nodes and configured as a cluster. Clusters are deployed in odd numbers to maintain quorum. All data is replicated among all nodes in the cluster. A leader election promotes a single Consul node as the leader. The leader accepts new logs entries and replicas to all other nodes. Consul cluster for Vault storage backend should not be used for Consul functions in a production setting.
+
+A Consul cluster takes an application write to the Vault cluster, stores it key-value format to the storage backend. The consul leader node will accept the key-value write and will replicate it to the follower nodes.
+
 
 ## Accessing Vault
+
+Vault has three interfaces: UI, CLI, and HTTP API. Not all features are available through the UI or CLI, only the API can access all features. Most calls from teh CLI and UI invoke the HTTP API. UI must be enabled via the configuration file. Authentication is required to access any of the interfaces.
+
+Access UI through port 8200 by default. It runs on the same IP as the listener. Vault UI enables access to configure the key-value store, secrets engine, ACL policies, authentication methods, direct CLI access, replication (enterprise), licensing (enterprise), as well as groups and entities.
+
+Access the CLI through the Vault node or a remote machine (needs to be authenticated through `vault login`). Need to set the environment variables `VAULT_ADDR` if different than the default `https://127.0.0.1:8200`. Use `vault -autocomplete-install` to enable auto-completion. Use `vault -h` to get help.
+
+API access is provided through REST API or by using `curl` or any other http client. It is necessary to authenticate first, and Vault will return a Vault API token that cna be used for future requests.
