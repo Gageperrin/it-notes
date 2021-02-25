@@ -243,8 +243,48 @@ Dynamic secrets by contrast can be created on-demand and are not stored independ
 
 Dynamic secrets can be used in CI/CD pipelines, database credentials, privileged access for administrators, and elevated account for vulnerability scanning.
 
-### Vault Secrets Engines
-
-Secrets engiens are the reason Vault is deployed. They can store, generate, or encrypt data. They are enabled and isolated at a path and all interactions are done directly with the path itself. There are a large number of supported Secrets Engines.
+Secrets engines are the reason Vault is deployed. They can store, generate, or encrypt data. They are enabled and isolated at a path and all interactions are done directly with the path itself. There are a large number of supported Secrets Engines.
 
 Key Value secrets engine creates a foundational structure that uses parameters to simplify policies for administration, groups by application and teams, creates additional mounts, and provide a different structure for each case (though these should be standardized across environments).
+
+## Audit Devices
+
+Audit devices keep a detailed log of all authenticated requests and responses to Vault and is formatted using JSON. Sensitive information is hashed with a salt using HMAC-SHA256. Log files should be protected as a user with permisssion can still check the value of those secrets via the `/sts/audit-hash` API and compare to the log file.
+
+Types of Audit Devices:
+* File writes to a file, does not assist with log rotation, uses `fluentd` or similar tool to send to collector.
+* `Syslog` writes audit logs to a syslog in a local agent only.
+* Socket writes to a tcp, udp, or unix socket but can be unreliable.
+
+It is best to have more than one audit device enabled. Vault requires that the audit device can write to the log before completing any client request. If it cannot write to the log, then Vault cannot respond to client requests and is effectively down.
+
+## Vault Clustering and Replication
+
+There are three types of nodes:
+* Active node: Responsible for all reads and writes in a basic Vault cluster configuration.
+* Standby node: Will forward all requests to the active node in a basic cluster configuration.
+* Performance standby: Can process read requests for clients without forwarding to the active node. Will still forward write requests to active node (enterprise only).
+
+Vault provides built-in high availability in the form of clustering. Multiple Vault instances form a cluster when sharing a storage backend without additional configuration. The storage backend must support high-availability. Clustering is available in both open source and enterprise. Clusters consist of active and standby nodes. The first Vault node who grabs a lock in the storage backend is promoted to the leader.
+
+Vault is generally front-ended with a load balancer or Consul. In this case the load balancer is for high-availability, not load balancing. Health checks on the load balancer can determine which node is the active node by running `curl https://<ipaddress>:8200/v1/sys/health`. A HTTP response of 200 means it is initialized, unsealed and active while a repsonse of 429 means it is unsealed and on standby. A sealed node will respond with 503.
+
+Vault can be tightly integrated into Consul as well.
+
+### Enterprise
+
+Enterprise includes disaster recovery replication for key-value stores, policies,a nd tokens. It includes a warm standby that does not serve client requests.
+
+Performance replication replicates key-value stores, policies, but not tokens. It will serve client read requests and it is used to extend Vault across data centers.
+
+Mount filters can ensure certain data is not replicated.
+
+### Vault Ports and Protocols
+
+All communication between clusters is encrypted with TLS. It uses TCP port 8200 for UI and API and TCP port 8201 for server to server communication.
+
+Consul client requires TCP port 8500 for Consul client to server communication and TCP and UDP port 8301 for serf LAN for LAN gossip.
+
+Consul servers and clients should also be permitted to access third-party API ports.
+
+
