@@ -17,7 +17,6 @@ Key terms:
 * ACID - Atomicity, Consistency, Isolation, and Durability
 * OLTP - Online Transaction Processing
 * OLAP - Online Analytical Processing
-* 
 
 ### Database Service Summary
 
@@ -149,18 +148,96 @@ With one replicas failure, a new primary is created and endpoints are switched t
 
 #### RDS Design ####
 
+RDS performance can be increased with insteance size, read replicas, storage size, and storage type.
+
+Compliance solutions vary based on backups, multi-AZ, read replicas, and snapshots.
+
+Scability is based on instance size, read replicas, storage size, and type.
+
+Cost design can vary based on each aspect of RDS: backups, instance size, multi-AZ, read replicas, snapshots, storage size, and storage type.
+
 #### Aurora Design ####
+
+Aurora design considerations:
+* Performance: Instance size, read replicas, serverless (not storage size)
+* Compliance: Backups, RRs, and snapshots
+* Scalability: Instance size, read replicas, and serverless
+* Cost: Backups, instance size, RRs, serverless, snapshots, and storage size (all features)
 
 #### DynamoDB Design ####
 
+DynamoDB design considerations:
+* Performance: Auto scaling, DAX, global table, instant scaling, and provisioned capacity
+* Compliance: Backups, global table, and streams
+* Scalability: Auto scaling, DAX, global table, instant scaling, provisioned capacity, and table size
+* Cost: Auto scaling, backups, DAX, provisioned capacity, restore, streams, table size
+
 #### Redshift Design ####
+
+Redshift design considerations:
+* Performance: Number of nodes, concurrency scaling, DB encryption, distribution keys, federated query, node type, and Spectrum
+* Compliance: DB encryption and snapshots
+* Scalability: Number of nodes, concurrency scaling, federated query, Spectrum
+* Cost: Number of nodes, federated query, node type, snapshots, and Spectrum
 
 #### Elasticache Design ####
 
+Elasticache (Redis) design considerations:
+* Performance: Cluster mode, global datastore, node size, read replicas, and write endpoints
+* Compliance: Backups, global datastore, multi-AZ, and RRs
+* Scalability: Cluster mode, global datastore, node size, RRs, and write endpoints.
+* Cost: Backups, global datastore, node size, RRs, and write endpoints
+
 #### DocumentDB Design ####
+
+DocumentDB design considerations:
+* Performance: Instance size and RRs
+* Compliance: Read replicas and snapshots
+* Scalability: Instance size and RRs
+* Cost: Instance size, RRs, snapshots, and storage size
 
 #### Neptune Design ####
 
+Neptune design considerations:
+* Performance: Instance size, RRs
+* Compliance: Multi-AZ, RRs, and snapshots
+* Scalability: Instance size and RRs
+* Cost: Instance size, RRs, snapshots, and storage size
+
 #### EC2 Design ####
 
+EC2 design considerations:
+* Performance: Instance size, storage size, and storage type
+* Compliance: Backups, inspector, and replicas
+* Scalability: Instance size, storage size, and storage type
+* Cost: Backups, instance size, replicas, storage size, and storage type
+
 #### Service Term Associations ####
+
+Key words for each service:
+* RDS: Oracle, SQL Server, monolithic
+* Aurora: Multi-primary, serverless, global database
+* DynamoDB: Key-value, partition key, global table
+* Redshift: Data warehouse, Spectrum, columnar
+* Elasticache: In-memory, cluster mode, and shards
+* DocumentDB: MongoDB, replicaset, and collection
+* Neptune: SPARQL, Gremlin, and Apache TinkerPop
+
+## Deployment and Migration
+
+### Database Deployment Automation
+
+#### Automation using CloudFormation ####
+
+#### Automation using DMS ####
+
+#### Automation using CodePipeline ####
+
+### Migration Strategies
+
+#### Rs of Cloud Migration ####
+
+#### AWS Schema Conversion Tool ####
+
+#### AWS Database Migration Service ####
+
