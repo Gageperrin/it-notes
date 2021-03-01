@@ -229,7 +229,21 @@ Key words for each service:
 
 #### Automation using CloudFormation ####
 
+Each CloudFormation template follows a sequence for provisioning resources in the correct order and proper segregation.
+
+Example: Neptune in three stacks
+
+1. Deploy VPC, Subnets, IGW, NAT Gateways, route tables, and a Neptune subnet group
+3. Deploy Neptune cluster with replicas, instance, profiles, security group and S3 load config.
+4. Deploy SageMaker notebook with security group, IAM role, and connection configuration.
+
 #### Automation using DMS ####
+
+A DMS automation starts with the source stage. For example, an archive is uploaded to a S3 bucket which contains all of the depenency files and DMS task definitions. The S3 upload triggers a CodeBuild job that manages the rest of the individual tasks for a full data load via DMS. This is an optional step that will create the schema in the destination RDS instance. Once the schema is in place, create the DMS tasks to provision the DMS replication instance. Then it creates an event notification stream with SMS so that outcomes can be monitored. Then the full load task begins and sends any updates to the SNS topic.
+
+The `ApprovalForDMS` stage is a manual approval stage for the process that can still utliize some automation. The startup message is sent via SMS with an approavl token parsed by Lambda. The DMS task sends a notification on completion. 
+
+The PreCDC CodeBuild stage is entirely optional for tasks that require ongoing Change Data capture after the full load. This task creates the object for CDC after the full load. This task creates the objects for CDC and triggers the DMS task. The DMS replication task is resumed and the user is notified via SNS.
 
 #### Automation using CodePipeline ####
 
