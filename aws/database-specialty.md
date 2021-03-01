@@ -247,11 +247,110 @@ The PreCDC CodeBuild stage is entirely optional for tasks that require ongoing C
 
 #### Automation using CodePipeline ####
 
+Example: Automate schema updates to an RDS database.
+
+Have a CodeBuild project that can point to a source code repo containing the buildspec file. The pre-change DB schema is stored as an RDS snapshot. The first step in the CodeBuild process is to use the CLI to restore the RDS snapshot to a new instance. The process pauses while the snapshot restore completes before proceeding.
+
+The next step is to validate the restored data, apply the schema changes, and perform app validation. Then validate restored data.If the validation is successful, complete the build and remove the restored DB instance. Then approve the schema change.
+
 ### Migration Strategies
 
 #### Rs of Cloud Migration ####
 
+1. Rehost - "lift and shift"
+2. Replatform - move into a managed service
+3. Repurchase - purchase new software
+4. Refactor - re-architect the solution
+5. Retire - get rid of an old application
+6. Retain - keep as is
+
+
+
 #### AWS Schema Conversion Tool ####
+
+1. SCT is not a managed service but is downloaded and run locally.
+2. Configure source and target database connections, must be available from the local instance at the same time.
+3. Generate the Database Migration Assessment Report.
+4. Convert the source database schema to the target engine.
+5. Apply schema, procedure and code to target database.
+
+AWS Schema Conversion Tool can convert OTLP schemas from Microsoft SQL Server, MySQL, Oracle, PostgreSQL, IBM Db2, Apache Cassandre, and Sybase. It can be destined for Amazon RDS, EC2, Aurora, DynamoDB and S3.
+
+For OLAP, it can convert from Microsoft SQL Server, Greenplum Database, Netezza, Oracle, Teradata, and Vertica. It can be destined for Redshift, EC2, and S3.
 
 #### AWS Database Migration Service ####
 
+DMS Workflow:
+1. Create a replication server
+2. Create source and target endpoints
+3. Create migration and tasks for data migration
+  a. Full load of existing data
+  b. Application of cached changes
+  c. Ongoing changes
+  
+DMS can take the following as sources:
+* Oracle
+* SQL Server
+* Azure SQL
+* PostgreSQL
+* MySQL
+* SAP ASE
+* MongoDB
+* S3
+* IBM Db2 LUW
+
+Targets:
+* Oracle
+* SQL Server
+* PostgreSQL
+* MySQL
+* Redshift
+* SAP ASE
+* S3
+* DynamoDB
+* Kinesis Data Streams
+* Apache Kafka
+* Amazon Elasticsearch
+* DocumentDB 
+* Neptune
+
+
+## Migration Execution and Validation
+
+### DB Migration Cycle
+
+1. Plan
+2. Schema conversion
+3. Data migration
+4. Application update
+5. Test
+6. DB cutover (if necessary)
+
+### DB Cutover Options
+
+Offline migration:
+1. Start write downtime (switch DB to read-only)
+2. Migrate and verify data
+3. Point application to new DB
+4. End downtime
+
+Flash-cut migration:
+1. Start DMS in continuous data replication mode
+2. When synced, verify the data
+3. Start downtime
+4. Deploy new application version
+5. End downtime
+
+Active/Active Database Configuration:
+1. Copy data to target
+2. Set up 2-way replication
+3. Alternative to 2-way replication
+4. Verify data
+5. Migrate traffic to target
+
+Incremental migration:
+1. Migrate from one DB in small parts with various AWS services
+2. Microservice 1
+3. Microservice 2 etc.
+
+# Management and Operations
