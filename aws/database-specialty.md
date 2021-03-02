@@ -353,4 +353,176 @@ Incremental migration:
 2. Microservice 1
 3. Microservice 2 etc.
 
-# Management and Operations
+## Management and Operations
+
+### Maintenance Tasks and Processes
+
+Here are a few scenarios of maintenance tasks for database administration.
+
+#### RDS Parameter Changes ####
+
+For RDS parameter changes, one example is that a DBA needs to configure `lower_case_table_names=1` for and RDS database instance running MySQL 5.6.
+
+1. Check which parameter group is associated with the RDS instance. A default parameter group cannot be edited.
+2. If it is default, create a new parameter group and associate the RDS instance with the new group.
+3. The RDS instance must be rebooted for the parameters to be updated.
+
+#### Neptune Bulk Data Load ####
+
+1. A Neptune DB can be placed in a private subnet.
+2. The S3 bucket must be in the same region as the DB and a role should grant read access to S3.
+3. A NAT Gateway and IGW cannot be used for this procedure, only a VPC Gateway Endpoint on the target VPC.
+4. Place the data in the bucket.
+5. Initiate the CLI using `curl`.
+
+#### RDS Snapshot Cross-Account Copy ####
+
+Copy a RDS database backup to a separate AWS account.
+
+1. Because snapshots and keys are region-scoped resources, it is first necessary to modify the CMK key policy for sharing. The Key Users section must be updated to add the remote account ID.
+2. Modify the snapshot itself for sharing by adding the remote account ID in the permissions.
+3. Initiate snapshot copy from the target account.
+4. Restore from snapshot in the target account and validate the data.
+
+#### Operational Overhead ####
+
+EC2 operational overhead:
+* Hardware failure recovery
+* Disk space management
+* OS management
+* DB software install
+* DB software update
+* DB replication
+* DB failover
+* DB backups and restores
+
+RDS operational overhead:
+* DB software updates
+* DB replication
+* DB failover
+* DB backups/restore
+* DB security
+
+DynamoDB operational overhead:
+* DB replication
+* DB backups/restore
+* DB security
+
+
+### Backup and Restore Strategies
+
+#### RDS Backup ####
+
+Automated backups can have a retention of up to 35 days, be retained for the retention period after the DB delete, and backups contain databases and transaction logs. Restores are restored to any second in the retention period. It creates a new DB instance.
+
+Manual snapshots are kept until they are deleted, they are retained after DB delete, and shared with a remote account. It restores to snapshot time (no flexibility), creates a new DB instance, and restores encrypted DB snapshots cross-account directly. However, an encrypted DB cluster snapshot cross-account requires an initial copy first.
+
+Snapshot exports to S3 consist of a back up on MariaDB, MySQL, or PostgreSQL and rstore to data export time. A new DB instance is not required because it is stored in S3.
+
+#### Aurora Backups ####
+
+Continuous backup has up to 35 day retention, but retention cannot be turned off. It is deleted immediately after the database is deleted. It restores to any second in the retention period. It creates a new DB instance and includes an earliest restorable time and lastest restorable time option.
+
+Manual snapshots are kept until deleted, retained after DB delete, and shared with remote account. It restores to a snapshot time, creates a new DB instance, restores encrypted DB snapshot cross-account directly, and the encrypted snapshot cross-account requires copy first.
+
+DB backtrack can be used as a recovery option. It uses continuous backup, transaction logs, covers a 24-72 hour window, and must be enabled at cluster provisioning. It restores through a rewind to previous timestamp, loses all uncommitted writes and transactions after backtrack point, but no new endpoint is needed.
+
+Snapshot export to S3 from MySQL and PostgreSQL are possible. It restores to a data export time and a new database instance is not required.
+
+DB cloning uses continuous backup to create a clone from current data copy with either 0 or 1 database instance. It uses copy-on-write for cloned DB changes.
+
+#### DynamoDB Backups ####
+
+PITR (Point in Time recovery) has a backup of 35 day retention, set statically. It has zero performance impact and can restore to any second in 35 days while creating a new table. It includes cross region restores.
+
+On-demand backup is kept until deleted, has zero performance impact, restores to a snapshot time, creates a new table, and allows cross-region restores.
+
+Global tables propagates deletes as well as additions. It cannot be used for restores but rather for disaster recovery.
+
+#### Redshift Backups ####
+
+Automated snapshots are taken every 8 hours or if there is 5 GB of change per node. Each snapshot can be copied cross-region. Encrypted snapshots require KMS grants for cross-region. Restores to snapshot time, to a new cluster, and can restore table to existing cluster.
+
+Manual snapshots include cross-region copy, cross-account sharing, and is retained until deleted. It restores to snapshot time, restores to a new cluster, can restore to an existing cluster, and can share snapshot.
+
+Unloading to S3 is a manual operation and can have cross-account sharing. It is retained until it is deleted. It can be used to unencrypt the cluster, restore to a new cluster, can restore to an existing cluster, and is accessible from other services.
+
+#### Elasticache Backups ####
+
+Automated backup retained for up to 35 days. It can copy to a manual backup, is stored in S3. It restores to a backup time, restores to a new cluster, and changes parameters.
+
+Manual backups are kept until deleted, exported within the region, stored in S3. It restores to the backup time, restores to the new cluster, and changes parameters.
+
+Snapshot export to S3 allows user to use data outside Redis, creates an RDF file, and is stored durably in S3. To restore, import the RDF file into an existing ElastiCache cluster (cannot be done for a new cluster). Can also import the RDF file into an unmanaged Redis cluster.
+
+#### DocumentDB Backups ####
+
+Continuous backup and automated snapshots are similar to Aurora with up to 35 day retention, no cross-account sharing, cross-region copy, it restores to any second within the retention period, creates a new cluster.
+
+Manual snapshots are retained until deleted, can be shared with other accounts, restores to snapshot time, restores to a new cluster, and can cross account restore from encrypted snapshot requires copy first.
+
+MongoDB native tools can also be used. It allows for migrations and exports to unmanaged replsets. Restores have full flexibility cross-cloud and even for hybrid architectures.
+
+
+#### Neptune Backups ####
+
+Continuous backups have up to 35 day retention. They are deleted immediately after DB delete. It restores to any second in the retention period, creates a new cluster, and also allows for earliest and latest restorable time settings.
+
+Manual snapshots are kept until deleted and can be shared with other accounts. It restores to the snapshot time and creates a new cluster.
+
+
+## Monitoring and Troubleshooting
+
+### Monitoring and Alerting Strategies
+
+#### RDS Monitoring ####
+
+All basic metrics are gathered from the hypervisor perspective through CloudWatch, and these include CPU & Memory, disk metrics, network traffic, and DB connections. This can be used to create a CloduWatch dashboard and SNS topic.
+
+CloudTrail logging can also be used in conjunction with IAM users and roles to invoke RDS actions. All RDS actions are logged to CloudTrail even if they are not successful. RDS log entries are delivered to S3 by default, optional to CloudWatch Logs. CloudWatch Logs metric filters can be used to generate metrics, graphs, and CloudWatch alarms.
+
+Enhanced monitoring offers fine-grained, real-time metrics that are gathered from the OS perspective and stored in CloudWatch Logs. OS metrics are different for SQL server instances than for the other engines. 
+
+Performance insights are enabled upon creation or by modifying an existing database instance and published to CloudWatch as metrics. DB load is the active number of sessions on the database, wait events that are unique to each database engine, top SQL shows which queries contribute to the database load, and max CPU by the number of vCPU on the instance.
+
+Database Logs can be used to view the various database logs. Use the AWS CLI to export the various database logs. Use the AWS CLI to export logs for local viewing. Use the AWS SDKs to export logs for local viewing. Stream the logs to CloudWatch Logs for easier viewing and integration with CloudWatch. Each database engine has its own logs with slightly different formats, and some CloudWatch Logs streams are enabled by default.
+
+RDS recommendations provides suggestions on optimizing RDS including instance configuration, engine version, and performance data.
+
+Event notifications can use SNS topics as destination for RDS events. Use SNS topics as destination for RDS events.
+
+Trusted Advisor can also be used to provide advice based on the Well-Architected Framework.
+
+DB instance status can provide availability and durability metrics.
+
+#### Aurora Monitoring ####
+
+Aurora has the same options available as RDS but also Aurora Advanced Auditing.
+
+This requires setting the parameter `server_audit_logging=ON`, `server_audit_events` with events such as `CONNECT`, `QUERY`, `QUERY_DCL`, `QUERY_DDL`, `QUERY_DML`, and `TABLE`. For access controls, set the parameters `server_audit_excl_users` and `server_audit_incl_users`.
+
+View the logs in CloudWatch Logs, the Aurora dashboard, the CLI, or with SDK.
+
+#### DynamoDB Monitoring ####
+
+DynamoDB can mainly only use CloudWatch alarms, CloudTrail Logs, and contributor insights.
+
+DynamoDB streams can act as a transaction log for data changes since it is the mechanism for global table replication. Consuming from DynamoDB Streams does not impact table read/write capacity.
+
+#### Redshift Monitoring ####
+
+Redshift can make use of CloudWatch alarms, CloudTrail Logs, database logs, event notifications, Trusted Advisor, and instance/cluster status.
+
+These metrics are only available in the Redshift dashboard (not CloudWatch). It includes cluster CPU, cluster network/storage, query plans, and query execution and stages.
+
+Audit logging can be enabled via the CLI, SDK, or the dashboard. Connection and user logs are enabled at the same time with delivery to S3. User activity logs require a DB parameter to be set `enable_user_activity_logging=true` (and perhaps a DB reboot). 
+
+#### DocumentDB Monitoring ####
+
+DocumentDB can use CloudWatch alarms, CloudTrail Logs, database events, and instance/cluster status.
+
+DocumentDB profiler can create a new cluster parameter group with custom parameters like `profiler=enabled`, `profiler_threshold_ms=XX`, and `profiler_sampling_rate=YY`. This cluster parameter group is assigned to the existing cluster and the profiler captures execution time and details of operations before delivering them to CloudWatch Logs. 
+
+Audit logging modifies the non-default cluster parameter group to enable logging. The cluster must itself bne updated to enable CloudWatch Logs export with `--enable cloudwatch_logs_exports audit`. Event details are delivered to CloudWatch Logs.
+
+### Troubleshooting Common Issues
