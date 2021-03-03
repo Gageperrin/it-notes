@@ -14,12 +14,14 @@ Exam date log:
 * **GCP Associate Cloud Engineer** - January 22, 2021 - **PASSED**
 * **AWS SysOps Administrator Associate** - February 11, 2021 - **PASSED**
 * **AWS Developer Associate** - February 11, 2021 - **PASSED**
+* **Hashicorp Certified Terraform Associate** - March 1, 2021 - **PASSED**
 
 Planned:
 
-* **Certified Docker Associate**
+* **Certified MongoDB Associate** 
+* **AWS Database Specialty**
+* **Certified Docker Associate** *
 * **Certified Kubernetes Administrator**
-* **Hashicorp Certified Terraform Associate**
 * **Hashicorp Certified Vault Associate**
 * **AWS Security Specialty**
 * **GCP Cloud Architect**
