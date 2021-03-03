@@ -526,3 +526,327 @@ DocumentDB profiler can create a new cluster parameter group with custom paramet
 Audit logging modifies the non-default cluster parameter group to enable logging. The cluster must itself bne updated to enable CloudWatch Logs export with `--enable cloudwatch_logs_exports audit`. Event details are delivered to CloudWatch Logs.
 
 ### Troubleshooting Common Issues
+
+#### RDS Troubleshooting ####
+
+Example: "incompatible parameters" status
+
+Most commonly this stems from the incorrect memory parameter for the instance type. To mitigate this, revert the parameter to the default value and restart the instance.
+
+Example: replica lag
+
+Possible root causes:
+* High query load on primary
+* Transient network issue
+* Failed transaction
+
+Mitigation:
+* Resize replica
+* Reduce load on primary
+* Resolve network issue
+
+Example: connectivity failure
+
+Possible root causes:
+* VPC network misconfiguration
+* Firewall issue
+
+Mitigation:
+* Resolve network issue (NACL, security group, etc.) Use VPC flow logs
+
+Examples: DB parameter changes not taking effect
+
+Possible root causes:
+* Change made in wrong parameter group
+* Parameter change requires reboot
+
+Mitigation:
+* Update correct parameter group
+* Reboot database instance
+
+#### Aurora Troubleshooting ####
+
+Example: Aurora OOM
+
+Possible root causes:
+* Instance undersized
+* Too many queries
+* Query too large
+
+Possible mitigation:
+* Kill other queries
+* Reconfigure cache
+* Disable new queries
+
+Example: read replica failure
+
+Possible root causes:
+* `max_allowed_packet` misconfiguration
+* Writing to tables on replica
+* Using MyISAM engine
+
+Possible mitigation:
+* Enforce read only queries
+* Migrate tables to InnoDB
+
+Example: No space left on device
+
+Possible root causes:
+* Poorly designed queries
+* Undersized instance
+
+Possible mitigation:
+* Optimize queries
+* Upsize instance
+
+#### DynamoDB Troubleshooting ####
+
+Example: read or write throttling
+
+Possible root causes:
+* Poorly chosen partition key
+* Traffic spike on specific tiem
+* Static provisioning too low
+
+Possible mitigation:
+* Recreate table with different partition key
+* Enable instant scaling
+* Configure DAX
+
+Example: high latency
+
+Possible root causes:
+* Hot partition on table
+* Throttling in effect
+
+Possible mitigation:
+* Configure DAX
+* Increase read/write provisioning
+
+Example: 400 error code
+
+Possible root causes:
+* Throttling
+* `AccessDeniedException`
+* `IncompleteSignature`
+* `MissingAction`
+
+Possible Mitigation:
+* Increase read/writes
+* Check permissions
+* Verify signing code
+* Validate request syntax
+
+#### DocumentDB Troubleshooting ####
+
+Example: blocked queries
+
+Possible root causes:
+* Too many write operations
+
+Possible mitigation:
+* Use mongo CLI to investigate with `currentOp` and `killOp`
+* Increase number of cluster nodes
+
+Example: long running queries
+
+Possible root causes:
+* Undersized cluster
+* Suboptimal queries
+* Query requires full scan
+
+Possible mitigation:
+* Create indexes
+* Optimize query
+* Use explain command
+
+Example: high CPU usage
+
+Possible root causes:
+* Resource contention
+* Too many concurrent queries
+* Garbage collection
+
+Possible mitigation:
+* Add replicas
+* Increase replica size
+* Optimize database structure
+
+### Performance Optimization
+
+#### Performance Optimization Types ####
+
+* Vertical scaling resizes the compute resource to increase CPU and memory
+* Vertical scaling the storage resource to improve throughput and IOPS
+* Horizontal scaling adds same-region read replicas
+* With Aurora Serverless, horizontal scaling can be accomplished by adding Aurora Compute Units
+* Add a Neptune Replica for read throughput horizontal scaling.
+
+#### EC2 Optimization ####
+
+Vertical scaling:
+* Resize instance
+* Upsize storage
+* Change volume type
+
+Horizontal scaling:
+* Add read replicas
+* Configure multiple primaries
+
+Re-architecture:
+* Shard the DB
+* Move tables to NoSQL
+* Split the DB
+* Query tuning
+
+
+#### RDS/Aurora Optimization ####
+
+Vertical scaling:
+* Resize instance
+* Upsize storage
+* Change volume type
+
+Horizontal scaling:
+* Add read replicas
+* Configure multiple primaries
+* Aurora serverless
+* Parallel queries
+
+Re-architecture:
+* Shard the DB
+* Move tables to NoSQL
+* Split the DB
+* Query tuning
+
+
+#### DynamoDB Optimization ####
+
+Vertical scaling:
+* Burst capacity
+* Add indexes
+
+Horizontal scaling:
+* Increase read ops
+* Increase write ops
+
+Re-architecture:
+* Change partition key
+* Query tuning
+* DAX
+
+
+#### Elasticache Optimization ####
+
+Vertical scaling:
+* Resize node type
+
+Horizontal scaling:
+* Add shards
+* Add read replicas
+
+Re-architecture:
+* Implement hashing
+
+
+## Database Security
+
+### Data Encryption
+
+#### DB Encryption At-Rest ####
+
+   | Default | AWS keys | KMS keys | Customer keys | CloudHSM keys
+EC2|    x    |          |    x     |      x        |       x
+RDS|         |          |    x     |               |            
+Aurora| x    |          |    x     |               |
+DynamoDB|x   |    x     |    x     |      x        |
+Redshift|    |          |    x     |               |       x
+ElastiCache| |    x     |    x     |               |
+DocumentDB|  |          |    x     |               | 
+Neptune|     |          |    x     |               |
+
+Redshift is the only service that can enabled encryption on an existing cluster.
+
+#### DB Encryption In-Transit ####
+
+   | Default | AWS managed TLS | Customer managed TLS | Unencrypted allowed
+EC2|         |                 |    x                 |        x
+RDS|    x    |        x        |                      |        x 
+Aurora| x    |        x        |                      |        x
+DynamoDB|x   |        x        |                      |
+Redshift|    |                 |    x                 |        x
+ElastiCache| |        x        |                      |        x
+DocumentDB|  |        x        |                      |        x
+Neptune|     |        x        |                      |        x
+
+
+
+#### Enabling At-Rest Encryption ####
+
+To enable at-rest encyrption on the CLI for RDS and Aurora use the `--storage-encrypted` argument with `--kms-key-id [ID]`. For Redshift, create a cluster with `--encrypted` and attach the KMS key id or the HSM client certificate identifier with the configuration identifier.
+
+For DynamoDB, create the table with `--sse-specification \ Enabled = TRUE` alongside `SSEType=KMS` and `KMSMasterKeyID`. If set to false, then AWS will manage the entire chain of trust instead. Encryption cannot be disabled for DynamoDB.
+
+For Elasticache, create a replication group with `--at-rest-encryption-enabled true` and `--kms-key-id [ID]`. For DocumentDB, create a cluster and include `--storage-encrypted true` with `--kms-key-id [ID]`. For Neptune, it is the same as DocumentDB.
+
+Note that ACM can manage TLS certificates for all storage solutions except RDS.
+
+### Auditing for Vulnerabilities
+
+#### DB Service Logs ####
+
+EC2:
+* View DB logs on the local filesystem
+* Use the CloudWatch agent to stream logs to CloudWatch Logs
+
+RDS:
+* View DB logs in the RDS console
+* Enable audit logging for MySQL and MariaDB
+* View DB logs in CloudWatch Logs
+* View RDS operations in CloudTrail
+
+Aurora:
+* View DB logs in the Aurora console
+* Enabled advanced auditing
+* View DB logs in CloudWatch logs
+* View Aurora operations in CloudTrail
+
+DynamoDB: (limited because it is serverless and only accessed via an API endpoint)
+* View operations in CloudTrail
+
+Redshift: 
+* View query/load performance data in the Redshift console
+* Enabled auditing
+* View Redshift operations in CloudTrail
+
+DocumentDB:
+* View profiler logs in CloudWatch Logs
+* View operations in CloudTrail
+
+Neptune:
+* View audit logs in CloudWatch Logs
+* View Neptune operations in CloudTrail
+
+#### AWS Config Rules ####
+
+AWS Config Streams can capture changes to various resources within a timeline, with dependency visualization, and viewed against configuration rules. It supports EC2/EBS, RDS, DMS, DynamoDB, ElastiCache, and Redshift. The Config Stream captures all changes through the AWS service's API endpoint.
+
+Create config rules to evaluate compliance with security controls across many services. These include `dms-replication-not-public`, `db-instance-backup-enabled`, `rds-instance-public-access-check`, `redshift-require-tls-ssl`,`rds-snapshot-encrypted`, `rds-logging-enabled`, `rds-storage-encrypted`, and `rds-snapshots-public-prohibited`.
+
+#### Trusted Advisor ####
+
+The Trusted Advisor dashboard is built on the five pillars of the Well-Architected Framework. With business or Enterprise support, service limits can be queried via the CLI (although this is not available for all services).
+
+Trusted Advisor checks RDS security group access risk, RDS public snapshots, and exposed access keys.
+
+#### Security Hub ####
+
+Firewall Manager can be used to develop guardrails for network access, IAM access analyzer can determine if IAM permissions are too permissive, Systems Manager: Patch Manager checks if patches are in compliance. Detective can look at root causes of security incidents. GuardDuty looks at various logs to build a model of known, legitimate behavior in the account. Inspector is installed on EC2 and can perform OS security audits. Macie can profile data to detect improperly accessible sensitive data and who has accessed it.
+
+Security Hub Standards:
+* CIS AWS Foundations Benchmark: No specific DB controls
+* PCI DSS: PCI.DMS.* , PCI.RDS.* , PCI.Redshift.* 
+* AWS Foundational Best Security Practices
+
+
+### Access Control and Authorization ###
