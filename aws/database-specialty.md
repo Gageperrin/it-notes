@@ -756,6 +756,7 @@ Re-architecture:
 #### DB Encryption At-Rest ####
 
    | Default | AWS keys | KMS keys | Customer keys | CloudHSM keys
+---|---------|----------|----------|---------------|---------------
 EC2|    x    |          |    x     |      x        |       x
 RDS|         |          |    x     |               |            
 Aurora| x    |          |    x     |               |
@@ -770,6 +771,7 @@ Redshift is the only service that can enabled encryption on an existing cluster.
 #### DB Encryption In-Transit ####
 
    | Default | AWS managed TLS | Customer managed TLS | Unencrypted allowed
+---|---------|-----------------|----------------------|---------------------
 EC2|         |                 |    x                 |        x
 RDS|    x    |        x        |                      |        x 
 Aurora| x    |        x        |                      |        x
