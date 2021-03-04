@@ -852,3 +852,93 @@ Security Hub Standards:
 
 
 ### Access Control and Authorization ###
+
+#### IAM Access Control ####
+
+RBAC - Role based access control
+ABAC - Attribute based access control
+
+[Overview of IAM]
+
+#### DB Authentication Options ####
+
+* EC2 does not allow IAM authentication but is restricted to internal authentication based on the database engine.
+* RDS can use IAM users and roles on MySQL and PostgreSQL. Internally, SQL Server can use AD authentication, and MariaDB, MySQL, PostgreSQL and Oracle DB can use grants.
+* Aurora supports IAM users and roles. MySQL and PostgreSQL can use grants.
+* DynamoDB supports IAM users and roles but no internal authentication.
+* Redshift does not support IAM but can use internal authentication through PostgreSQL grants.
+* ElastiCache does not support IAM, but can use Pre-6.x: Redis AUTH or uses RBAC for 6.x and later.
+* DocumentDB does not support IAM, so `db.createUser()` must be used from the MongoDB CLI.
+* Neptune supports IAM users and roles. Internally, it supports `neptune-remote.yaml` for Gremlin or Neptune endpoint and repository for SPARQL.
+
+#### VPC Security ####
+
+[Overview of VPC]
+
+DynamoDB is launched outside VPC but can be connected through a VPC Gateway Endpoint.
+
+## Next Steps
+
+### Recommended Reading:
+
+Question Domain 1: Workload-Specific Database Design
+*  Whitepaper: Database Caching Strategies Using Redis
+*  Database Architecture Selection Well-Architected Framework
+*  Technical Guide: Modeling Data with Amazon DynamoDB
+*  Technical Guide: Optimizing MySQL running on Amazon EC2 Using Amazon EBS
+
+Question Domain 2: Deployment and Migration
+* Whitepaper: Modernizing the Amazon Database Infrastructure
+* Whitepaper: Best Practices for Deploying Microsoft SQL Server on AWS
+* Tutorial: Migrate from Oracle to Amazon Aurora
+* Documentation: AWS Database Migration Service - Step-by-Step Walkthroughs
+
+Question Domain 3: Management and Operations
+* Whitepaper: Best Practices for Running Oracle Database on AWS
+* Operational Excellence Pillar - AWS Well-Architected Framework
+* Documentation: Best Practices for Amazon RDS
+
+Question Domain 4: Monitoring and Troubleshooting
+* Documentation: Monitoring an AWS RDS DB Instance
+* Documentation: Troubleshooting for Aurora
+* Blog: Monitoring Best Practices with Amazon Elasticache for Redis using Amazon CloudWatch
+
+Question Domain 5: Database Security
+* Security Pillar - AWS Well-Architected Framework
+* Blog: Applying Best Practices for Securing Sensitive Data in Amazon RDS
+* Documentation: Controlling Access with Security Groups
+
+### Hands-On Experience Recommendation
+
+* AWS Database Migration Service Automation Framework
+* Modular Architecture for Amazon Redshift
+* MongoDB
+* Data Lake Foundation with AWS Services
+
+#### Well-Architected Labs ####
+
+Directly applicable labs:
+
+Security
+* Level 200: Automated Deployment of IAM Groups and Roles
+* Level 200: Automated Deployment of VPC
+* Quest: Managing Credentials and Authentication
+
+Reliability
+* Level 100: Deploy a Reliable Multi-tier Infrastructure Using CloudFormation
+* Level 200: Testing Backup and Restore of Data
+* Level 300: Testing for Resiliency of EC2, RDS, and AZ
+
+Cost Optimization
+* Level 100: Cost and Usage Analysis
+* Level 200: EC2 Right Sizing
+* Level 200: Pricing Models
+
+AWS Labs (Qwiklabs):
+* Optimize Slow Databases with Amazon Aurora
+* Introduction to Amazon RDS - SQL Server
+* Introduction to AWS Database Migration Service
+* Introduction to Amazon DynamoDB
+* Managing IoT Sensor Data with Amazon ElastiCache for Redis
+* Working with Amazon Redshift
+* Introduction to Amazon RDS (Linux)
