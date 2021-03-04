@@ -1,4 +1,4 @@
-# MongoDB M001 Course
+# M001: MongoDB Basics Course
 
 ## Chapter 1: What Is MongoDB?
 
