@@ -136,4 +136,123 @@ Common tools:
 
 ## Chapter 2: Replication
 
+Replication is essential for maintaining high availability and fault tolerance for data. In MongoDB, a group of nodes that each have a copy of the same data is called a replica set. The data is sent to the primary node and is then replicated to seocnadry nodes. The secondary nodes determines the primary through an election.
+
+Data replication has two possible forms: binary replication and statement-based replication.
+
+Binary replication examines the exact bytes that were changed in data files and records those changes in a binary log. The secondary nodes then receive a copy of the binary log and write the specified dta that changed to the exact byte locations that are specified on the binary log. This is not very strenuous for the secondary nodes. However binary replication assumes homogeneous OS configuration across systems. Forgetting to update one database server on a node can corrupt data across the whole interface.
+
+Statement-based replication means that when a write is completed on the primary node, the write statement is stored in the `oplog` and the secondary nodes sync their `oplogs` with the primary and replay statements on their own data. This works regardless of the OS or instruction set. MongoDB uses statement-based replication. MongoDB's particular version of replication uses idempotency to ensure that the stored statements can be applied multiple times and still result in the same final state.
+
+### MongoDB Replica Set
+
+Replica set members have the same data between them. A replica set member can be either primary or secondary. Primary nodes serve all read and write requests. Secondary nodes replicate the primary node and serve as a HA failover backup. Secondary nodes receive data through an asynchronous replication mechanism.
+
+MongoDB uses an asynchronous replication protocol with two different versions: `PV1` and `PV0`. Protocol Version 1 is currently the default and based on the RAFT protocol. 
+
+The `oplog` is a segment based lock that tracks all write operations acknowledged by the replica sets. When a write is successfully applied to the primary node, it will be recorded to the `oplog` in idempotent form.
+
+A replica set member can also be an arbiter that does not hold data but serves as a tiebrekaer between secondary nodes in an election. There should always be an odd number of nodes in a replica set, and the arbiter can be injected to make a node configuration odd-numbered. Any replica set topology change (adding members, failing members, or changing configuration aspects) triggers an election. MongoDB replica sets can contain up to 50 members, but only up to 7 members can vote. Arbiters do cause consistency issues in distributed systems and should only be used as a last resort.
+
+Hidden nodes can also be used to allow resilience to application level corruption by setting a delay timer in their replication process so they hold   data as a potential hot backup in case of a database drop.
+
+### Setting Up a Replica Set
+
+Replica sets can be created by building a configuration file for a node and duplicating it with different names for the other nodes. The `dbpath`, `port`, and `logpath` needs to be configured separately for each node iteration.
+
+Creating a keyfile and setting permissions on it:
+```
+sudo mkdir -p /var/mongodb/pki/
+sudo chown vagrant:vagrant /var/mongodb/pki/
+openssl rand -base64 741 > /var/mongodb/pki/m103-keyfile
+chmod 400 /var/mongodb/pki/m103-keyfile
+```
+
+After applying the configuration, connect to the first node and run `rs.initiate()`. `rs.status()` can be run to determine the status of the replica set. Status heartbeat checks are run every 2 seconds by default. `rs.add()` adds new members to the replica set. `rs.isMaster()` identifies the primary node. `rs.stepDown()` demotes the current primary node.
+
+When connecting to a replcia set, the mongo shell will redirect the connection to the primary node. Enabling internal authentication in a replica set implicitly enables client authentication.
+
+### Replication Configuration
+
+A replication configuration document can be used to configure replica set topology and replication opitons. Edits can also be made through shell helpers. Whenever mongod is started it can be associated with a `--replSet` name. Versioning can also be set for replication configurations. It is automatically incremented when the topology changes. The in-line field members marks each sub-document member of the replica set as an array. Each member has a set of flags to determine their role such as `arbiterOnly`.
+
+### Replication Commands
+
+* `rs.status()`
+* `rs.isMaster()`
+* `db.serverStatus()['repl']`
+* `rs.printReplicationInfo()` only returns timestamps for `oplog` statements.
+
+### Local DB
+
+On a local implementation, `oplog.rs` is the central point of the replication mechanism. This is a capped collection which is limited to a specific size. The `.capped` flag will indicate if the `oplog` is capped. By default, the `oplog.rs` will take up to 5% of the free disk. MongoDb will also indicate how much time it will take to start overwriting entries in the `oplog`. The replication window is proportional to the load of the system. Each node will only see its own `oplog`. The `local` database is not replicated.
+
+### Reconfiguring a Running Replica Set
+
+Reconfiguring the replica with `rs.reconfig()` means that the node configuration files do not need to be reconfigured.
+
+### Reads and Writes on a Replica Set
+
+Read commands to a secondary node must be confirmed first with `rs.slaveOk()`. Writes can never be enabled on a secondary node.
+
+### Failover and Elections
+
+When there are an even number of voters in the set, a tiebreaker is needed by re-running the election. If elections are repeated, all queries are paused which can cause inconvenience. Nodes can be assigned higher priority to designate them as the preferred primary node candidate or they can be blocked from becoming the primary node by assigning them the value of `0`.
+
+### Write Concerns
+
+Developers can set higher levels of acknowledgement to guarantee stronger durability, (i.e. the write has propagated to more member nodes). The more replica set members that acknowledge the success of a write, the more likely the write is durable in the event of a failure. This comes at the expense of time.
+
+A write concern level of 0 means that the application does not wait for any acknolwedgements. It can be incremented by integers from there. The default write concern is one. It can also be set to a simple majority so that write concerns do not need to be adjusted with replica scaling.
+
+There are two additional write concern options: `wtimeout` and `j` (journal). The former sets a maximum amount of time allotted for waiting before marking the write concern operation as failed. It does not mark the write operation itself as failed, only the durability guarantee. The latter requires that each replica set member receive the write and commit an acknowledgement to the journal filed to the write. A write concern of majority assumes journal is set to true. This increases the durability guarantee by ensuring it is written to an on-disk journal.
+
+Write concern commands include:
+* `insert`
+* `update`
+* `delete`
+* `findAndModify`
+
+Write concerns are supported on all MongoDB deployment types including standalone, replica sets, and sharded clusters.
+
+### Read Concern
+
+Read concern is like the write concern mechanism. It strengthens the guarantee of consistency across nodes for a read operation. But a document that does not meet the specified read concern is not a document that is guaranteed to be lost, only that the data had not propagated enough to be guaranteed.
+
+There are four read concern levels:
+* Local returns the most recent data in the cluster.
+* Available read concerns the same as local read concern for replica set deployments. (default)
+* Majority
+* Linearizable - provides (Read your own Write functionality)
+
+Linearizable waits until all prior writes (including subsequent ones after the read operation) have been replicated to a majority of nodes before it returns a response.
+Best practice to pick two of three: latest, safe, and fast.
+
+### Read Preference
+
+There are five read preference nodes:
+* primary (default)
+* primaryPreferred
+* secondary
+* secondaryPreferred
+* nearest
+
+The trade off is between operation load/time and the possibility of reading stale data. Every read preference other than primary can return stale reads.
+
 ## Chapter 3: Sharding
+
+### What is Sharding?
+
+Instead of vertical scaling, MongoDB implements horizontal scaling through sharding. Sharding divides a dataset into pieces and divides it across a number of shards that are collectively known as the sharded cluster. Each shard contains a replica set to provide a level of fault tolerance.
+
+A router process known as Mongos receives requests and processes which shard should receive the query. It uses shard metadata stored on replicated config servers to make its decisions. Config servers are deployed as replica sets.
+
+### When to Shard
+
+Before sharding, determine if it isn't more economically viable to vertically scale instead. This is a good first step for any throughput performance or volume bottleneck resolution.
+
+Another aspect is the operational impact. Vertically scaling can mean significantly more back up data and sharding will allow horizontal performance through parallelization of the backup, restore, and sync processes.
+
+Also, some workloads are better suited for distributed deployments such as single threaded aggregation framework commands. But not all stages of an aggregation pipeline are parallelizable, so this needs to be considered on a case-by-case basis.
+
+Geodistributed data is much simpler to manage using zone sharding to easily distribute data that needs to be co-located.
