@@ -256,3 +256,82 @@ Another aspect is the operational impact. Vertically scaling can mean significan
 Also, some workloads are better suited for distributed deployments such as single threaded aggregation framework commands. But not all stages of an aggregation pipeline are parallelizable, so this needs to be considered on a case-by-case basis.
 
 Geodistributed data is much simpler to manage using zone sharding to easily distribute data that needs to be co-located.
+
+### Sharding Architecture
+
+Any number of shards can be added to a sharded cluster. Mongos is the router than mediates between shards and the client. Mongos can be replicated for high availability or higher performance. Note that it does not have a `dbpath` since it does not store any data. Metadata is stored on the config servers. Config servers can shift data across shards to promote equal distribution. 
+
+Each sharded cluster also has a primary shard that includes all non-sharded collections and is responsible for merge operations for aggregation commands. Mongos also executes a shard merge to sort results if specified by the query. Mongos processes are invisible to the client, it just makes the queries and receives the response.
+
+The bare minimum for a sharded cluster is Mongos, a config server replica set, and one shard.
+
+### Config DB
+
+Data should not be written to Config DB, unless MongoDB support engineers provide guidance when doing so. It is used to provide information about the sharded cluster including shard keys and chunks.
+
+### Shard Keys
+
+Shard keys are the indexed fields used to partition data in a sharded collection and distribute them. The shard key is used to divide documents into logical groupings known as chunks. The shard key defines which chunk a document belongs to.
+
+Shards handle distributed write and read operations. For the former, Mongos checks which shard contains the chunk for a document's key-value. For the latter, Mongos redirects queries only to relevant chunks.
+
+A field cannot be selected for a shard key if there is no existing index for the field.
+
+To enable sharding, enable `sh.enablesharding` with the name of the database and then create an index to back the shard key with `db.[collection].createindex`. Then use `sh.shardCollection` with the full path to the collection alongside the shard key to shard the specified collection. Shard status can be checked with `sh.status`.
+
+The shard key is immutable but the shard key value has recently been made mutable as of MongoDB 4.2 .
+
+### Picking a Good Shard Key
+
+Three properties of the shard key can ensure proper distribution: cardinality, frequence, and monotonicality. 
+
+Cardinality is the measure of the number of elements in a set of values. It is the number of unique possible shard key values. A low cardinality means fewer shards can be present in a cluster. High cardinality allows more chunks and more room for sharding.
+
+Frequency represents how often the unique values occurs in the data. High frequency can lead to hot spotting and bad performance. Low frequency means the values are more evenly distributed.
+
+Monotonically changing means that the possible shard key values for a new document changes at a constant rate. It is bad for performance because documents with a higher shard key value than the previous one will end up with most data in the upper boundary chunk. This is why timestamps and ID numbers are a bad shard key.
+
+Read isolation can also be used to help with distribution by targeting frequent queries to its right shard. Shard keys should support the most frequent kinds of queries. If the queried fields make bad shard keys then specify a compound index as the undelrying index for the shard key.
+
+A collection cannot be unsharded once sharded. A shard key cannot be updated once a collection has been sharded (only its key-value). It is best to test shard keys in staging first before sharding in production. 
+
+### Hashed Shard Keys
+
+Hashed shard keys are shard keys with the underlying index hashed. In other words, Mongo hashes a value to sort the query into the right shard. This promotes a more even distribution of data and can alleviate problems with monotonically changing shard keys.
+
+However, queries on ranges of shard key values are more likely to be scatter-gather. Hashed shard keys cannot support geographically isolaetd read operations using zoned sharding. Hashed index must be on a single non-array field. Hashed Indexes do not support fast sorting.
+
+To enable sharding on a database, run `sh.enableSharding("<database>")` then `db.[collection].createIndex( { "<field>" : "hashed"} )` to create the index. Then use `sh.shardCollection( "<database>.<collection>", { <shard key field > : "hashed" })` to shard the collection.
+
+### Chunks
+
+Each chunk has an inclusive lower bound and an exclusive bound. In between these two points is the key space. The chunk will be split up over time to evenly distribute data. The number of chunks that a shard key allows defines the max number of shards for a system. This is why cardinality is important. 
+
+`ChunkSize` is by default 64MB but can be defined between 1MB and 1024MB. If there is a high frequency of shard key values, then it creates jumbo chunks that are larger than the defined chunk size. They cannot be moved and the balancer will skip over it. Sometimes these cannot even be split.
+
+### Balancing
+
+The MongoDB balancer identifies which shard has too many chunks and re-arrnages chunks accordingly. The primary node of the Config Server Replica Set is responsible for balancing processes. Migrating chunks can cause performance issues but there is built-in functionality to minimize disruption.
+
+Commands:
+`sh.startBalancer(timeout, interval)`
+`sh.stopBalancer(timeout, interval)`
+`sh.setBalancerState(boolean)`
+
+### Queries in a Sharded Cluster
+
+Queries are directed to the mongos. It determines the list of shards that receive the query. If the query predicate includes a shard key then it will only target the relevant shard. If there is a vague shard key, then mongos will target every shard which can lead to slowdown depending on the size of the implementation.
+
+Mongos opens a cursor against each targeted shard and executes the query predicate and returns any data to mongos. It merges the results together to form the whole set of document and returns them to the client.
+
+Mongos can handle query modifiers as well. `sort()` pushes the sort to each shard and merge-sorts the results. `limit()` the mongos passes the limit to each targeted shard and then re-applies the limit to the merged set of results. With `skip()` the mongos performs the skip against the merged set of results.
+
+In short, mongos handles all queries in a cluster, builds a list of shards to target a query, and handles query modifiers.
+
+### Targeted Queries vs Scatter Gather
+
+The mongos holds a cached version of Config server metadata as a map for queries. With targeted queries, mongos only opens a cursor against shards that meets the predicated shard keys. This is faster than scatter gather that opens a cursor against all shards.
+
+If using a compound index, it is possible to specify every prefix up to the entire shard key and still have a targeted query. It cannot use any arbitrary field, only pathed ones.
+
+Targeted queries require the shard key in the query otherwise it performs a scatter-gather query. Ranged queries on the shard key may still require targeting every shard in the cluster.
