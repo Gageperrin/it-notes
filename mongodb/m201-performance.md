@@ -85,3 +85,34 @@ Wildcard indexes are useful for unpredictable workloads, can index all fields in
 ## Chapter 3: Index Operations
 
 ### Building Indexes
+
+A foreground index build is problematic because it locks the database. Background index builds are slower because of their incremental approach but do not lock the database in the same way. The index structure built using this method is also less efficient.
+
+After 4.2, these problems have been resolved with a hybrid index build with the performance of a foreground index build with the non-locking capability of a background index build.
+
+### Query Plans
+
+Query plans are formed when a query comes into the database. It usually follows an `IXSCAN`, `FETCH`, and `SCAN` sequence, but it depends on the structure of the index and the data. If the server is restarted, the amount of work performed by the first portion of a query is excessive, or an index is created or dropped, then the plan will be evicted. Query plans are cached.
+
+### Forcing Indexes with `hint()`
+
+Sometimes the query optimizer does not always choose the best index for a given query. This can be overriden with `hint()` by passing in the shape or the name of the index.
+
+### Resource Allocation for Indexes
+
+MongoDB shows not only database size but also collection and index size which is helpful for seeing resource allocation.
+
+The cache will show how many bytes are in the cache, how many bytes are read into the cache, how many pages are requested from or read into the cache, RAM allocation can be surmised from cache details as well as hit/miss ratios. For the fastest processing, ensure that indexes fit entirely in RAM.
+
+To mitigate the effects of BI/BA tools use secondary indexes to reply to requests.
+
+It is important to remember that indexes require resources, they are a part of the database working set, and they need to be taken into consideration in sizing and maintenance strategy.
+
+### Basic Benchmarking
+
+Benchmarking correlates performance indicators and metrics through public test suites (e.g. iBench, Jepsen) or through specific private testing environments. Database server benchmarking can help with identifying metrics such as data set load, writes per second, reads per second, balanced workloads, and read-write ratio.
+
+With self managed benchmarking it is important to set up anti-patterns that avoid data interference like a local laptop, database replace and swap, using mongo shell or `mongoimport` to test, or using default MongoDB parameters. These are all problematic for accurate benchmarking.
+
+
+## Chapter 4 - CRUD Optimization
