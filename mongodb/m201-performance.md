@@ -116,3 +116,66 @@ With self managed benchmarking it is important to set up anti-patterns that avoi
 
 
 ## Chapter 4 - CRUD Optimization
+
+### Optimizing CRUD Operations
+
+Optimized queries tend to:
+* Put most selective index fields first
+* Follow the sequence "Equality, Sort, Range"
+* Or be less selective for performance considerations
+
+### Covered Queries
+
+Covered queries are satisfied by index keys and do not touch the documents, very high performance. A query cannot be covered if any of the indexed fields are arrays, any of the indexed fields are embedded documents, or when run against a mongos if the index does not contain the shard key.
+
+### Regex Performance
+
+To reduce the overhead of operators like `$text`, regex can be used with indexing for better perfrmance. At the start of the regex expression include a `^` like `username: /^bob/` to ignore branches of the b-tree that do not begin with "bob". This reduce the number of index keys that need to be examined.
+
+### Aggregation Performance
+
+Realtime processing provides data for applications. Query performance is more important here. Batch processing provides data for analytics so query performance is less important because it is less urgent.
+
+Aggregation queries should use indexes as much as possible. Aggregation queries form a pipeline that transform the data into the target format. Since aggregation piplines move from the first pipeline to the last, once there is a stage that is not able to use an index, then the following stages will not be able to either. The query optimizer will do its best to navigate this. The `explain()` option can be used to analyze the aggregation query.
+
+Limits and sorts should be placed together at the beginning of the query so the server can do a top-k sort which is very performant efficient.
+
+There are some memory constraints. Results are subject to the 16MB document limit. 100MB of RAM per stage. `allowDiskUse` can be set to true to increase query speed but this seriously impacts performance. It is generally only used for batch processing.
+
+## Performance on Clusters
+
+### Performance Considerations in Distributed Systems
+
+A distributed system in MongoDB is a replica or sharded cluster. Distributed systems require taking into account latency, data spread across different nodes, read implications, and write implications.
+
+There are two types of reads in MongoDB: scatter-gather and routed queries. With distributed systems, scatter-gather will have a high performance toll while routed queries have lower latency.
+
+Within a shard cluster, the Mongos will drive the request to designated shards and locally sort then bring the data to the primary data for a merge. After the sort merge, the information will be returned to the client. Skip and limit also follow this procedure.
+
+### Increasing Write Performance with Sharding
+
+Best practices for high write performance with sharding include:
+* Vertical and/or horizontal scaling
+* Good shard key (high cardinality, low frequency, non-monotonically changing)
+* Bulk writes should be unordered (parallel operation)
+
+### Reading from Secondaries
+
+`readPref()` can be used to set read preferences for reading from one of the secondaries instead. This only goes for reads as writes can only be directed to the primary node.
+
+The options are:
+* `primary`
+* `primaryPreferred`
+* `secondary`
+* `secondaryPreferred`
+* `nearest`
+
+Reading from secondary nodes can return stale data because of its asychronous eventual consistency.
+
+### Replica Sets with Differing Indexes
+
+It is not very common to have an architecture that relies on secondary nodes with specific indexes. It can be used for analytics, reporting, or text searches. To set this up, then secondary nodes should be prevented from becoming primary because the application would begin communicating with a replica set not design for these queries. While indexes can be set on the primary node, in this case it is desirable to avoid operational workload performance impacts.
+
+### Aggregation Pipeline on a Sharded Cluster
+
+In a sharded cluster, since data is partitioned, aggregation pipelines queries can be difficult but MongoDB's query optimizer will navigate routing to avoid scatter-gather queries. It will locate the data and then merge them on a random shard. This does not happen for `$out`, `$facet`, `$lookup`, or `$graphLookup` where the primary shard will do the merging.
