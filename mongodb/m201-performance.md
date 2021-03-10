@@ -142,7 +142,7 @@ Limits and sorts should be placed together at the beginning of the query so the 
 
 There are some memory constraints. Results are subject to the 16MB document limit. 100MB of RAM per stage. `allowDiskUse` can be set to true to increase query speed but this seriously impacts performance. It is generally only used for batch processing.
 
-## Performance on Clusters
+## Chapter 5: Performance on Clusters
 
 ### Performance Considerations in Distributed Systems
 
