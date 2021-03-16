@@ -91,3 +91,10 @@ Performance statistics can be viewed in real time in MongoDB Compass. It include
 ### `$indexStats`
 
 `$indexStats` shows what indexes are being and can be useful to know what queries are doing. It increments by one, starting at zero when the server starts up or when indexes are created. It is not allowed in transactions and must be the first stage in an aggregation pipeline. It can be used to identify and remove unused indexes.
+
+## Chapter 3: Slow Queries
+
+### Resposne Time Degradation
+
+Some culprits can lead to response time degradation such as working set exceeding RAM, queries taking longer as the data set grows, growing pool of clients, unbounded array growth, and excessive number of indexes.
+
