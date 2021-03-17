@@ -94,7 +94,50 @@ Performance statistics can be viewed in real time in MongoDB Compass. It include
 
 ## Chapter 3: Slow Queries
 
-### Resposne Time Degradation
+### Response Time Degradation
 
 Some culprits can lead to response time degradation such as working set exceeding RAM, queries taking longer as the data set grows, growing pool of clients, unbounded array growth, and excessive number of indexes.
+
+Proper indexing can help reduce data query size from O(N) time to O(log(N)) time. Other improvements include providing enough RAM for the working set and optimizing our query results. `mlogvis` can be used to see the execution time for an operation.
+
+### Sudden Drop in Throughput
+
+* Long-running queries (collection scans, poorly anchored regex, or inefficient index usage)
+* Index builds
+* Write contention
+
+The server logs, `db.currentOp()`, and the profiler will show any long running queries and can help troubleshoot.
+
+Index building is a blocking operation and can take time that can cause slowdown on throughput for queries.
+
+Write contention can be complicated to resolve. When a documetn is updated in the WiredTiger storage engine, it uses a copy-on-write approach. When a new version is being prepared, only the original document is visible to applciations. The update is committed by switching the pointer to the new version in a single CPU operation. This is known as multiversion concurrency control.
+
+However there is write contention when multiple writers are trying to update the same document at the same time. This will lock the document.
+
+### Impact of Application Changes
+
+Detect application changes by keeping historical monitoring data, watching out for spikes in connections, watching out for spikes in ops/s, and spotting long lasting, non-indexed queries. This can easily be done in MongoDB Atlas.
+
+Connection spikes can be caused by exhausting connection pools, incorrect connections to a production environment, analytical workload and reporting tools. Stale operations or incorrect credentials can be responsible for this. 
+
+Query targeting helps identify long-lasting non-indexed queries (very undesirable scenario to have these).
+
+### Using Mtools to Find Slow Queries
+
+Three tools to identify and troubleshoot slow queries:
+* `mloginfo` for a summary of query shapes.
+* `mplotqueries` to plot queries over time.
+* `mlogvis` to plot queries on a browser.
+
+### Fixing Missing Indexes
+
+Options:
+* Build the index on the primary from the shell
+* Build the index in the background on the primary from the shell
+* Build the index with Compass
+* Build the index on each member of the replica set (rolling upgrade)
+* Use Ops Manager or Cloud Manager to build the index through a rolling upgrade.
+
+
+## Chapter 4: Connectivity
 
