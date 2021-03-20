@@ -77,3 +77,33 @@ Common commands:
 Type casting is where a value is automatically converted to a different type in order to allow an operation to continue. An int added to a double will be converted into a double, and the result will be a double as well.
 
 ## Week 3: Lifecycle of C++ Objects
+
+### Class Constructors
+
+Without any custom constructors, the C++ compiler automatically uses an automatic default. The automatic default constructor will only initialize all member variables to their default variables. Non-default custom constructors can be used as well. They require client code to supply arguments. If any custom constructor is defined, an automatic default constructor is not defined.
+
+### Copy Constructors
+
+A copy constructor is a pseical constructor that exists to make a copy of an existing object. The automatic copy constructor is provided autoamtically by default and will copy the contents of all member variables. A custom copy constructor is a class constructor and has exactly one argument.
+
+Copy constructors are invoked automatically by passing an object as a parameter, returning an object from a function, and initializing a new object.
+
+### Copy Assignment Operator
+
+In C++, a copy assignment operator defines the behavior when an object is copied using the assignment operator `=`. While a copy constructor creates a new object, an assignment operator assigns a value to an existing object. C++ provides an automatic default assignemtn operator.
+
+A custom assignment operator is required to be a public member function of the class, have the function name `operator=`, have a return value of a reference of the class type, and have exactly one argument.
+
+### Variable Storage
+
+In C++, an instance of a variable can be stored directly in memory, accessed by a pointer, or accessed by a reference. By default, variables are stored directly in memory. The type of a variable has no modifiers, the object takes up exactly its size in memory. The type of a variable is modified with an `*`. A pointer takes a memory address width of memory (e.g. 64 bits on a 64-bit system). The pointer points to the allocated space of the object.
+
+A reference is an alias to existing memory and is denoted with an `&`. A reference does not store memory but is only an alias. The alias must be assigned when the variable is initialized.
+
+Just like with storage, arguments can be passed to functions via value, pointer, or reference. It is important to never return a reference to a stack variable created on the stack of the current function.
+
+### Class Destructors
+
+A destructor should never be called directly. Instead it is automatically called when the object's memory is being reclaimed by the system: if the object is on the stack when the function returns or if the object is on the heap when delete is used. The deconstructors are not called at compile time but during runtime.
+
+To add custom behavior to the function's end of life, use a custom destructor. A custom destructor is a member function which is the name of the class preceded by a `~`. All destructors have zero arguments and no return type. A custom destructor is essential when an object allocates an external resource that must be closed or freed when the object is destroyed. Examples include heap memory, open files, and shared memory.
