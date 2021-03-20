@@ -107,3 +107,23 @@ Just like with storage, arguments can be passed to functions via value, pointer,
 A destructor should never be called directly. Instead it is automatically called when the object's memory is being reclaimed by the system: if the object is on the stack when the function returns or if the object is on the heap when delete is used. The deconstructors are not called at compile time but during runtime.
 
 To add custom behavior to the function's end of life, use a custom destructor. A custom destructor is a member function which is the name of the class preceded by a `~`. All destructors have zero arguments and no return type. A custom destructor is essential when an object allocates an external resource that must be closed or freed when the object is destroyed. Examples include heap memory, open files, and shared memory.
+
+### Uninitialized Pointers, Segfaults, and Undefined Behavior
+
+A segmentation fault (`segfault`) occurs when a referenced address is dereferenced.
+
+Undefined behavior is when a program compiles and runs as expected but does not follow best practices is not completely safe and valid. Often caused by using uninitialized variables.
+
+Initialization is specifying a value for a variable from the moment it is created. If a pointer is not initialized, it should not be dereferenced. Uninitialized pointers are not a good practice for generating randomnness. If a value is initialized with `()` after it, the parameters will be given to the class types' corresponding constructor.
+
+Pointers should be manually reset to `nullptr` when they are done being used since using `delete` on a pointer frees the heap memeory allocated at that address but does not change the pointer value itself. Manually resetting pointers will prevent deleting the same allocated address more than once and a pointer being dereferenced to deallocated memory. 
+
+Delete and `nullptr` only need to be used with pointers not variables since variables are automatically de-allocated.
+
+### Unsigned Integer Types
+
+Unsigned integers cannot represent negative values but have an increased upper positive value range for memory usage. Unsigned integers help with memory optimization. A negative signed integer may be reinterpreted as a very large positive unsigned integer and vice versa. This can cause problems operating arithmetic on signed and unsigned integers.
+
+A casting operation may be used to convert back to a signed integer but it is not always the best method. It is better to create temporary working copies of unsigned values as signed types.
+
+The generic data structure class is often referred to as a container. The C++ STL provides many such as `std::vector`.
