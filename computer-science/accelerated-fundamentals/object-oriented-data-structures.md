@@ -127,3 +127,28 @@ Unsigned integers cannot represent negative values but have an increased upper p
 A casting operation may be used to convert back to a signed integer but it is not always the best method. It is better to create temporary working copies of unsigned values as signed types.
 
 The generic data structure class is often referred to as a container. The C++ STL provides many such as `std::vector`.
+
+## Week 4: Engineering C++ Software Solutions
+
+### Template Types
+
+A template type is a special tpye in C++ that can take on different types when it is initialized like the standard vector. `std::vector` is a standard library class that provides the functionality of a dynamically growing array with a templated type.
+
+Key ideas:
+* Defined in `#include <vector>`
+* Initializiation `std::vector<T> v;`
+* Add to back of array `::push_back(T);`
+* Access specific element `::operator[](unsigned pos);`
+* Number of elements `::size()`
+
+### Tower of Hanoi
+
+The Tower of Hanoi problem is the problem of moving a stack of differently sized cubes from one stack to another with only three possible stacks. This can be cached out and solved in C++ syntax (as the next few lessons demonstrate).
+
+### Templates and Classes
+
+A template variable is defined by declaring it before the beginning of a class or function. Templated variables are checked at compile time which allows for errors to be caught before running the program.
+
+### Inheritance
+
+Inheritance allows for a class to inherit all member functions and data from a base class into a derived class. A base class is a generic form of a specialized, derived class. When a derived class is initialized, the derived class must construct the base class. By default it uses the default constructor. It can access all public members but no private members.
