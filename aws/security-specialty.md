@@ -74,22 +74,84 @@ Containment strategy:
 * Access Key rotation
 * KMS CMK rotation
 
-Evidence Gathering and Handling:
+Evidence gathering and handling:
 * CloudTrail
 * CloudWatch Logs
 * VPC Flow Logs
 * IAM Access Advisor
 
-Identify Source of Attack:
+Identify source of attack:
 * DNS lookup
 * GuardDuty
 
+Eradicate compromised resources:
+* EC2 instance termination
+* Disable compromised keys
+* Segregate compromised data for analysis
+
+Recovery steps:
+* Know the RTO/RPO
+* Resources to repair or replace
+* What can be automated?
+
+Clean up:
+* Remove temporary resources
+* KMS key audit
+* Full IAM audit
+* Review further findings
 
 ### IR Post-Incident Activity
 
+Learning for next incident:
+* Evidence retention in S3, AMI, or snapshots
+* Proposals for improvement in terms of least privilege implementation, access control, and network permissions
+* Monitoring through better dashboards and active responses
+
 ## Security Monitoring
 
+### Infrastructure Security Monitoring
+
+The best solutions for security monitoring:
+* VPC Flow Logs within a VPC or Subnet
+* GuardDuty
+* OS Logs
+* Config Rules
+* Amazon Inspector
+
+### Application Security Monitoring
+
+Application-level security: CloudWatch Logs receives logs from
+* Lambda Execution Logs
+* EC2 Application Logs
+* ECS/EKS Container Logs
+
+CloudTrail receives logs from:
+* Cognito User Authentication Logs
+* Step Functions Logs
+* Deployments via CodeDeploy
+
+S3 receives logs from:
+* ALB Access Logs
+* CloudFront Access Logs
+* Redshift Audit Logs
+
+### Account Security Monitoring
+
+Account security logging can be done through:
+* CloudWatch Events pulled from GuardDuty Findings, CloudTrail Events, and AWS Org Events
+* Config Rules from CloudTrail, IAM User Key rotation, and root user MFA enabled.
+
+### Troubleshooting Security Monitoring
+
 ## Logging Solutions
+
+
+
+
+
+## Account Security Monitoring
+
+
 
 ## Infrastructure Security
 
