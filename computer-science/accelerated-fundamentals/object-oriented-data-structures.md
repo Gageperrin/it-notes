@@ -1,6 +1,8 @@
+# Accelerated Fundamentals
+
 # Object-Oriented Data Structures
 
-These are my notes to University of Illinois' Object-Oriented Data Structures course on Coursera offered as part of their Computer Science Accelerated Fundamentals Specialization track.
+These are my notes to University of Illinois' Object-Oriented Data Structures course on Coursera offered as part 1 of their Computer Science Accelerated Fundamentals Specialization track.
 
 ## Week 1: C++ Part 1
 
@@ -152,3 +154,61 @@ A template variable is defined by declaring it before the beginning of a class o
 ### Inheritance
 
 Inheritance allows for a class to inherit all member functions and data from a base class into a derived class. A base class is a generic form of a specialized, derived class. When a derived class is initialized, the derived class must construct the base class. By default it uses the default constructor. It can access all public members but no private members.
+
+
+# Ordered Data Structures
+
+These are my notes to University of Illinois' Ordered Data Structures course on Coursera offered as part 2 of their Computer Science Accelerated Fundamentals Specialization track.
+
+## Week 1
+
+### 1.1 Arrays
+
+An array stores data in blocks of sequential memory. Instantiate an array in C++ with `int values[10]` for an array of 10 values starting with index `0`. All data in an array must be of the same type, and therefore the byte size of the data is also known. This makes it easier for iterating through arrays. Arrays also have a fixed capacity. They must store their data sequentially in memory. The capcity of an array is the maximum number of elements that can be stored. The size of an array is the current number of elements stored in the array. An array is full when the size of the array is equal to the capacity.
+
+### 1.2 Linked Memory
+
+Instead of storing data sequentially, linked memory (or linked lists) store data together with a link to the in-memory location of the next list node. A list node refers to the pair of both data and the link. Zero or more ListNode elements linked together form a linked list. A pointer called the head pointer stores the link to the beginning of the list. A pointer to nullptr marks the end of the list.
+
+A linked list takes longer to access than an array. In a list, the capacity is bounded not by the list but by the memory available on the system. In both arrays and lists, all data wihtin an instance must be the same type.
+
+### 1.3 Run Time Analysis
+
+Run-time analysis formally compares the speed of an algorithm as the size of input grows. One-dimensional arrays are accessed at a given index in O(1) constant time while linked lists are O(n) linear time. O(n^2) is polynomial time.
+
+### 1.4 Array and List Operations
+
+Action | Array | List
+------ | ------|----------
+Access a Given Index | O(1)    | O(n)
+Insert at front  | O(1)*  |  O(1)
+Find data | O(n)    |   O(n)
+Binary search | O(log(n)) | N/A
+Insert after |  O(n)  | O(1)
+Delete after |  O(n)  | O(1)
+
+### 1.5 Queue (Data Structure)
+
+A queue is a FIFO data structure with an enter point and exit point. A structure's abstract data type (ADT) is how data interacts with the structure.
+
+The Queue ADT has four operations:
+* `create` creates an empty queue.
+* `push` adds data to the back of the queue.
+* `pop` removes data from the front of the queue.
+* `empty` returns true if the queue is empty.
+
+All four have O(1) for both arrays and linked lists. `push` and `pop` can have an amortized runtime for arrays.
+
+Queues can be array-based or doubly linked list-based. List-based queues can have a tail pointer to access the end of the list while new elements can be chained onto the head.
+
+### 1.6 Stack (Data Structure)
+
+A stack is a LIFO data structure like a stack of papers.
+
+The Stack ADT has four operations:
+* `create` creates an empty stack.
+* `push` adds data to the top of the stack.
+* `pop` removes data from the top of the stack.
+* `empty` returns true if the stack is empty.
+
+Both an array-based and a list-based implementation can be built to run in constant, O(1) running time.
