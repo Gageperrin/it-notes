@@ -212,3 +212,55 @@ The Stack ADT has four operations:
 * `empty` returns true if the stack is empty.
 
 Both an array-based and a list-based implementation can be built to run in constant, O(1) running time.
+
+## Week 2 Binary Search Trees
+
+### 2.1 Tree Terminology
+
+A tree is a linked structure with inheritance. Each element in a tree is a node and each connection between two nodes is an edge. Trees must always contain a root node with no incoming edges. Nodes that contain no outgoing edges are called leaf nodes. A node's children are the nodes with the node as its parent. 
+
+A tree must have a root, directed edges, and not have a cycle. It is a rooted, directed, and acyclic structure.
+
+### 2.2 Binary Trees
+
+A binary tree is a tree where every node has no more than two children. The height of a binary tree is the number of edges in the longest path from the root to a leaf. 
+
+A binary tree is full if and only if every node has either zero children or two children. A binary tree is perfect if and only if all interior nodes have two children and leaves are at the same level. A binary tree is complete if and only if the tree is perfect up until the last level and all leaf nodes on the last level are pushed to the left.
+
+### 2.3 Tree Traversal
+
+Tree traversal consists of shouting out the node to see if there is left and right branches, then traversing first the left branch and exhausting it before traversing the right branch. When both branches are exhausted it returns to the parent node.
+
+### 2.4 Binary Search Tree
+
+A binary search tree is an ordered binary tree capable of being used as a search structure. A binary tree is a BST if for every node in the tree nodes in the left subtree are less than itself. Nodes in the right subtree are greater than itself.
+
+Dictionary ADT:
+* `find` finds the data associated with a key in the dictionary
+* `insert` adds a key/data pair to the dictionary
+* `remove` removes a key from the dictionary
+* `empty` returns true if the dictionary is empty
+
+A BST used to implement a dictionary will store both a key and value in every node.
+
+The in-order predecessor (IOP) of a node will always be the right most node in the node's left sub-tree.
+
+To remove from a BST:
+* Zero children: delete the node
+* One child: Remove like a linked list
+* Two children: Find the IOP of the node to be removed, swap with the IOP and the remove the node in its new position
+
+### 2.5 BST Analysis
+
+BST can take on many forms and structures, even containing the same data.
+
+
+Action | BST avg. case| BST worst case | Sorted Array | Sorted List
+------ | ------|----------| ------ | ------- |
+find |    O(lg(n))      | O(n)  |  O(lg(n))   | O(n)
+insert |  O(lg(n))      | O(n)  |  O(n)  | O(n)
+remove |  O(lg(n))      | O(n)  |  O(n)  |  O(n)
+
+The height balance factor (b) of a node is the difference in height between two trees. A balnaced BST is a BST where every node's balance factor has a magniture of 0 or 1.
+
+There are n! different ways to create BSTs with the same data. The worst case BST will have a height proportional to the number of nodes while an avergae BST will have a height proportional to the logarithm of the number of nodes.
