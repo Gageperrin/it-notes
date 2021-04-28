@@ -264,3 +264,41 @@ remove |  O(lg(n))      | O(n)  |  O(n)  |  O(n)
 The height balance factor (b) of a node is the difference in height between two trees. A balnaced BST is a BST where every node's balance factor has a magniture of 0 or 1.
 
 There are n! different ways to create BSTs with the same data. The worst case BST will have a height proportional to the number of nodes while an avergae BST will have a height proportional to the logarithm of the number of nodes.
+
+## Week 3: AVL Trees and B-Trees
+
+### 3.1 AVL Trees
+
+Balanced BSTs are height-balanced trees that ensure nearly half of the data is located in each subtree. BST sub-structures include a mountain with both a right and a left child and a stick that has two children only in one direction. Sticks should be converted into mountains. 
+
+A balance factor is the absolute difference between heights of left and right subtrees. A higher balance factor means less balance.
+
+To do this, first identify the node that is deepest into the tree that makes the tree out of balance. Identify the stick, break it in half, and raise it up as a mountain and re-attach the children. For example, a stick slanted to the right should be broken in half and everything rotated to the left. This is a generic left rotation.
+
+An elbow occurs when a stick is bent. It is first necessary to unbend the elbow with a rotation about the end so that it becomes a straightened stick. 
+
+There are four possible rotations: L, R, LR, and RL. Rotations are local operations that do not impact the broader tree. Rotations run in O(1) time. 
+
+AVL trees are self-balancing BSTs like the above. They are named after Adelson-Velsky and Landis. Everything about a BST remains true in an AVL tree, but there is extra work on insert and remove.
+
+For an AVL insert, insert at the proper place, check for imbalance, rotate if necessary and then update height.
+
+For an AVL remove, find the node, swap it with the IOP, check for imbalance, rotate if necessary and then update height.
+
+Again, an AVL tree is a BST implementation that also maintains the height at each node and the balance factor.
+
+### 3.2 B-Trees
+
+B-Trees are designed to perform well both in main memory and on-disk memory. The order of a B-Tree refers to the size of the nodes, it is the maximum number of keys that a given node can have plus one. A single B-tree should minimize the number of network packets, disk seeks, or whatever operation is being conducted. Again, the goal is to minimize the seeks to reach the data.
+
+A B-tree of order m is a tree that contains nodes of order m. Each node can contain no more than m-1 keys. Each internal node can have at most m children, so a B-tree of order m is like an m-way tree. To insert into a b-tree, throw up the value into a new node. The inserted key becomes a root node, splitting the B-tree into a child node on the left and right. 
+
+A B-tree recursive insert will continuously throw up middle values to create deeper and deeper root nodes to maintain two value nodes.
+
+B-tree properties:
+* All keys within a node are in sorted order.
+* Each node contains no more than m-1 keys.
+* Each internal node has exactly one more child than key. A root node can be a leaf or have `[2,m]` children. Each non-root, internal node has `[ceil(m/2),m]` children.
+* All leaves are on the same level.
+
+With searching a B-Tree, the height of the B-Tree determines the maximum number of seeks possible in search data and the height of the structure is log<sub>m</sub>(n). Therefore the number of seeks can be no more than this number.
