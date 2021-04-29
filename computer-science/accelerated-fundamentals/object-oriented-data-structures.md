@@ -302,3 +302,32 @@ B-tree properties:
 * All leaves are on the same level.
 
 With searching a B-Tree, the height of the B-Tree determines the maximum number of seeks possible in search data and the height of the structure is log<sub>m</sub>(n). Therefore the number of seeks can be no more than this number.
+
+## Week 4: Heaps
+
+### 4.1 Heap Introduction
+
+A complete binary tree T is a min-heap if the tree is empty or has both a left and a right node that are larger than the original node. Every descendant must be larger than its ancestor. The memory representation of a heap is an array and is easily accessible.
+
+### 4.2 Heap Insert
+
+To insert a value into a heap, it should be inserted at the end of the array. This value should be compared with the represented ancestor to make sure it is larger than its parent. If it is not, it should be swapped with its parent node, and this should be done recursively until it is greater than its parent or is at root. Doubling an array adds a new layer on the bottom of the heap tree.
+
+### 4.3 Heap - RemoveMIN
+
+It is only possible to remove the most minimum element from a heap through a `heapifyDown`. The value to be removed should be swapped with the value at the end of the array and then removed. The value that was swapped should then be moved down the tree by comparing it with the left and right child nodes until it is given a new location on the tree.
+
+### 4.4 Heap - buildHeap
+
+Three possible ways to insert into an unsorted array:
+(1) Sort the array.
+(2) Call insert a number of times with `heapifyUp`
+(3) Sort the array to have only the first half of the array have its heap properties restored then apply `heapifyDown` on the rest.
+
+Given any sort of data, buildHeap can be completed in O(n) time.
+
+### 4.5 Heap - Runtime Analysis
+
+A heap can be built in linear O(n) time.
+
+A heap sort consists of (1) building a heap, (2) call `n` number of removeMn, and (3) swap elements to order. Running time at worst will be `n * log(n)`. A heap sort is an ideal sorting algorithm.
