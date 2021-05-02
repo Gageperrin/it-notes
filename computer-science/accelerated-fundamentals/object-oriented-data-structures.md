@@ -420,3 +420,60 @@ The iterated log function is the number of times you can take a log of a number 
 
 In a disjoint set implemented with smart unions and path compression on find, any sequence of m union and find operations result in the worst case running time of `O(m*log(n))` where n is the number of items in the Disjoint set.
 
+## Week 3: Graph Data Structures
+
+### 3.1 Graphs Introduction
+
+A graph is perhaps the most powerful data structure in this course. A graph can label every node with different color or shape, so that no colors or shapes are touching.
+
+### 3.2 Graph Vocabulary
+
+* `G` is a collection of vertices and edges where every node is connected.
+* Node and vertex can be used interchangeably.
+* Edge is the connection between two nodes.
+* Degree is the count of number of incident edges in a collection.
+* A path is a sequence of vertices connected by edges.
+* A cycle is a path with a common beginning and end vertex.
+* A simple graph is a graph with no self loops or multi-edges.
+* A subgraph contains all the vertices and edges of a particular subgraph. Subgraphs can be complete, connected, a connected component, an acyclic subgraph, and spanning tree.
+
+Run times are reported by the number of vertices but can often depend on the number of edges.
+
+### 3.3 Graphs: Edge List Implementation
+
+Graph ADT functions: (edgeless implementation)
+* `insertVertex(K key)`
+* `insertEdge (Vertex v1, Vertex v2, K key)`
+* `removeVertex (Vertex v)`
+* `removeEdge(Vertex v1, Vertex v2)`
+* `incidentEdges(Vertex v)`
+* `areAdjacent(Vertex v1, Vertex v2)`
+* `origin(Edge e)`
+* `destination(Edge e)`
+
+### 3.4 Graphs: Adjacency Matrix Implementation
+
+An adjacency matrix stores a false value if an edge between two vertices does not exist, and true if there is. An index on a vertex list is matched with the possible connections on an edge list. Inserting a vertex has between O(1)* -> O(n) and removing a vertex has O(n). Checking adjacency has O(1) runtime. Checking incident edges is O(n).
+
+### 3.5 Adjacency List Implementation
+
+The third implementation is the adjacency list implementation. This combines some features of each.
+
+The index in the vertex list stores pointers to two separate values and two separate rows in the edge list.
+
+The runtimes are:
+* insertVertex: O(1)*
+* removeVertex: O(deg(v))
+* areAdjacent: min(deg(v1), deg(v2))
+* incidentEdges: deg(v)
+
+Expressed as O(f) | Edge List | Adjacency Matrix | Adjacency List
+------ | ----------| ------ | ------- |
+Space |  n + m | n<sup>L<sup> | n+m | 
+insertVertex(v) | 1 | n | 1 | 
+removeVertex(v) | m | n | deg(v) | 
+insertEdge(v, w, k) | 1 | 1 | 1 |
+removeEdge(v, w) | 1 | 1 | 1 |
+incidentEdges(v) | m | n | deg(v) |
+areAdjacent(v, w) | m | 1 |  min(deg(v), deg(w)) | 
+  
