@@ -331,3 +331,92 @@ Given any sort of data, buildHeap can be completed in O(n) time.
 A heap can be built in linear O(n) time.
 
 A heap sort consists of (1) building a heap, (2) call `n` number of removeMn, and (3) swap elements to order. Running time at worst will be `n * log(n)`. A heap sort is an ideal sorting algorithm.
+
+# Unordered Data Structures
+
+These are my notes to University of Illinois' Unordered Data Structures course on Coursera offered as part 3 of their Computer Science Accelerated Fundamentals Specialization track.
+
+## Week 1: Hashing
+
+### 1.1 Hashing Introduction
+
+Hashing defines a keyspace (a mathematical description of the keys for a set of data) to use a function to map the keyspace into a small set of integers.
+
+A hash table based dictionary consists of (1) a hash function, (2) an array, and (3) collision handling (what happens when a hash matches two different values).
+
+### 1.2 Hashing - Hash Function
+
+A perfect hash function has an onto function where there is a unique bilateral match for each hashed key and value.
+
+A hash function has two parts: a hash and a compression. A hash transforms an input into an integer. A compression functoin takes a fixed lenght input and returns a fixed-length output.
+
+A good hash function runs in O(1), is deterministic so that the output reliably comes out the same, and satisifes the SUHA requirement. SUHA is the simple uniform hashing assumption and says that the result of a hash algorithm must be uniform across an entire key space.
+
+### 1.3 Hash Function Examples
+
+Examples provided in lecture.
+
+### 1.4 Collision Handling I: Separate Chaining
+
+Sometimes the hashing function returns the same value for two different inputs. This often happens with weak hashing algorithms. This can be resolved with separate chaining which puts the clashing values in a linked list. For example if 29 % 7 and 8 % 7 both match 1. Then at index "1" in the array, it can point to 29 which points to 8.
+
+The main cost is that the load factor will grow as linked lists accumulate inside arrays.
+
+### 1.5 Collision Handling II: Probing and Double Hashing
+
+Probe-based hashing will probe ahead in the array to find the next index without a corresponding value and insert it there, even if it means looping to the beginning of the array. Linear probing has problematic runtimes because of primary clustering. Primary clustering will have a set of values disproportionately grouped in a single block.
+
+Double hashing can solve this. Double hasing applies an alternative shifted hash function if the value returned for the first one is full.
+
+### 1.6 Hashing Analysis
+
+Separate chaining works better for big records while double hashing works better for structure speed. Hash tables replace a dictionary. Hashing does not have any nearest neighbor approach like BSTs do. So for range finding or nearest neighbor, a tree structure is best. Hash tables are best if the exact key is known and is used only for lookups.
+
+### 1.7 Hash Tables in C++
+
+```
+std::map
+  ::operator[]
+  ::insert
+  ::erase
+  ::lower_bound(key) -> Iterator to first element <= key
+  ::upper_bound(key) -> Iterator to first element > key
+```
+
+An unordered map has the first three but no bound approach. Instead it has:
+* `::load_factor()`
+* `::max_load_factor(ml)`
+
+
+## Week 2: Disjoint Sets
+
+### 2.1 Disjoint Sets Introduction
+
+A disjoint set (also known as union-find or merge-find) stores a collection of non-overlapping sets which are held to be equivalent regardless of the elements contained inside them. Each set has a unique identity and a representative member.
+
+In C++, union is a reserved word and cannot be used as a name for a union find function.
+
+### 2.2 Naive Implementation
+
+If there is enough room in the array, each value across disjoint sets (including its identity value) can be assigned array values in sequence. But this only works well under ideal circumstances.
+
+### 2.3 UpTrees
+
+This implementation continues to use an array where the index is the key. The value of the array is `-1` if the representative element has been located or the index of the parent if it is not the representative element. This is called an UpTree. It is a tree where each node except the root has a single pointer that points to the parent. This makes it easy to update a data structure with disjoint sets.
+
+### 2.4 UpTrees: Simple Running Time
+
+The running time of a disjoint sets find is proportional to the height of the algorithm O(h). The ideal UpTree is extremely flat with a height of one. Otherwise, it can have a very bad worst case runtime.
+
+### 2.5 UpTrees: Smart Union and Path Compression
+
+To keep track of the height of the tree, it is good practice to replace a `-1` root node with the negative height of the tree minus one. For example a node of tree with height 1 would be `-2`.
+
+Union by height should keep the height of the tree as small as possible. Union by size should minimize the number of nodes that increase in height.
+
+Path compression can be used to point intermediate tree nodes to the root node itself reducing path traversal.
+
+The iterated log function is the number of times you can take a log of a number before reaching 1.
+
+In a disjoint set implemented with smart unions and path compression on find, any sequence of m union and find operations result in the worst case running time of `O(m*log(n))` where n is the number of items in the Disjoint set.
+
