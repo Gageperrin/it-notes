@@ -477,3 +477,61 @@ removeEdge(v, w) | 1 | 1 | 1 |
 incidentEdges(v) | m | n | deg(v) |
 areAdjacent(v, w) | m | 1 |  min(deg(v), deg(w)) | 
   
+### 4.1 Graph Traversal
+
+#### 4.1.1 Graphs: BFS Traversal
+
+A traversal visits every vertex and edge in the graph. BST traversals are ordered, have an obvious start, and a notion of completeness.
+
+Graph traversal is different because it is not sequential, not clear where it starts, and must be designed to traverse every node exactly once. It starts with one node, visits all of its children, then all of their children.
+
+#### 4.1.2 Graphs: BFS Analysis
+
+A well-designed BFS traversal can handle disjoint graphs and count components, it can detect a cycle, and have a running time of O(n+m).
+
+#### 4.1.3 Graphs: DFS Traversal
+
+In a depth-first traversal, it goes deep very quickly instead of visiting each generation of children at a time.
+
+### 4.2 Minimum Spanning Trees (MST)
+
+#### 4.2.1 Minimum Spanning Tree
+
+A minimum spanning tree takes in a connected, undirected graph G with edge weights, and it outputs a spanning graph that is a connected, acyclic tree with a minimal total weight among all spanning trees.
+
+#### 4.2.2 MST: Kruskal's Algorithm
+
+Kruskal's algorithm helps find the shortest route on the entire map. It requires an organized list (mini-heap) of edge weight for every vertex in the graph. Every vertex needs to be provided with its own uptree.
+
+It removes the minimum element from the heap and check if the two vertices in the element are in the same disjoint set. If they are not, then they are unioned together so that they are in the same set. If they are in the exact same est, nothing needs to be done.
+
+Building a priority queue in a heap takes O(m) time while for a sorted array takes O(m * lg(m)). Each `removeMin` in a heap takes log(m) runtime and for a sorted array O(1).
+
+#### 4.2.(3) MST: Prim's Algorithm
+
+Prim's algorithm offers a different approach. An arbitrary partition of the vertices on G into two subsets U and V will have an edge of minimum weight across the partition. This edge will be part of some minimum spanning tree.
+
+The partition property itself suggests an algorithm and finds the minimum spanning tree.
+
+The input is a graph with a starting vertex and return a spanning tree as output.
+
+Runtime for a heap is O(n<sup>2<sup> + m log (n)) for adjusting the matrix and O(n log(n) + m (log(n)) for adjusting the list. For an unsorted array it is O(n<sup>2<sup>) for both the matrix and the list. Prim's algorithm is m * log m for a sparse graph but n<sup>2<sup>log(n) for a dense graph.
+  
+### 4.3 Shortest Path Algorithms
+
+#### 4.3.1 Dijkstra's Algorithm
+
+Instead of finding the minimum spanning tree, Dijkstra's Algorithm finds the shortest path on a graph. It goes through every vertex on a graph and labels the distance to that vertex to infinity and the previous pointer as null, just like Prim's algorithm. The initial vertex is set to 0 with hte same priority Q.
+
+Dijkstra's Algorithm gives the shortest path from a single source path to every connected vertex.
+
+
+#### 4.3.2 Dijkstra's Algorithm: Edge Cases
+
+In cases of a single heavy-weight path versus multiple light-weight paths, Dijkstra's Algorithm still effectively finds the shortest path. With negative weight cycles, Dijkstra's algorithm fails. Shortest path algorithms always fail with negative weight cycles in general as shortest paths in these cases are infinite.
+
+
+#### 4.3.3 Dijkstra's Running Time
+
+The Fibonacci heap optimizes Dijkstra's algorithm to make it the smallest time in any shortest path algorithm with a run time of O(m + n * log(n)). It is just slightly more than a traversal but still very good.
+
