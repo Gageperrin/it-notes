@@ -26,8 +26,57 @@ Essential CLI tools:
 `pinfo coreutils [command] invocation` provides documentation on some commands in Linux. It was a historical alternative to command documentation and includes more features than man pages but has less documentation. `/usr/share/log` can also be used to find command information.
 
 
-
 ### Lesson 3: Essential File Management Tools
+
+Every Linux file is located within `/`. Within the root directory by default are `bin`, `home`, `var`, `usr`, etc. A mount is a storage device connected to a separate directory. Putting a directory on a separate disk can ensure that dedicated storage space is available. This separate disk is mounted onto the file directory.
+
+Default root directory subdirectories:
+* `bin` is a symbolic pointer to `/usr/bin`. `bin` contains regular binaries, `sbin` contains system binaries.
+* `boot` is for booting and is usually on a separate partition to be available at all times.
+* `dev` stands for devices and containers drivers connecting Linux to hardware. `sda` is the hard disk and partitions are labeled `sda1`, `sda2`, etc.
+* `etc` is for configuration files.
+* `proc` is an interface to the Linux kernel and can provide extensive information about the Linux system.
+* `root `is the home directory for the root user.
+* `run` is the new temp directory for processes.
+* `sys` is for hardware information.
+* `tmp` is the old temp directory.
+* `media`, `mnt`, and `opt`, and `srv` are rarely used.
+* `usr` is like Program Files in Windows.
+* `var` contains a wide variety of files created by the OS. `var/log` is one of the most commonly used subdirectories for log files.
+* 
+
+#### ls ####
+
+Important options for `ls`:
+* `-l` gives a long list of files and directories with creation date/time, link counter, and permission information.
+* `-a` shows all files including hidden files prefixed with `*`.
+* `-lrt` sorts files by last modification date.
+* `-ld [directory]` shows directory properties rather than contents
+
+#### Globbing ####
+
+* `*` globs for everything. 
+* `?` globs for a single character.
+* `[a-c]` specifies a range of a, b, and c.
+* `[a-c]*` will return all files starting with a, b, or c.
+* `?[z-s]*` shows all files where the second character is a z or s.
+
+#### cp ####
+
+Copy can copy both files and directories from a source to a destination.
+
+`cp -R` recursively copies all files in a directory instead of just a single file.
+
+#### cd, mkdir ####
+
+`cd` is used to navigate between directories. A `/` is used to distinguish between absolute and relative directories.
+* `cd -` returns to previous directories.
+* `mkdir` creates a directory.
+* `rmdir` removes directories only if the directory is empty. `rm -rf` is more useful.
+
+
+
+
 
 ### Lesson 4: Working with Text Files
 
