@@ -72,13 +72,124 @@ Copy can copy both files and directories from a source to a destination.
 `cd` is used to navigate between directories. A `/` is used to distinguish between absolute and relative directories.
 * `cd -` returns to previous directories.
 * `mkdir` creates a directory.
-* `rmdir` removes directories only if the directory is empty. `rm -rf` is more useful.
+* `rmdir` removes directories only if the directory is empty. `rm -rf` is more useful to force remove directories.
 
+### link ####
 
+A hard link is different from a symbolic (soft) link. Every file has one `inode` that provides all administration of a file. Users access an `inode`'s blocks through names. This is a hard link. A symbolic link like `sym1` points to a name rather than directly to a node.
+
+A hard link cannot be used across devices and cannot have directories. Symbolic links must be used instead in these situations.
+
+The command `ln` creates a link in the same way as `cp` takes a source and destination.
+
+Symbolic links should always use absolute pathnames for when they are moved.
+
+Links are useful for creating pointers while maintaining only one copy of a file, improving the navigability of a file system.
+
+#### find ####
+
+`find / -name "hosts"` will find any file in the root directory that includes "hosts". `{}` can be used in a second command after "find" to use the results of the find query.
+
+`-type` and `-size` can be used to filter the find command's searches. `-xargs` is a command in a pipe that will work on the results of a command line by line. It can be used to search for a particular string inside the resulting files from a search.
+
+#### tar ####
+
+`tar` is the tape archiver that is used to compress, extract, or list files to a tape.
+
+Commands:
+* `tar -cvf [name] [target]` creates a tar archive. 
+* `tar -xvf [name] -C [destination]` extracts to a particular directory.
+* `tar -tvf` will show the contents of an archive
+
+Add compression using `-z` or `-j` for gzip and bzip respectively. 
+
+#### File Compression ####
+
+* Gzip is most common and very fast
+* bzip2 has a better compression ratio.
+* zip can also be used and has a Windows-compatible syntax
+* There are other less common utilities outside the scope of this course
+
+Unlike other file compression utilities, zip creates a copy of the file rather than compressing the file itself.
 
 
 
 ### Lesson 4: Working with Text Files
+
+`Vim` is `vi` + more. `Vim` automatically starts in command mode rather than input mode. To enter input mode, one can use `i`, `o`, `O`, `a`, or the "Insert" key. To return to command mode, use the Esc key.
+
+Most common commands:
+* `:wq` writes and quits
+* `u` is undo
+* `dd` deletes a line
+* `:q!` to just exit
+* `v` makes a block with arrow keys
+* `y` copies
+* `p` pastes
+* `/` searches with a string match
+* `gg` brings the screen to top of document
+* `%s/[FROM]/[TO]/` is a search and replace to make it global add `g` to the end
+
+From the terminal run `vi [filename]` to create a file (or modify it if it exists).
+
+The command `vimtutor` opens a Vim tutor with various instructions.
+
+`nano` is another text editor but it is not as widespread. Nano is more intuitive but not installed by default on most Linux systems.
+
+`more` was the original file pager to view files. `less` was developed to offer more advanced features.
+
+`less` commands:
+* `/` searches text
+* The "N" key goes to the next occurrence
+* Lower case "g" goes to the bottom of the file, upper case "G" to the top.
+* The "Q" key is used to quit
+
+#### cat and tac ####
+
+`cat` prints all text in a file (`tac` does so in the opposite order).
+
+Options:
+* `-A` all non-printable characters
+* `-b` numbers lines
+* `-n` numbers lines but not empty lines
+* `-s` suppresses repeated empty lines
+
+
+#### grep ####
+
+`grep` can be used in a pipe to filter the previous commands.
+
+Options:
+* `-i` case insensitive
+* `-R` searches all subdirectories as well
+* `-l` just shows the matching file
+
+#### regex ####
+
+Regular expressions are text patterns within strings. Regular expressions are built around atoms. Atoms specify what text is to be matched. It can be a single character, a range of characters, a dot if it is unknown or a class. The second element is the repetition operator which identifies how many times a character should occur. The third element indicates where to find the next character.
+
+Common regex:
+* `^` beginning of the line
+* `$` end of the line
+* `\<` beginning of a word
+* `\>` end of a word
+* `\A` start of a file
+* `\Z` end of a file
+* `{n}` exact n times
+* `{n,}` minimum of n times
+* `{,n}` n times max
+* `{n,o}` between n and o times
+* `*` zero or more times
+* `+` one or more times
+* `?` zero or one time
+
+#### Text Processing Utilities ####
+
+* `cut` filters output from a text file
+* `sort` sorts files, often used in pipes
+* `tr` translates uppercase to lowercase
+* `awk` searches for specific patterns
+* `sed` powerful stream editor to batch-modify text files
 
 ### Lesson 5: Connecting to a Server
 
