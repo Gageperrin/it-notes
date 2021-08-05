@@ -193,7 +193,40 @@ Common regex:
 
 ### Lesson 5: Connecting to a Server
 
+#### Root User ####
+
+The kernel environment accesses the hardware through drivers. Users can only access the kernel through system calls or permissions. The root user transcends system call and permissions restrictions.
+
+Commands:
+* `su` can be used to switch users. This user will be maintained during the lifecycle of the terminal.
+* `sudo` is "superuser do" and is used to run commands as the superuser.
+* `sudo -i` opens a root shell after the user password is entered.
+* `usermod -aG [name] user` adds a user to a group.
+
+`sudo` can be edited through `visudo`, it is usually stored in `/etc/sudoers.d`.
+
+#### Terminals ####
+
+`chvt` changes between virtual terminals (tty's). By default, Red Hat tty1 is graphical while tty2 is not graphical. Most environments do not have a graphical environment but the main advantage of graphical is being able to run multiple text-based terminals at once.
+
+#### SSH ####
+
+SSH is secure shell and replaces options like `telnet` which passes a string password over a network. SSH reaches out to the server to fetch a key that establishes identity and enables encryption. Remote connection identity is established through a ECDSA fingerprint.
+
+`ssh-keygen` generates a private key and public key, the latter is copied over the server through `ssh-copy-id`.
+
+`scp` is inside SSH and is a secure copy protocol.
+
+Commands:
+* `ssh [user]@[ip]` is the default syntax to connect to a remote server through SSH.
+* `ssh-keygen` to generate a public/private RSA key pair.
+* `ssh-copy-id [target-IP]` to copy a public key to a target IP.
+* `scp [ip]:[target-path]` to securely copy a file to a destination.
+
+
 ### Lesson 6: Working with the Bash Shell
+
+
 
 ## Module 2: User and Group Management and Permissions
 
