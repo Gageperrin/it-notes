@@ -69,3 +69,5 @@ On-premise instances need a CodeDeploy configuration file. For Ubuntu this is `/
 CodeDeploy can also deploy to Lambda through all-at-once, canary, or linear deployments. Lambda only has the before allow, traffic, and after allow traffic hooks.
 
 ## CodePipeline
+
+CodePipeline offers continuous delivery of source, build, test, and deploy stages using AWS-native service or third-party services. Each pipeline stage can create its own artifact.
