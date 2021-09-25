@@ -82,8 +82,42 @@ CodeStar is a UI that manages and combines all of the above features with AWS's 
 
 ## Jenkins
 
-Jenkins is an open source CI/CD tool that can be used instead of CodeBuild, CodePipeline, and CodeDeploy or be integrated alongside any combination of these. Jenkins is deployed in a master/worker configuration via EC2 in AWS. All projects must have a Jenkinsfile like CodeBuild has a `buildspec.yml`. The master and workers can be hosted on the same instance or separated between multiple instances for higher availability.
+Jenkins is an open source CI/CD tool that can be used instead of CodeBuild, CodePipeline, and CodeDeploy or be integrated alongside any combination of these. Jenkins is deployed in a master/worker configuration via EC2 in AWS. All projects must have a Jenkinsfile like CodeBuild has a `buildspec.yml`. The master and workers can be hosted on the same instance or separated between multiple instances for higher availability. A Jenkins worker is also known as an agent.
 
 Jenkins plugins for AWS include:
-* 
+* AWS Lambda
+* AWS EC2
+* AWS Device Farm
+* AWS CodeBuild
+* AWS ECS
+* AWS EC2 Container Service
+* AWS SQS Build Trigger
+* Artifact Manager on S3
+
+# Domain 2 - Configuration Management and Infrastructure as Code
+
+## Introduction to CloudFormation
+
+Skipped.
+
+## Intermediate CloudFormation
+
+CloudFormation includes several helper scripts such as:
+
+* `cfn-init` can be used to fetch and parse metadata, install packages, write files to disk, and start/stop services.
+* `cfn-signal` is typically run after `cfn-init` to indicate if CloudFormation should continue or fail. It is based on a `WaitCondition` typically in conjunction with a `CreationPolicy` for a resource.
+
+`WaitCondition` signalling can fail when the AMI does not have the CloudFormation helper scripts installed, the helper scripts were not successfully run, or the instance is not connected to the public Internet.
+
+General note: Rollback on failure should be disabled for CFN troubleshooting.
+
+Nested stacks are stacks within stacks. THese are considered best practice to layer infrastructure and isolate repeated patterns and make them replicable. They consist of parent, child, and root stacks.
+
+ChangeSets are files that can be used to update stacks with explicitly marked changes and additions fo the current stack.
+
+Deletion policies can be used at a resource-level to specify what happens upon resource deletion. Options include retaining resources, resource snapshots, or a default delete. The last is helpful for RDS which has a default delete policy of snapshot.
+
+Termination protections can also be set in place to prevent accidental termination of CFN stacks.
+
+## DevOps-Level CloudFormation
 
