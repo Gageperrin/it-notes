@@ -71,3 +71,19 @@ CodeDeploy can also deploy to Lambda through all-at-once, canary, or linear depl
 ## CodePipeline
 
 CodePipeline offers continuous delivery of source, build, test, and deploy stages using AWS-native service or third-party services. Each pipeline stage can create its own artifact.
+
+CodePipeline can be set up with manual approval steps, integrated with CloudWatch events to receive and send triggers with other processes, and include integrations for a wide variety of pipeline processes including ECR and ECS, S3 static websites, EC2 hosting, Lambda infrastructures, Device Farm application testing, and more.
+
+Stage Actions are written in JSON with a "State Change' action specified. Parallel stages can be set up by specifying the same `runOrder` value. For example, a `runOrder` of 1 will be run first, and multiple actions with `runOrder` value 2 will be run concurrently after the first stage.
+
+## CodeStar
+
+CodeStar is a UI that manages and combines all of the above features with AWS's Cloud9 IDE environment to create a more streamlined experience.
+
+## Jenkins
+
+Jenkins is an open source CI/CD tool that can be used instead of CodeBuild, CodePipeline, and CodeDeploy or be integrated alongside any combination of these. Jenkins is deployed in a master/worker configuration via EC2 in AWS. All projects must have a Jenkinsfile like CodeBuild has a `buildspec.yml`. The master and workers can be hosted on the same instance or separated between multiple instances for higher availability.
+
+Jenkins plugins for AWS include:
+* 
+
