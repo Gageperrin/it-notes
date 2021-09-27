@@ -111,7 +111,7 @@ CloudFormation includes several helper scripts such as:
 
 General note: Rollback on failure should be disabled for CFN troubleshooting.
 
-Nested stacks are stacks within stacks. THese are considered best practice to layer infrastructure and isolate repeated patterns and make them replicable. They consist of parent, child, and root stacks.
+Nested stacks are stacks within stacks. These are considered best practice to layer infrastructure and isolate repeated patterns and make them replicable. They consist of parent, child, and root stacks.
 
 ChangeSets are files that can be used to update stacks with explicitly marked changes and additions fo the current stack.
 
@@ -120,4 +120,42 @@ Deletion policies can be used at a resource-level to specify what happens upon r
 Termination protections can also be set in place to prevent accidental termination of CFN stacks.
 
 ## DevOps-Level CloudFormation
+
+CloudFormation can grab parameters or values from SSM Parameter Store or Secrets Manager. AWS also hosts public SSM parameters like latest Amazon Linux version ID. `DependsOn` can be used to explicitly specify the sequence of provisioning CFN resources in a template.
+
+Lambdas can be deployed entirely in-line through CFN by deploying code from an S3 artifact.
+
+CFN custom resources can be used to cover AWS resources not yet specified by official CFN templates, on-premises resources, emptying S3 buckets before deletion, or fetching an AMI ID.
+
+CloudFormation automatically detects drift from manual changes in comparison to the original stack.
+
+Additional helper scripts:
+* `cfn-hup` is a daemon that detects changes in resource metadata and runs specified actions when a change is detected. This can make configuration updates on running EC2 instances through the API action `UpdateStack`. This is stored in `cfn-hup.conf`.
+* `cfn-get-metadata` to fetch a metadata block from CloudFormation and print to std out. Subtrees of metadata can also be printed by specifying the key.
+
+Stack policies can be used to specify permissions for creating, updating, or deleting stacks and/or particular stack resources via their logical resource ID.
+
+## Elastic Beanstalk
+
+Elastic Beanstalk is the best lift-and-shift option for hosting applications on AWS through EC2 under the hood. EBS automatically creates EC2 instances with autoscaling groups, CloudWatch alarms, and other configuration pieces as specified. It includes a health dashboard for monitoring an application's health.
+
+EB's config is saved as a `cfg.yml` file in the `.elasticbeanstalk` directory and includes av ariety of option settings including batch size, load balancing, service role, etc. Configurations are saved and versioned. Configurations can be imported and exported across environments as well.
+
+`.ebextensions` can update configurations and persist changes. Configuration files are run in alphabetical order. `.ebextensions` can also include CloudFormation resources in-line to provision resources out of EB. Their output values can then be passed along as environment properties (variables) to an EB deployment. `.ebextensions` can also include commands that are executed before the application and web server are set up and the application version file is extracted. This is distinct from `container_commands` which are run after the application and web server are set up and the version archive has been extracted but still before the application version is deployed.
+
+Note that it is better to decouple databases from EB deployments because databases would be deleted alongside the environment.
+
+Environments can be cloned, have their CNAME records swapped, have the environment rebuilt, managed schedule updates, or be rolled back to a previous version.
+
+EB deployment strategies include:
+* All-at-once: fastest, lowest cost, but has downtime
+* Rolling: Update a few at a time in a bucket group then move onto the next bucket when complete. Bucket size can be specified.
+* Rolling with additional batch: Like rolling but spins up new instances to move the batch to avoid performance reduction in production environment.
+* Immutable: Spins up new instances in a new auto-scaling group then moves them to the original group when all instances are healthy. Fastest rollback but highest cost.
+
+## Lambda
+
+(Lambda basics are skipped here.)
+
+
 
