@@ -157,5 +157,21 @@ EB deployment strategies include:
 
 (Lambda basics are skipped here.)
 
+Lambda can be triggered by a variety of sources including CloudWatch Events and DynamoDB.
+
+Lambda versioning, aliases, and canary deployments can be used to create stable and secure development and testing ecosystems.
+
+Amazon's Serverless Application Model is a form of CloudFormation templates that can be used to create serverless applications by deploying Lambdas in conjunction with API Gateway. SAM comes with built-in support for CodeDeploy.
+
+Step Functions can be used to coordinate long, multi-step workflows whose duration would exceed the fifteen minute limit of an individual Lambda.
+
+## API Gateway
+
+API Gateway can create REST, HTTP, or Websocket APIs from scratch, cloning an existing API, or importing from Swagger. API Gateway can provide public and/or private endpoints (deployed in a VPC) as well as require authorizers through tokens, Cognito, or other means. API is most often integrated with Lambda but can be connected to other AWS services or a HTTP endpoint as well.
+
+API Gateway can interact directly with Lambda aliases for testing Lambdas and do canary weighting, but it is also possible to point explicitly to a Lambda version. API Gateway can also transform request and response bodies.
+
+API Gateway changes need to be deployed before the changes are live. Deployments are made to individual stages, and each stage can have its own configuration parameters, variables, metrics, and logs. This makes it easy to roll back to previous stages.
+
 
 
