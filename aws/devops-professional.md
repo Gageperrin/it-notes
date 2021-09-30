@@ -173,5 +173,13 @@ API Gateway can interact directly with Lambda aliases for testing Lambdas and do
 
 API Gateway changes need to be deployed before the changes are live. Deployments are made to individual stages, and each stage can have its own configuration parameters, variables, metrics, and logs. This makes it easy to roll back to previous stages.
 
+API Gateway has a limit of 10,000 requests per second per account, but throttling usage plans can be set up for individual stages of various APIs. Lambda can also throttle requests through its concurrency limits.
 
+## ECS
+
+Elastic Container Service is Amazon's containerization solution through deploying containers either onto EC2 or through a serverless Fargate solution.
+
+ECS runs task definitions which include the Docker image to use with each container, the allocated resources, the launch type to use, the DOcker networking role, the command the container should run, as well as any data volumes that should be used with the containers in the task. A task definition is run via a service which can be auto-restarted as needed. A load balancer can distribute traffic between services.
+
+Images can be stored publicly or privately in ECR.
 
