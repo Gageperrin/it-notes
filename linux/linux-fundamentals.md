@@ -270,7 +270,14 @@ Permissions are assigned to `ugo`: user owner, group owner, or others. `chown` a
 
 Permission mode consists of read, write, and execute. For files this is `open`, `modify`, and `run`. For directories this is `list`, `create/delete`, and `cd`. Read is `4`, write is `2`, and execute `1`.
 
-This is configured in ugo format. For example, 471. 4 for user owner, 7 for group owner, and 7 for others
+This is configured in ugo format. For example, `chmod 471 [file]` sets 4 for user owner, 7 for group owner, and 1 for others.
+
+Special Permissions:
+Suid (4): Runs a file as owner
+Sgid (2): Runs file as group owner or inherits directory group owner
+Sticky Bit (1): Can only delete a directory if owner
+
+This is prepended to chmod permissions, changing it to a four digit sequence.
 
 ### Lesson 9: Storage Management Essentials
 
