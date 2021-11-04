@@ -232,7 +232,45 @@ Commands:
 
 ### Lesson 7: User and Group Management
 
+
+(7.5 Managing Users and Groups)
+
+`/etc/shadow` is the main file for user management.
+
+Commands:
+* `w` shows active users and current activity.
+* `who` is an abbreviated version of `w`
+* `getent [passwd] [user]` gets information about the user from `passwd`
+* `userdel` and `groupdel` can delete users or groups 
+
+
+*  `usermod` to modify user properties
+*  `-L` to lock an account
+*  `-G` sets a new list of supplementary groups, overriding the current one
+* `-aG` will change a list of supplementary groups without overriding the current one
+
+Defaults for new users:
+* `useradd -D` to add a user, specifying default settings
+* `/etc/login.defs` is the default configuration file
+* `/etc/skell` contents is copied to user home directory upon user creation
+
+Linux does not offer an easy solution to apply new defaults to pre-existing users.
+
+`passwd` has several useful features for a system administrator.
+* `-l` locks the account which is safest for removing a user without deleting files
+* `echo password | passwd --stdin [user]` securely passes in a password
+* `chage` sets time restrictions for password use
+* `vipw` and `vigr` can be used to securely edit user or group settings.
+* `loginctl session-status [session #]` show activity for the specified session.
+
+
 ### Lesson 8: Permissions Management
+
+Permissions are assigned to `ugo`: user owner, group owner, or others. `chown` and `chgrp` change the ownership of a file.
+
+Permission mode consists of read, write, and execute. For files this is `open`, `modify`, and `run`. For directories this is `list`, `create/delete`, and `cd`. Read is `4`, write is `2`, and execute `1`.
+
+This is configured in ugo format. For example, 471. 4 for user owner, 7 for group owner, and 7 for others
 
 ### Lesson 9: Storage Management Essentials
 
