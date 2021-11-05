@@ -279,7 +279,25 @@ Sticky Bit (1): Can only delete a directory if owner
 
 This is prepended to chmod permissions, changing it to a four digit sequence.
 
+The `umask` is a shell setting that defines a mask that subtracts from default permissions. Default permissions for directories are 777 and for files are 666. a `umask 022` will set a file to 644. A `umask 027` will set a directory to 750.
+
+
+
 ### Lesson 9: Storage Management Essentials
+
+Storage must be presented to Linux through some medium whether a disk in the machine or a Storage Area Network (SAN) through Iscsi or Fibre. Storage is often located in `/dev/sda`. `sda` stands for the scicsi disk.
+
+A disk can partitioned into several partitions to provide greater isolation and security. LVM is the logical volume manager is a partition in a partition.
+
+There are two partioning schemes: MBR and GPT. MBR is legacy and faces severe limitations. CentOS uses MBR and Ubuntu uses GPT.
+
+`lsblk` lists block devices. `fdisk` is the command for configuring a partition table.
+
+`gdisk` is used for GPT partitions on Ubuntu. `fdisk` and `gdisk` essentially have the same options.
+
+`mkfs` creates a filesystem. `vfat` is the best protocol for Windows compatibility. `.xfs` and `.btrfs` are alternative options. NTFS is not supported in Linux.
+
+`mount` mounts a device to a target directory.
 
 ## Module 3: Operating Running Systems
 
