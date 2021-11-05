@@ -297,7 +297,7 @@ There are two partioning schemes: MBR and GPT. MBR is legacy and faces severe li
 
 `mkfs` creates a filesystem. `vfat` is the best protocol for Windows compatibility. `.xfs` and `.btrfs` are alternative options. NTFS is not supported in Linux.
 
-`mount` mounts a device to a target directory.
+`mount` mounts a device to a target directory. `findmnt` finds mounted devices, and `umount` unmounts a device. `lsof` locates active files on a mounted device.
 
 ## Module 3: Operating Running Systems
 
