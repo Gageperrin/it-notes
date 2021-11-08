@@ -303,6 +303,37 @@ There are two partioning schemes: MBR and GPT. MBR is legacy and faces severe li
 
 ### Lesson 10: Managing Networking
 
+IPv4 basics (skipped)
+
+#### IPv6 basics ####
+* Addresses are 128 bits and written in hexidecimal
+* Leading zeroes can be omitted, as well as long strings of zeros
+* When referring to address and port, the address should be between square brackets
+* Default subnet mask is /64
+* Node bit of the address may contain the device MAC address
+
+Reserved addresses:
+* `::1/128` is localhost
+* `::` is unspecified address
+* `::/0` is the default route
+* `2000::/3` is the global unicast address
+* `fd00::/8` is a unique local address
+* `fe80::/64` link-local address
+* `ff00::/8` multicast
+
+`fe80::` address is used by default. IPv6 uses DHCPv6, multicast is sent out to `[ff02::1:2]:547 UDP` This is the all-DHCP multicast group. The DHCP server sends a packet back to client 546/UDP. It also uses Statelesss Address Auto Configuration (SLAAC). Router solicitation is sent to `ff02::2`, the all-routers multicast group. The router sends back an IP address, which allows the host to learn the network prefix. Install the `radvd` package to use this.
+
+
+Run `ip a` to get current network configuration. `ip route show` will show the routing configuration. DNS configuration is included in `/etc/resolv.conf`. `ip addr` will show the current IP addresses. `dh` can be used to access the DHCP client. IP addresses can be manually added with `ip addr add`. Do not use `ifconfig` as it is legacy and does not include useful information.
+
+Network devices initially consisted of Ethernet (`eth0`, `eth1`, etc.). Biosdevnames uses device names to reveal information about physical location and `systemd-udevd` generates the network device names. `em123` is the Ethernet Motherboard Portnumber, `p<port>p<slot>` (PCI, PCI port), `eno123` is EtherNet Onboard, and if driver does not reveal sufficient information then `etho0` is used.
+
+`hostname` command returns the FQDN. `hostname -I` shows all IPs currently assigned to this host. The hostname is stored in `/etc/hostname` for RH distributions. `hostnamectl` allows hostname configuration.
+
+`etc/hosts` allows DNS resolution if there is no Internet access. A server can be made inaccessible from the Internet by creating a fake host.
+
+`ping` can be used to ping a server while `ping -f` can be used to test flood a server. `netstat -tulpen` gives a list of everything listening on the machine. `ss -tuna` is the more modern version of this command. `nmap` is a rich network scanner but can be abused. `dig` includes other helpful information as well for DNS troubleshooting.
+
 ### Lesson 11: Managing Time
 
 ### Lesson 12: Working with Systemd
