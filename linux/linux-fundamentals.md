@@ -336,7 +336,17 @@ Network devices initially consisted of Ethernet (`eth0`, `eth1`, etc.). Biosdevn
 
 ### Lesson 11: Managing Time
 
+System time is set from hardware time at boot, but it is often inaccurate so NTP (Network Time Protocol) synchronizes time with the Internet.
+
+Commands like `date` and `timedatectl` manage system time. `hwtime` manages hardware time and can synchronize hardware and system time. `hwclock` can be used as well but has been replaced by `timedatectl`.
+
+Every server involved with NTP are assigned a stratum. Servers at stratum 1 are directly connected to atomic time. Servers synchronizing with stratum 1 are ranked stratum 2, and so on. Stratum 10 is a local NTP server and is therefore not taking part in Internet synchronization. Stratum 16 is an error and should not be used.
+
+An "insane clock" is too far away from current time and NTP will not use it for synchronization. These don't apply often anymore because iburst protocol is used to ignore an insane clock.
+
 ### Lesson 12: Working with Systemd
+
+
 
 ### Lesson 13: Process Management
 
