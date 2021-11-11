@@ -346,7 +346,31 @@ An "insane clock" is too far away from current time and NTP will not use it for 
 
 ### Lesson 12: Working with Systemd
 
+`Systemd` manages everything. It is the first thing started after booting the Linux kernel. It starts processes and can do that in parallel. It manages mounts, timers, paths, and much more. It is event driven. Items managed by `systemd` are called units. Default units are in `/usr/lib/systemd/system`.
 
+Commands:
+* `systemctl -t help` shows unit types
+* `systemctl list-unit-files` lists all isntalled units
+* `systemctl list-units` lists active units
+* `systemctl enable name.service` enables but does not start a service
+* `systemctl start name.service` starts a service
+* `systemctl disable name.service` disables but does not stop a service
+* `systemctl stop name.service`  stops a service
+* `systemctl status name.service` give information about a service
+* `systemctl cat name.service` reads the current unit configuration
+* `systemctl show` shows all available configuration parameters
+* `systemctl edit name.service` allows you to edit service configuration
+* `systemctl daemon-reload` after modifying service configuration to reload the config
+* `systemctl restart name.service` to restart the service with applied changes.
+
+A target is a group of services. Some targets are isolatable to use for a state that the system is in `emergency.target`, `rescue.target`, `multi-user.target`, and `graphical.target`. 
+
+Commands for managing targets:
+* `systemctl list-depedendencies name.target` can be used to show what is included in a target.
+* `systemctl isolate name.target`
+* `systemctl start name.target`
+* `systemctl get-default`
+* `systemctl set-default name.target`
 
 ### Lesson 13: Process Management
 
