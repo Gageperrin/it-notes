@@ -374,7 +374,50 @@ Commands for managing targets:
 
 ### Lesson 13: Process Management
 
+In Linux, the init process (systemd) starts first and is process 1.
+
+http and sshd are child processes of systemd. Bash is a child process of sshd. These dependencies are important because parent processes cannot be killed without endangering child processes.
+
+A thread is a process within a process allowing multiple operations at the same time. This is called a multi-threaded process.
+
+A job is a process as well that be managed by individual users. Jobs are launched from the shell. `Ctrl + Z` can be used to stop a job temporarily. `bg` can continue a job in the background. Run `jobs` to get a list of jobs. To bring a job from the background to the foreground, run `fg [job #]`.
+
+`top` is the most important command for process management. The load average gives information over the last one, five, and fifteen minutes respectively. `top -u [user]` shows top for a specific user. The `>` and `<` keys can be used to sort top by different column categories. Press `f` to select other columns. `W` will write the current top display to file to save monitoring display settings for later.
+
+`ps aux` shows processes as well including if they are run by a kernel process. Another way to show processes is `ps -ef` which also shows the parent process ID. `ps fax` is a graphical display for showing the relation between processes.
+
+`nice` can be used to set a priority for a process, `renice` can be used for an existing process. A higher niceness makes the process friendlier. To finish processes really fast, give them a high negative value. Root privileges are required though for negative nice values. `k` can be used to kill a process from top.
+
+Kill consists of a sequence of signals. `SIGTERM` is a terminal signal, `SIGKILL` is an aggressive kill signal. Use `kill -[signal number] [pid]` to send a signal to a process. `kill -9` is very aggressive and should only be used in emergencies. `kill` without a flag is better for graceful termination. `killall` can be used to kill all processes with the matching name.
+
 ### Lesson 14: Managing Software
+
+Software can be delivered in a compressed tar ball that may or may not contain a setup script. Source files need to be compiled to run on a specific platform. Different compiling utilities historically caused problems for registering software. Package manager was introduced to solve this.
+
+A package is a tar  ball with a script to copy files to the right location and a database to keep track of what is installed. Packages focus on the software it wants to install and uses dependencies for related software packages. Dependency hell is when there is a seemingly endless series of dependencies that need to be installed.
+
+Libraries provide common functionality to be used by multiple packages. Some libraries are very specific, and others are more generic. `libc` is the C-library that provides all the common functions in the Linux operating system. `ldd` identifies all the libraries used for an entity.
+
+Software managers were developed to fix dependency problems by working with repositories. The software manager analyzes dependencis and tries to fetch the dependencies from their respective repositories.
+
+`yum` uses repositories that are in `/etc/yum.repos.d`. Commands include:
+* `yum install`
+* `yum search`
+* `yum remove`
+* `yum groups list`
+* `yum groups install`
+* `yum provides`
+* `yum history` to undo changes.
+
+GPG keys keep track of package versioning.
+
+`apt` is the Ubuntu equivalent to `yum`. 
+
+`rpm` is Red Hat's equivalent but should not be used any more for package installation. It is useful for working with the RPM database:
+* `rpm -qf /my/file` to indicate which package a file is from
+* `rpm -ql mypackage` queries the database to list package contents
+* `rpm -qpc mypackage.rpm` lists configuration files in a downloaded package file.
+* `rpm -qp --scripts mypackage.rpm` shows scripts that may be present in a package.
 
 ### Lesson 15: Scheduling Tasks
 
