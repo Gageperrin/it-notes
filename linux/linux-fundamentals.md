@@ -421,4 +421,19 @@ GPG keys keep track of package versioning.
 
 ### Lesson 15: Scheduling Tasks
 
+`cron` is the classic solution to schedule re-occurring tasks using the `crond` daemon. Use `crontab -e` to edit tasks. 
+
+`at` is used for tasks that need to run once only. Use the `atd` daemon. use `at` to schedule the task.
+
+`systemd` timers are the newer alternative to cron jobs.
+
 ### Lesson 16: Reading Log Files
+
+`Syslog` is the legacy logging service. On modern systems, `rsyslogd` is used.
+
+`systemd-journald` is a systemd-integrated log service.
+
+`journalctl` shows the complete journal. `journalctl -u <unit>` shows information about a specific unit. `journalctl --dmesg` showws kernel messages. Combined filters can be used.
+
+The `rsyslogd` service works with facility priority, and destination. THe facility is what rsyslogd should be logging for. The priority indicates the severity of a log event. The destination defines where the message should be written to. Log messages are sent to `/var/log/`.
+
