@@ -83,6 +83,78 @@ Parallel clusters or wide-area network (WAN) clusters can also be implemented bu
 
 Storage-area networks (SANs) can also be used to distribute storage across various geographic zones.
 
+#### 1.4 Operating-System Structure ####
+
+Multiprogramming is a core component of operating systems. Several jobs are kept in memory simultaneously within a job pool. The pool consists of all processes residing on disk awaiting an allocation of the main memory. The CPU switches between jobs. Time sharing systems are where the CPU executes multiple jobs by switching between them. This depends on an interactive computer system for the user to instruct a program directly. A program loaded into memory and which is executing is a process. When there are multiple jobs but not enough room in memory for all of them, job scheduling is required. 
+
+CPU scheduling determines the sequence of several jobs to be run. In a time sharing system, the operating system ensures reasonable response times through swapping. More commonly, virtual memory is used to run a process that is not entirely in memory. This abstracts logical memory from physical memory.
+
+#### 1.5 Operating-System Operations ####
+
+Modern operating systems are interrupt driven. Events are signalled by an interrupt or a trap. A trap (i.e. exception) is a software generated interrupt caused by an error.
+
+##### 1.5.1 Dual-Mode and Multimode Operations #####
+
+Operating system code and user-defined code are separated into kernel and user mode respectively. A mode bit is added to the computer hardware to indicate the current mode. `0` is kernel and `1` is user. At system boot time, the hardware starts in kernel mode. This allows for privileged instructions to separate out user permissions. CPUs with virtualization can have a virtual machine manager (VMM) to be in control of the system. The VMM has more privileges than a user but less than the kernel.
+
+##### 1.5.2 Timer #####
+
+A variable timer is implemented by a fixed-rate clock and a timer. This is used to implement proper controls over user programs and interrupt after a certain period of time if it gets stuck in an infinite loop.
+
+#### 1.6 Process Management ####
+
+For process management, the operating system is responsible for: 
+* Scheduling processes and threads on the CPUs
+* Creating and deleting both user and system processes
+* Suspending and resuming processes
+* Providing mechanisms for process synchronization
+* Providing mechanisms for process communication
+
+#### 1.7 Memory Management ####
+
+For memory management, the operating system is responsible for: 
+* Keeping track of which parts of memory are currently being used and who is using them
+* Deciding which processses and data to move into and out of memory
+* Allocating and deallocating memory space as needed
+
+#### 1.8 Storage Management ####
+
+The operating system abstracts from the physical properties of storage devices to define a logical storage unit: the file. 
+
+##### 1.8.1 File-System Management #####
+
+File management is one of the most user-visible components of an operating system. A file is a collection of related information defined by its creator. They represent programs and data. A file is an umbrella concept for many kinds of entities.
+
+For file management, the operating system is responsible for: 
+* Creating and deleting files
+* Creating and deleting directories to organize files
+* Supporting primitives for manipulating files and directories
+* Mapping files onto secondary storage
+* Backing up files on stable (nonvolatile) storage media
+
+##### 1.8.2 Mass-Storage Management #####
+
+Most computer systems use disk memory as the principal on-line storage medium. Secondary storage is used frequently and therefore also must be efficient. Storage may also be slower and lower in cost in tertiary storage devices such as magnetic tape drives. Media can vary between WORM (write-once, ready-many) and RW (read-write) formats. Tertiary storage must also be managed.
+
+For disk management, the operating system is responsible for: 
+* Free-space management
+* Storage allocation
+* Disk scheduling
+
+##### 1.8.3 Caching #####
+
+Cache systems are fast short-term storage. A system will first check if a particular piece of information is stored in-cache before checking the memory. If it is not in-cache, then a copy is stored in-cache temporarily. Internal index registers provide a high-speed cache for main memory. Caches are also implemented completely in hardware.
+
+The size of the cache is important to manage for performance. Cache coherency is also important in multiprocessor environments which have multiple local caches. This becomes more evident in distributed environments.
+
+##### 1.8.4 I/O Systems #####
+
+The I/O subsystem hides the peculiarity of I/O devices from both the operating system and the user. An I/O subsystem contains (1) a memory management component (buffering, caching, and spooling), (2) a general device-driver interface, and (3) drivers for specific hardware devices.
+
+
+#### 1.9 Protection and Security ####
+
+
 ### Chapter 2: Operating-System Structures
 
 ## Part Two: Process Management
