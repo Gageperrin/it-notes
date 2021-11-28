@@ -52,6 +52,37 @@ Solid-state disks have several variations. One stores data in a DRAM array and a
 
 ##### 1.2.3 I/O Structure #####
 
+Storage is only one type of I/O device. A general-purpose computer system consists of CPUs and multiple device controllers. A SCSI (small computer-systems interface) controller can have seven or more devices attached. The device controller maintains some local buffer storage. Operating systems have a device driver for each device controller. An I/O operation is started when the device driver loads the appropriate registers within the device controller. The device controller acts according to the specification of the register, transferring data from the device ot the local buffer. The device controller interrupts the device driver, and the device driver returns control to the operating system.
+
+Interrupt-driven I/O can cause issues for bulk data movement. Direct memory access (DMA) is used to solve this. In this case, the device controller transfers an entire block of data directly to or from its buffer storage to memory. Only one interrupt is generated per block rather than one interrupt per byte. Some high-end systems use switch architecture where multiple components talk to other components concurrently.
+
+#### 1.3 Computer-System Architecture ####
+##### 1.3.1 Single-Processor Systems #####
+
+Until recently, most computers had a single processor with one main CPU for general-purpose instructions. Single-processor systems usually include other special-purpose processors as well. The special-purpose processors do not run user processes. Microprocessors are also used to alleviate the CPU such as in a PC keyboard.
+
+##### 1.3.2 Multiprocessor Systems #####
+
+Multiprocessor systems (i.e. parallel systems, multicore systems) are common now. A multiprocessor system has two or more processes in communication, sharing a computer bus, clock, memory, and peripheral devices. The three advantages of a multiprocessor are: (1) increased throughput, (2) economy of scale, and (3) increased reliability. (3) is particularly crucial for graceful degradation and fault tolerance.
+
+There are two types of multiprocessor systems. Asymmetric multiprocessing includes a boss processor delegating tasks to worker processors. More common though is symmetric multiprocessing (SMP) where each processor performs all tasks in an operating system. All processors are peers. 
+
+Multiprocessing can cause a system to change its memory access model from uniform memory access (UMA) to non-uniform memory access (NUMA). UMA is when memory access from any CPU takes an equal amount of time. NUMA by contrast may take an uneqal amount of time.
+
+CPU design now features multiple computing cores on a single chip--multicore chips. These are more efficient with faster communication rates.
+
+Blade servers feature multiple processor boards, I/O boards, and networking boards within the same chassis.
+ 
+##### 1.3.3 Clustered Systems #####
+
+A clustered system gathers multiple CPUs because they have multiple nodes (individual systems) joined together. This is a loosely coupled system where each node may be either single or multiprocessor in nature. Clustering provides high-availability for when one node system may fail, and they are also used for high-performance computing environmnets which depend on parallelization. 
+
+Clustering may be structured asymmetrically or symmetrically. Asymmetric clustering has one machine in hot-standby mode where it monitors an active server but does nothing else. In symmetric clustering, two or more hosts are running applications while monitoring each other. Symmetric is more efficient.
+
+Parallel clusters or wide-area network (WAN) clusters can also be implemented but require a distributed lock manager (DLM) for effective version control and system locking to prevent conflicting operations.
+
+Storage-area networks (SANs) can also be used to distribute storage across various geographic zones.
+
 ### Chapter 2: Operating-System Structures
 
 ## Part Two: Process Management
