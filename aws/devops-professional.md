@@ -177,9 +177,16 @@ API Gateway has a limit of 10,000 requests per second per account, but throttlin
 
 ## ECS
 
-Elastic Container Service is Amazon's containerization solution through deploying containers either onto EC2 or through a serverless Fargate solution.
+Elastic Container Service is Amazon's containerization solution through deploying containers either onto EC2 or through a serverless Fargate solution. Fargate runs off the task definition without further infrastructure management.
 
-ECS runs task definitions which include the Docker image to use with each container, the allocated resources, the launch type to use, the DOcker networking role, the command the container should run, as well as any data volumes that should be used with the containers in the task. A task definition is run via a service which can be auto-restarted as needed. A load balancer can distribute traffic between services.
+ECS runs task definitions which include the Docker image to use with each container, the allocated resources, the launch type to use, the Docker networking role, the command the container should run, as well as any data volumes that should be used with the containers in the task. A task definition is run via a service which can be auto-restarted as needed. A load balancer can distribute traffic between services.
 
 Images can be stored publicly or privately in ECR.
+
+ECS tasks require an IAM execution role to deploy the task and retrieve the image. If running on EC2, a separate role is required for the EC2 instance. If running on Fargate, only the task role is required.
+
+
+## Elastic Beanstalk + ECS
+
+Elastic Beanstalk can be run in single and multi Docker container mode. Multi-Docker helps run multiple contianers per EC2 instance in EB. This creates an ECS cluster, EC2 instances for the ECS cluster, a load balancer, and executed task definitions. It requires a config file `Dockerrun.aws.json` at the root of source code. The Docker image must be pre-built and stored in ECR. In other words, the containers are deployed through EB on top of an ECS cluster.
 
