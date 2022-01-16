@@ -185,8 +185,98 @@ Images can be stored publicly or privately in ECR.
 
 ECS tasks require an IAM execution role to deploy the task and retrieve the image. If running on EC2, a separate role is required for the EC2 instance. If running on Fargate, only the task role is required.
 
+Autoscaling can be based on target metrics such as average CPU utilization with a specified maximum and minimum instances as well as scaling cooldown periods. Both EC2 and Fargate offer autoscaling at the service level.
 
-## Elastic Beanstalk + ECS
+CloudWatch Logs can receive individual container logs by default using `awslogs` as the log driver. EC2 instances can also send OS logs to CloudWatch.
+
+Log groups include:
+* `/var/log/dmesg`
+* `/var/log/docker`
+* `/var/log/ecs/ecs-agent.log`
+* `/var/log/ecs/ecs-init.log`
+* `/var/log/messages`
+
+
+### Elastic Beanstalk + ECS
 
 Elastic Beanstalk can be run in single and multi Docker container mode. Multi-Docker helps run multiple contianers per EC2 instance in EB. This creates an ECS cluster, EC2 instances for the ECS cluster, a load balancer, and executed task definitions. It requires a config file `Dockerrun.aws.json` at the root of source code. The Docker image must be pre-built and stored in ECR. In other words, the containers are deployed through EB on top of an ECS cluster.
 
+
+### ECS + CI/CD Pipeline
+
+CodeBuild can build Docker images from Docker files found in a specified repository and store them in ECR. ECS can then pull the latest or otherwise specified image from ECR and deploy it automatically. CodePipeline provides a variety of configuration options to automate this process.
+
+
+## OpsWorks
+
+OpsWorks is a configuration management service that consists of OpsWorks Stacks, OpsWorks for Chef Automate, and OpsWorks for Puppet Enterprise.
+
+An OpsWorks Stack consists primarily of three layers:
+1. Elastic Load Balancing Layer
+2. Application Server Layer
+3. Amazon RDS Layer
+
+The first and third layers are AWS-manged while the customer supplies the application for the second layer.
+
+Stacks can be deployed into particular regions, VPCs, subnets, with particular SSH keys, and alongisde custom Chef cookbooks in a specified repository (with a repository SSH key if needed). Advanced options include default root device type (EBS vs. Instance store), IAM role, host name theme, etc.
+
+The layers section of the OpsWorks console UI shows the application blueprint for a set of EC2 instances to be deployed. The layer shows Chef recipe status, EBS volumes, networking, security, CloudWatch Logs, etc. The instance size can be specified alongside scaling conditions such as time or load. Manual deploys can also be triggered by the user via CLI or the OpsWorks UI. This includes specifying custom run commands for cookbooks.
+
+### Lifecycle
+
+Each layer has a set of five lifecycle events:
+1. Setup
+2. Configure
+3. Deploy
+4. Undeploy
+5. Shutdown
+
+Setup occurs after an instance has booted. Configure occurs when the instance enters or leaves the online state, an Elastic IP is associated or disassociated with the instance, or an ELB is attached to the layer. Deploy occurs alongside an application deployment on an instance. Undeploy occurs when an app is deleted or removed from a set of instances. Shutdown shuts down associated EC2 instances but before the EC2 instance is ultimately terminated.
+
+OpsWorks by default has auto-healing enabled. An instance is considered unhealthy by default if the OpsWorks Stacks agent does not report healthy in five minutes. CloudWatch Events rules can be integrated with OpsWorks to specify healing and termination for specific errors or status codes.
+
+
+# Domain 3: Monitoring and Logging
+
+## CloudTrail
+
+CloudTrail by default records all actions in an account. Records can be sent to an S3 bucket and can be based on read, write, or both kinds of management events. CloudTrail logs can be configured with a file prefix. Logs can also be encrypted using SSE-KMS. Log files can be validated and log file notifications can be integrated with SNS.
+
+CloudTrail Log File Integrity is command `aws cloudtrail validate-logs` via the CLI to check if any logs have been modified using a start time and a trail ARN as filter parameters.
+
+CloudTrail logs can be retrieved from multiple AWS accounts and multiple region into one S3 bucket in a single account by changing the target bucket policy to allow write access.
+
+
+## Kinesis
+
+Kinesis is an AWS-managed alternative to Apache Kafka. It is designed for application logs, metrics, IoT, clickstreams, real-time big data, and is great for streaming processing frameworks. Data is automatically replicated across three availability zones.
+
+Kinesis Streams offers low latency streaming ingest at scale, Kinesis Analytics performs real-time SQL analysis on streams, and Kinesis Firehose loads streams into S3, Redshift, and ElasticSearch.
+
+Kinesis streams are divided into shards and partitions that lie between producers and consumers. Data retention is one day by default but can be set for up to seven days. It can re-process and re-play data. Multiple applications can consume the same stream as well. It includes real-time processing with scalable throughput. Data inserted into Kinesis is immutable. Billing is based on each shard provisioned, batching is available (in contrast to per message calls), and the number of shards can evolve over time through resharding or merging. Records are ordered per shard. Latency is real-time (~ 200 ms)
+
+Kinesis Data Streams are limited on the producer side to 1 MB/s or 1000 messages/s to write per shard. If this is exceeded, it throws a `"ProvisionedThroughputException"`. Consumer classic is limited to 2 MB/s to read per shard across all consumers, 5 API calls/s per shard, and throttling if three different applications are consuming. Again, data retention by default is set to 24 hours.
+
+Kinesis producers include Kinesis SDK, Kinesis Producer Library, Kinesis Agent, CloudWatch Logs, and third party libraries. Kinesis consumers include Kinesis SDK, Kinesis Client Library, Kinesis Connector Library, Kinesis Firehose, Lambda, and third party libraries. Kinesis KCL uses DynamoDB to checkpoint offsets. KCL uses DynamoDB to track other workers and share the work amongst shards. It is designed for reading in a distributed manner.
+
+Kinesis Data Firehose is fully managed and near real time (~60s latency). It loads data into Redshift, S3, ElasticSearch, and Splunk. It features automatic scaling, data transformation through Lambda, compression (if the target if S3), and billing is based on the amount of data going through Firehose.
+
+Streams is for custom code, real time latency, un-managed scaling, real-time ElasticSearch insertion, and data storage. Firehose is fully managed and offers serverless data transformations through Lambda, near real-time latency (~60 seconds), and no data storage.
+
+Data Analytics performs real-time analysis on Kinesis Streams using SQL. It is fully-managed and continuous in real-time. Billing is based on actual consumption rate.
+
+
+## CloudWatch
+
+CloudWatch Metrics oversees various metrics for other services such as EC2 by default every 5 minutes with basic monitoring. Detailed monitoring offers metrics every 60 seconds. Metrics are deleted over time, increasing timestamp gaps in older metrics. Metrics are available for up to 15 months (at which point only one data point per hour is maintained.)
+
+Important CloudWatch EC2 metrics include:
+* CPU Utilization (aggregated)
+* Disk Reads/Writes
+* Network Packets
+
+Custom metrics can also be created with a standard or high resolution of either one minute or one second granularity respectively. Metrics can be exported using various filters including metric name, dimensions, start and end time, etc.
+
+CloudWatch Alarms are alerts based on certain conditions that can trigger SNS notifications or cause auto scaling or EC2 actions. It cannot directly cause any other actions. SNS topics must be used to trigger any other automated responses. Billing alarms can also be set in the `us-east-1` region for AWS accounts.
+
+The Unified CloudWatch Agent can be installed on EC2 instances to provide more detailed monitoring and logs from within an EC2 instance such as a breakdown of CPU utilization. AWS SSM can manage parameters to insert into CloudWatch Agent installations.
