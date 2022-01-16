@@ -280,3 +280,22 @@ Custom metrics can also be created with a standard or high resolution of either 
 CloudWatch Alarms are alerts based on certain conditions that can trigger SNS notifications or cause auto scaling or EC2 actions. It cannot directly cause any other actions. SNS topics must be used to trigger any other automated responses. Billing alarms can also be set in the `us-east-1` region for AWS accounts.
 
 The Unified CloudWatch Agent can be installed on EC2 instances to provide more detailed monitoring and logs from within an EC2 instance such as a breakdown of CPU utilization. AWS SSM can manage parameters to insert into CloudWatch Agent installations.
+
+EventBridge is an expanded version of CloudWatch Events which supports rules and other triggers that can be integrated with various AWS services and third-party monitoring services such as Datadog.
+
+S3 Events and unrelated to CloudWatch Events. S3 Events are concerned with specified changes in S3 buckets and can be sent to an S3 bucket, an SNS Topic, or a Lambda function. CloudWatch Events can be used to catch events not specified by S3 Events, such as API call events with CloudTrail.
+
+CloudWatch dashbaords can visualize and aggregate logs, metrics, and alarms via widgets.
+
+
+## X-Ray
+
+AWS X-Ray collects data about requests distributed across servers and services. Distributed calls are tracked in terms of traces which tracks services invoked, operations invoked, metadata, and length of time for call. CloudWatch and SNS can be integrated with X-Ray to trigger Lambdas based on X-Ray high latencies.
+
+## Amazon ElasticSearch
+
+AWS ElasticSearch is an AWS-mnaaged version of ElasticSearch. It is not serverless and needs to be run on a server. It is used for log analytics, real-time application monitoring, security analytics, full text search, clickstream analytics, and indexing.
+
+The ELK stack (ElasticSearch + Kibana + Logstash ) includes ElasticSearch for providing search and indexing capability. Kibana provides real-time dashboard on top of ES data, an alternative to CloudWatch. Logstash is a log ingestion mechanism (an alternative to CloudWatch Logs and Agent). 
+
+AWS ElasticSearch patterns uses CloudWatch Logs subscription filters to trigger a Lambda which passes log data to ES in real-time.
