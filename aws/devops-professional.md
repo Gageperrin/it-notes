@@ -280,3 +280,49 @@ Custom metrics can also be created with a standard or high resolution of either 
 CloudWatch Alarms are alerts based on certain conditions that can trigger SNS notifications or cause auto scaling or EC2 actions. It cannot directly cause any other actions. SNS topics must be used to trigger any other automated responses. Billing alarms can also be set in the `us-east-1` region for AWS accounts.
 
 The Unified CloudWatch Agent can be installed on EC2 instances to provide more detailed monitoring and logs from within an EC2 instance such as a breakdown of CPU utilization. AWS SSM can manage parameters to insert into CloudWatch Agent installations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Domain 4: Policies and Standards Automation
+
+## AWS Systems Manager
+
+AWS Systems Manager helps manage EC2 and on-premise servers at scale with operationals insights, monitoring, patching automation, as well as CloudWatch and AWS Config integrations. It includes resource groupings, insight dashboards, parameter stores, and actions.
+
+SSM Actions include:
+* Automation
+* Run Command
+* Session Manager
+* Inventory
+* Patch Manager
+* Maintenance Windows
+* State Manager
+
+SSM agent must be installed on servers whether EC2 isntance or on-premise VMs. It is installed by default on Amazon Linux AMI and some Ubuntu AMIs. EC2 instances require an IAM role to use SSM actions. On-premise instances can be tagged and grouped.
+
+Run Command consists of a Command Documents. These are JSON documents that specify the command to be run at run-time. `AWS-UpdateSSMAgent` updates SSM Agents on instances to the latest version. `AWS-RunShellScript` runs a shell script on all instances.
+
+Patch Manager consists of Patch Baselines with specified operating system and if it is the default baseline for AWS. Patch baselines containe a name, approval rules, exceptions, and patch sources. Patch Manager will then report to SSM Compliance if individual instances are compliant with the most recent patching standards.
+
+SSM Automation simplifies administrative and other custom workflows and send notifications based on the results. This can be used to create golden AMIs, i.e. AMIs standardized through configuration, consistent security patching, logging, etc.
