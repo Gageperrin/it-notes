@@ -299,3 +299,149 @@ AWS ElasticSearch is an AWS-mnaaged version of ElasticSearch. It is not serverle
 The ELK stack (ElasticSearch + Kibana + Logstash ) includes ElasticSearch for providing search and indexing capability. Kibana provides real-time dashboard on top of ES data, an alternative to CloudWatch. Logstash is a log ingestion mechanism (an alternative to CloudWatch Logs and Agent). 
 
 AWS ElasticSearch patterns uses CloudWatch Logs subscription filters to trigger a Lambda which passes log data to ES in real-time.
+
+
+# Domain 4: Policies and Standards Automation
+
+## AWS Systems Manager
+
+AWS Systems Manager helps manage EC2 and on-premise servers at scale with operationals insights, monitoring, patching automation, as well as CloudWatch and AWS Config integrations. It includes resource groupings, insight dashboards, parameter stores, and actions.
+
+SSM Actions include:
+* Automation
+* Run Command
+* Session Manager
+* Inventory
+* Patch Manager
+* Maintenance Windows
+* State Manager
+
+SSM agent must be installed on servers whether EC2 isntance or on-premise VMs. It is installed by default on Amazon Linux AMI and some Ubuntu AMIs. EC2 instances require an IAM role to use SSM actions. On-premise instances can be tagged and grouped.
+
+Run Command consists of a Command Documents. These are JSON documents that specify the command to be run at run-time. `AWS-UpdateSSMAgent` updates SSM Agents on instances to the latest version. `AWS-RunShellScript` runs a shell script on all instances.
+
+Patch Manager consists of Patch Baselines with specified operating system and if it is the default baseline for AWS. Patch baselines containe a name, approval rules, exceptions, and patch sources. Patch Manager will then report to SSM Compliance if individual instances are compliant with the most recent patching standards.
+
+SSM Automation simplifies administrative and other custom workflows and send notifications based on the results. This can be used to create golden AMIs, i.e. AMIs standardized through configuration, consistent security patching, logging, etc.
+
+
+## AWS Config
+
+AWS Config provides rules and compliance monitoring for various services. One Config rule costs $1.00. Configuration history is stored in a S3 bucket. Configuration changes can be streamed to SNS to trigger notifications and alarms. SNS can then automate response patterns via CloudWatch Events and/or Lambda. Config rules can be triggered based on configuration changes or periodic for when they review the specified resources.
+
+Config can be integrated with AWS SSM to create automatic remediation actions based on compliance violations.
+
+Config aggregators can be used to centralize AWS Config data across AWS accounts and regions.
+
+
+## AWS Service Catalog
+
+Service Catalog can be used by IT administrators to create a menu of organization-compliant virtual machines, databases, storage options, etc. for AWS users to create from using CloudFormation templates.
+
+
+## AWS Inspector
+
+AWS Inspector checks for security exposures or vulnerabilities in EC2 instances. Network assessments do not require the Inspector agent but Host assessments do. Assessments can be set to certain periodic intervals such as every 7 days. Inspector can trigger SNS topics that can automate remediation. Inspector cannot launch EC2s or Golden AMIs on its own.
+
+## AWS Service Health Dashboard
+
+This dashboard provides a global view of all AWS services across all regions to check for any outages or AWS-internal errors. The Personal Health Dashboard by contrast provides information on services you use and can be integrated with CloudWatch Alarms.
+
+## AWS Trusted Advisor
+
+Trusted Advisor provides a set of best practices to ensure your AWS account follows best practices according to the Well-Architected Framework. AWS hsots an official Trusted Advisor GitHub repo which provides a number of tools to follow Trusted Advisor recommendations. This can be integrated with SSM to automate Trusted Advisor recommendations. By default, Trusted Advisor does not refresh on its own but must be manually refreshed every five minutes. However, the AWS Support API can be used to refresh all recommendations through the `aws support refresh-trusted-advisor-check` 
+
+## GuardDuty
+
+GuardDuty is an intelligent threat discovery process to protect your AWS account. It uses machine learning, anomaly detection, and third party data. It is one click to enable for a 30 day free trial. Input data includes CloudTrail, VPC Flow Logs, and DNS Logs. It notifies user of findings and can be integrated with CloudWatch Event rules to trigger automatic remediation.
+## Macie
+
+Amazon Macie analyzes S3 data for detecting and classifying data. It will mark out any potentially sensitive data for the user.
+
+
+
+# Domain 5: Incident and Event Response + Domain 6: HA, FT, and DR
+
+## Auto Scaling Groups
+
+EC2 Auto Scaling Groups can be set from Launch Configurations or from Launch Templates. Launch Templates are newer and the preferred method of ASG deployment. Launch Configurations provide a specified IAM role monitoring, user data, storage, VPC, subnet, and security group with a particular AMI. Launch Templates are more advanced. Templates include versioning, template inheritance, AMI ID, instance type, and many other options. 
+
+ASGs can have scheduled events to scale instances based on periodic or cron triggers. Scaling can also be based on policies that use metrics such as CPU Utilization to scale the ASG. This includes a warm-up period which means the number of seconds required for the condition to be met before the scaling action actually occurs. Scaling policies can also be prevented from terminating instances. ASGs can also be integrated with CloudWatch Alarms.
+
+ASGs can be integrated with ALB with full scale-in and scale-out support. Route 53 can target a DNS record toward the ALB which then in turn targets the ASGs. ASG processes can be suspended for a variety of reasons such as for errors that require troubleshooting. `HealthCheck` is used to determine the health of target instances and can be used to terminate and/or replace instances with `ReplaceUnhealthy`. `AddtoLoadBalancer` will not add the suspended instance to the ALB Target Group. Scale-in protections can prevent scaling from passing certain minimum and maximum thresholds.
+
+ASGs include lifecycle hooks which are stages in the scaling process. When scaling out, there are several stages: `Pending:Wait`, `Pending:Proceed`, and `InService`. Following this, scaling in includes `Terminating:Wait`, `Terminating:Proceed`, and `Terminated`. SNS, SQS, and Lambda via CloudWatch Events can be used to interact with Lifecycle Hooks. SNS and SQS are both legacy options, Lambda via CloudWatch Events is the recommended way to interact with Lifecycle Hooks. Termination Policies determine the sequence in which instances are scaled in and terminated. These include `OldestInstance`, `OldestLaunchConfiguration`, etc. 
+
+The default termination policy follows the following steps:
+1. It determines which availability zone has the most instances and finds an instance not protected from termination.
+2. It looks at the allocation strategy to determine which instance is best to terminate to maintain that strategy. If there is an applicable instance, that is terminated.
+3. If (2) is not met, then it looks at the instance using the oldest launch template or launch configuration and terminates that
+4. If there is no applicable instance from the above, then it terminates the unprotected instance which is closest to the next billing hour. (Billing is now per second, so this now applies to the instance closest to the next billing second.)
+
+SQS can target ASG instances with messages and scale the instances accordingly. Workers in an auto-scaled pool are protected from auto scaling termiantion to ensure SQS processes are not interfered with. ASG notifications can be sent to an SNS topic.
+
+CodeDeploy and CloudFormation can be integrated with ASGs to automate deployments, including deployment behavior such as in case of failure. CodeDeploy will deploy new revisions of the application in-place on top of the ASG. If autoscaling occurs while a new application revision is being deployed, only the application version that has most recently completed a full deployment will be used for the new scaled-up instance. This can be circumvented by suspending autoscaling while CodeDeploy is executing a new deployment.
+
+There are several deployment strategies for ASGs and ALBs:
+* In-place (one LB, one TG, one ASG). The application is stopped and the new one deployed over it.
+* Rolling (one LB, one TG, one ASG). New instances are added before the old are removed. 
+* Replace (one LB, one TG, two ASGs). A new ASG is created with accompanying instances. The LB will target the new ASG when it is ready.
+* Blue/Green (two LB, two TG, two ASG, R53). The Route 53 record will switch from targeting the old ALB to the new ALB. This requires having parallel environments of the old and new application revision.
+
+## Multi-AZ
+
+Multi-AZ is enabled manually in these services:
+* EFS
+* ELB
+* ASG
+* EB (assign AZ)
+* RDS
+* ElasticCache
+* ElasticSearch (AWS-managed)
+* Jenkins (self-deployed)
+
+Automatically enabled:
+* S3 (except OneZone access)
+* DynamoDB
+* All AWS proprietary managed servies
+
+EBS is single AZ by design. It can be replicated to another AZ through EBS snapshots. This can be integrated with lifecycle hooks to automate multi-AZ EBS deployments. PIOPS volumes (io1) should read the entire volume once during the pre-warming of I/O blocks.
+
+
+## Multi-region
+
+Some services are natively multi-region:
+* DynamoDB Global Tables
+* AWS Config Aggregators
+* RDS Cross Region Read Replicas
+* Aurora Global Database
+* EBS volume snapshots, AMI, RDS snapshots
+* VPC Peering
+* Route53 and CloudFront
+* S3 Cross Region Replication
+* Lambda@Edge for global Lambda functions at Edge locations (good for A/B testing)
+
+Route 53 health checks can automatically remediate DNS failovers.
+
+CloudFormation StackSets are a useful way to replicate resources stacks across multiple regions and accounts via a single operation. Trusted accounts can create, delete, or update StackSets. When a StackSet is updated, all associated stack instances are updated throughout all accounts and regions.
+
+CodePipeline can also execute multi-region deployments by storing CodePipeline Artifacts across regions, setting up individual CodeDeploy EC2 instances in each region to retrieve their respective artifacts.
+
+
+## Disaster Recovery
+
+A disaster is any event that negatively impacts business continuity. DR is concerned with pre-emptive preparation and post facto recovery. RPO is concerned with the latest point of time in recovery. How far back does data have to rewind. RTO is the amount of time it takes to recover systems. How long after the incident until everything is operational again.
+
+Disaster recovery strategies:
+* Backup and restore
+* Pilot light
+* Warm standby
+* Hot site / multi-site approach
+
+Multi-region DR checklist:
+* Is the AMI and accompanying parameters stored in multiple regions?
+* Is the CloudFormation StackSet tested for other regions?
+* What is the RPO and RTO?
+* Are Route 53 health checks working correctly?
+* Are CloudWatch Events and associated Lambdas designed to automate failover?
+* Is data backed up across regions?
