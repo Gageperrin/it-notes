@@ -347,15 +347,95 @@ Other miscellaneous details. NAT Gateways are 5 GB/s by default and scale up to 
 
 ### AWS PrivateLink
 
+AWS PrivateLink provides private connectivity between VPCs, AWS services, and on-premises applications. The VPC Service provider provides cross-zone load balancing through an endpoint service (multiple to ensure high availability). Permissions are then granted to VPC Consumers and their interface endpoints secured via Security Groups and NACLs. PrivateLink supports IPv4 and TCP but not IPv6. Private DNS is supported with verified domains.
+
 ### Gateway VPC Endpoint
+
+Gateway VPC Endpoints allow access to S3 and DynamoDB without public addressing. They add prefix lists to a route table allowing the VPC router to direct traffic flow to the public services. Gateway endpoints are highly available within a region.
+
+The endpoint policy is used to control what it can access. It is regional and therefore can't access cross-region services. Gateway endpoints help prevent leaky buckets by setting privileged access only via gateway endpoints.
 
 ### Interface VPC Endpoint
 
+Interface endpoints provide private access to AWS Public services but not to DynamoDB (S3 has recently gained support). It is an ENI added to specific subnets and therefore not highly available by default. For high availability, add one endpoint to one subnet per availability zone in the VPC. Network access is controlled via security groups and endpoint policies can restrict what can be done with the endpoint. They are TCP and IPv4 only as they use PrivateLink.
+
+An endpoint provides a new service endpoint DNS. There is endpoint regional DNS, zonal DNS, or PrivateDNS which overrides the default DNS for services. It essentially injects a service DNS into the VPC so that the IGW can be bypassed. They do not use routing.
+
 ## VPC Networking with EC2s
+
+### EC2 Network Architecture
+
+EC2 instances have a primary ENI which cannot be removed from an instance. Additional ENIs can be added or removed from other subnets (multi-homed) but not in other AZs. Multi-ENI can isolate security zones or traffic types between public and private. Security Groups attached to ENIs offer different protection rules. Each ENI is allocated a primary private IPv4 address from the subnet range and can also have secondary IP addresses. Elastic IPs can be mapped onto individual application entrypoints (things that cannot use DNS). There can be one elastic IP per private address. Elastic IPs are charged if they are not associated to an active instance. ENIs also have 1 or more IPv6 addresses, 1 MAC address, and one or more security groups. They are publicly routable. ENIs also include source and destination checks.
+
+### Enhanced Networking: SR-IOV
+
+Networking is traditionally virtualized on EC2. VMs share a physical network interface card (NIC) and the hypervisor mediates access between them. However hypervisor mediation is typically slow. One way around this is a device passthrough which provides direct access from a VM to a network interface card, however tying networking to physical hardware is not ideal for resiliency. SR-IOV connects many VMs to an NIC and offers faster speeds, higher PPS, and lower CPU at higher loads. It is supported on almost all EC2 instances and is required for higher performance. 
+
+With virtualized networks, the OS expects privileged access to the hardware, the hypervisor provides the OS with the appearance that it has privileged access to hardware such as NICs. The hypervisor intercepts and consequently slows it down because it intercepts the calls and requires CPU usage. This model allows hardware to be shared between many VMs but adds overhead and limits performance.
+
+Device (PCI) passthrough is an alternative which allows the VM to passthrough the hypervisor and communicate directly with the hardware using IOMMU. Performance is near bare metal speeds with this approach, but there is a 1:1 mapping between a VM and physical device. It negatively impacts HA as the VM is dependent on the physical hardware. It is hard to scale with this architecture.
+
+Enhanced networking (SR-IOV) makes the NICs virtualization aware. SR-IOV devices offer physical functions and virutal functions. VMs access the VF directly resulting in near bare metal performance. 1 physical device can offer up to 256 VF. VFs are light-weight "sub" devices offered by the physical card. They can be used independently with no hypervisor involvement.
+
+Max speed achieved between two instances is the lowest common denominator (the instance with the lowest speed). For example, Intel 82599 Virtual Function interface supports network speeds of up to 10 GB/s while Elastic Network Adapter (ENA) supports network speeds of up to 100 GB/s. Performance limitations can be introduced if the instances are in separate regions (aggregate bandwidth of 5 GB/s). Single-flow traffic between instance A and instance B is determined by the 5-Tuple limit of source IP, destination IP, source port, destination port, and protocol which results in a maximum of 5 GB/s. Multi-path TCP (MTCP) is an alternative which offers full bandwidth and is more powerful than single-flow traffic.
+### Elastic Fabric Adaptor (EFA)
+
+The Elastic Fabric Adapter is a type of EC2 network interface that attached an EC2 instance for HPC or ML applications. One can be attached per instance at launch or shutdown and supports OS bypass to improve performance. Any application that uses MPI or NCCL can use an EFA.
+
+Traditional IP communications add overhead via the kernel and IP stack. Ideally, applications in separate devices are as close as possible. LIBFABRIC runs between user and kernel space and uses the EFA driver to bypass the OS.
+
+There are limitations:
+* OS bypass is single subnet only
+* Cross subnet/AZ works for normal IP traffic
+* OS bypass traffic cannot be routed
+* Security groups need an ALLOW ALL, self-referential rule inbound and outbound.
+
+### Cluster Placement Groups
+
+Cluster packs instances close together in **one AZ** for low-latency network performance for tightly-coupled node-to-node communication typical of HPC applications. Cluster has the same rack, sometimes the same host. **10 GB/s per stream** versus the standard 5 GB/s. Lowest latency and max PPS possible in AWS. Little to no resilience. Cluster can span VPC peers but this impacts performance. It requires a supported instance type. Best practice to use the same type of instance at the same time.
+
+### Spread Placement Groups
+
+Spread is used for maximum resilience and availability. Each instance has a distinct rack in multiple AZs. Hard limit of **7 instances per AZ** with isolated infrastructure limit. Each network has its own network and power source. Not supported for dedicated instances or hosts.
+
+### Partition Placement Groups
+
+Need separate partitions for more than 7 instances in an AZ. Divided into a max of 7 partitions per AZ. Each partition group can have as many instances as needed. Partition is used for large parallel running processes. While spread reduces admin overhead, partition allows larger scale.
+
+Instances can be placed in a specific partition or be auto placed. Great for topology aware applications such as HDFS, HBase, and Cassandra. Helps contain impact of failure in an application.
+
 
 ## Networking Automation
 
+CloudFormation, skipped.
+
 ## Elastic Load Balancing
+
+### ELB Architecture
+
+A single load balancer contains multiple nodes running in two or more AZs and scale with load. Each ELB is configured with an DNS A record name that resolves to the ELB nodes.
+
+ELBs can be Internet-facing or internal. Internet-facing nodes have public IPs while internal LBs only have private IPs. Load Balancer nodes are configured with listeners which accept traffic on a port and protocol and communicate with targets on a port and protocol. Internet-facing LB nodes can access both public and private EC2 instances. Load Balancers need 8+ free IPs per subnet and a `/27` or larger subnet to allow for scale (`/28` is risky but can also work). The listener configuration controls what the LB does.
+
+Classic Load Balancers do not scale, every unique HTTPS name requires an individual CLB because SNI is not supported. Application Load Balancers automatically scale with 1 SSL per rule. `v2` load balancers support rules and target groups. Host based rules use SNI and an ALB supports consolidation.
+
+The ALB is a Layer 7 LB and listens on HTTP and/or HTTPS. It does not support other Layer 7 protocols such as SMTP or SSH, and definitely does not support TCP/UDP/TLS listeners. It can understand L7 content including cookies, custom headers, user location and app behavior. HTTP(S) is always terminated on the ALB, there is no unbroken SSL connection from the customer to the instance. It is always terminated on the LB. ALBs must have SSL certificates if HTTPS is used. They are also slower than NLBs because they use level 7 traffic. Health checks evaluate application health at layer 7. ALBs have rules which direct connections which arrive at a listener. They are processed in priority order with the last rule being a default catch-all rule. Rule conditions include `host-header`, `http-header`, `http-request-method`, `path-pattern`, `query-string`, and `source-ip`. Rule also contain actions such as forwarding, redirection, fixed response, authentication with oidc, or authentication via Cognito.
+
+The NLB is a layer 4 LB and listens for TCP, TLS, UDP, TCP_UDP traffic. No visibility or understanding of HTTP or HTTPS. No headers, no cookies, and no session stickiness. They are really fast and can handle millions of requests per second. They have 25% of ALB latency. They are ideal for SMTP, SSH, game servers, and financial apps. Health checks however can only check ICMP/TCP handshakes, they do not have application awareness. NLBs can have static IPs which are useful for whitelisting. They can forward TCP to instances with unbroken encryption, unlike ALBs. NLBs can be used with PrivateLink as well.
+
+NLBs are best for unbroken encryption, static IP for whitelisting, fastest performance, non-L7 protocols, and for PrivateLink use. Otherwise, ALB is usually a better solution.
+
+### Other Load Balancing Topics
+
+Connection draining controls what happens when instance are unhealthy or deregistered. Normally all connections are closed and no new conneciton are accepted. Connection draining allows in-flight requests to complete. They are defined on Classic Load Balancers only. They have a timeout between one and 3,600 seconds with a default of 300. `InService` means instance deregistration is in progress. Auto scaling waits for all connections to complete or timeout.
+
+De-registration delay is supported on ALB, NLB and Gateway LBs. They are defined on the target group, not the LB itself. It stops sending requests to deregistering targets while existing connections can continue until they either complete naturally or the deregistration delay is reached. This deregistration delay is also between one and 3,600 seconds with a default of 300 seconds.
+
+`X-Forwarded-For` and `PROXY` protocols are alternative versions of visibility of original client IP address when using proxy servers or load balancers. Direct connections can record customer IPs without issues, however LBs complicate this, so these protocols can be used to assist with IP tracking. `X-Forwarded` is a set of HTTP headers that lists out the sequence of proxies and LBs used with the client IP leftmost on the list. The backend web server needs to be aware of this header. It is supported by CLB and ALB but not NLBs. The `PROXY` protocol works at layer 4 with an additional TCP header. It works with a range of protocols (including HTTP and HTTPS). It works with CLB and NLB. End-to-end encryption is supported by unbroken HTTPS via a TCP listener in combination with a `PROXY` protocol.
+
+LB security policies are a set of ciphers and protocols configured on the listener. It determines what is permissible for the LB to use. The protocol ensures secure client to server communication while the cipher is an algorithm of ciphertext. Client and server present the proper ciphers and protocols, and the best supported one is picked. The user controls the policy between the client and the LB. AWS chosen one is used between the LB and target groups `ELBSecurityPolicy-2016-08`. Newer policies are more secure, but less compatible. If you need forward secrecy use `ELBSecurityPolicy-FS`.
+
+Gateway Load Balancers (GWLB) enable deployment, scaling, and management of virtual 3rd party appliances particularly for security for multi-tenant architectures. It allows for transparent inspection of inbound and outbound traffic. GWLBs include traffic endpoints and balancing technology across multiple backend appliances. Traffic and metadata is tunnelled using the GENEVE protocol. Packets passed through the GWLB are completely unaltered and retain the same source IP and port through the GENEVE encapsulation (tunnel). This works across horizontally scaling appliances. GWLBs can sit in front of ALBs or NLBs and perform inspection there.
 
 ## Route 53 Networking
 
