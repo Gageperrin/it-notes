@@ -599,6 +599,23 @@ Logically 2 IPSEC tunnels between the VGW and CGW but physically the transit pat
 
 ### AWS Transit Gateway (TGW)
 
+TGWs are a network transit hub which can simplify networking between VPCs, VPN, and Direct Connect. It is a single network object which is both highly available and scalable. It includes attachments to other networks. Supported attachments include VPCs, Site-to-Site VPNs, and Direct Connect Gateway.
+
+Historically, 4 VPCs could be connected to a customrr site with a single CGW but this means there is only one site of failure. A second CGW could be added, but this would require networking all tunnels to the second CGW as well.
+
+A TGW can sit at the center of a networking hub for VPCs and connect to separate CGWs without setting up duplicate tunnels for each VPC-CGW connection. VPC attachments are configured with a subnet in each AZ where service is required. Peering attachments can be made intra-region or cross-region and within or across accounts using AWS RAM.
+
+At a deeper level, a TGW can connect multiple VPCs and CGWs and attach to a DX Gateway for a Transit VIF. A TGW by default has one route table. The TGWRT uses route propagation learned from the VPC and the BGP. All attachments to the TGW will use the TGWRT by default. TGWs can be peered across regions to other TGWs.
+
+When peering TGWs, no route propagation occurs across peering attachments. They use static routes. Use unique ASNs to account for potential future route propagation features. Public DNS to Private IP resolution is not supported over peers. Peering is encrypted. There can be up to 50 peering attachments per TGW across different regions and accounts. Static routes are required. Attachments can only be associated with one route table, but route tables can be associated with many attachments. Attachments can propagate to many route tables even if they are not directly associated with them.
+
+### Client VPN
+
+Client VPN is a managed implementation of Open VPN that allows client devices to connect securely into AWS VPCs. Any client with OpenVPN software is supported. It connects to a client VPN endpoint associated with one VPC and one or more target networks. Billing is based on network associations. Connection logs are stored in CloudWatch Logs. 
+
+Client routes only occur over the VPN. An alternative is split-tunnel Client VPN. It is not the default, but split tunnel means the ClientVPN routes are added to existing ones. This allows for efficient access to local networks, or the public Internet--avoiding the VPN tunnel.
+
+
 ## VPC Hybrid Networking (Physical)
 
 ## Hybrid Services
