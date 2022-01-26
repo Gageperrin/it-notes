@@ -439,13 +439,165 @@ Gateway Load Balancers (GWLB) enable deployment, scaling, and management of virt
 
 ## Route 53 Networking
 
+### Route 53 Zones
+
+A R53 Hosted Zone is a DNS DB for a domain. It is globally resilient, created with domain registration via R53 or separately. Hosted Zones reference records that are authoritative for a domain. 
+
+A public hosted zone includes DNS Database (zone file) hosted by R53 Public Name Servers. It is accessible from the public Internet and VPCs. It is hosted on four R53 name servers specific for the zone. The NS records point to those name servers to connect to global DNS. Resource records are created within the hosted zone. Externally registered domains can point at R53 Public Zone.
+
+A R53 private hsoted zone is associated with VPCs and only available in those VPCs. It is possible to use different accounts via the AWS CLI or API. Split-view can also be used with overlapping public and private to split public and internal use (e.g. with Amazon Workspace) with the same zone name. A private zone cannot be queried outside of associated VPCs.
+
+### CNAME vs. ALIAS
+
+An `A` record maps a name to an IP address. A `CNAME` maps a name to another name. A `CNAME` is invalid for the naked/apex domain. This is a problem for ELBs and services which do not have an IP address but use a DNS record. To point to a name from an apex domain, an Alias record can be used. Alias records can also be used for normal records beneath the apex domain. In Route 53, there is no charge for alias requests pointing to AWS resources. Default to picking Alias when possible. It should be the same type as what the record is pointing at. Alias records work for API Gateway, CloudFront, Elastic Beanstalk, ELB, Global Accelerator, and S3.
+
+### Route 53 Routing
+
+Simple routing supports one record per name. Simple routing is used to point toward one service, but it does not support health checks.
+
+Failover routing routes traffic to a backup resource if the primary resource is unhealthy, such as when an EC2 instance has an out of band failure. The health check is set to the primary record. If the primary record is unhealthy, traffic is re-routed to the backup resource. This is common for configuring active/passive failover.
+
+Multi-value routing supports multiple records with the same name. Up to eight healthy records are returned. If more exist, then eight are randomly selected. Client chooses and uses one value. Each record is independent and can have an associated health check. Any records which fail health checks will not be returned when queried. Multivalue improves availability but is not a replacement for load balancing.
+
+Weighted routing associates multiple resources with a single domain and chooses routing based on traffic load. It is used for simple load balancing or testing new software versions (canary deployment). There is a total weight of 100 and measures how often the record is returned. If it is never returned, then the weight is 0. If a chosen record is unhealthy, the process of selection is repeated until a healthy record is chosen.
+
+Latency-based routing routes requests based on the lowest latency. It is used for optimizing performance and user experience. Latency based routing supports one record with the same name in each AWS region. AWS maintains a database of latency between the users' general location and the regions tagged in records. The record returned is the one which offers the lowest estimated latency and is healthy.
+
+Geolocation routing is similar to latency routing but it is based purely on the geographic location of the user using country, continent, US state, or default. An IP check verifies the location of the user and uses this to route the record accordingly. Geolocation does not return the closest record only the relevant location record. It returns the most specific geographic record it can. It can be used for regional restrictions, language-specific content, or load balancing across regional endpoints.
+
+Geoproximity routing serves traffic based on the geographic location of users, measuring how far the DNS query origin is from the record. Records can be tagged with an AWS region or latitude or longitude coordinates. Bias can be added with `+` or `-` to increase a region's size or decrease neighboring regions. This circumvents distance-based routing to specific particular zones that can serve more traffic.
+
+### Route 53 Health Checks
+
+Health checks are separate from Route 53 records but they are used by them. Health checkers are located globally. Health checkers check every 30 seconds (can be set to 10 seconds for a higher price). It can check with TCP, HTTP/HTTPS/ and HTTP/HTTPS with String Matching. If 18% or more of health checkers report as healthy, the health check is reported as healthy. An endpoint can either be healthy or unhealthy. Checks can be endpoint checks, CloudWatch Alarm checks, or checks of checks (calculated).
+
+
+### Route 53 Interoperability
+
+Route 53 interoperability entails both domain registration and domain hosting. Route 53 can do both or either of these. Route 53 accepts the domain registration fee andthen allocates 4 nameservers for domain hosting. It creates a zone file on the above NS as a domain host. Route 53 communicates with the registry of the TLD as a domain registrar.
+
+What is not common is to have Route 53 as a DNS registrar and another service for domain hosting. Instead more often Route 53 only hosts while another party holds the domain registration. The name servers in the domain registrar must point to Route 53 to authenticate the public hosted zone.
+
+### Advanced Hybrid DNS Architecture Examples
+
+VPC DNS is implemented via the VPC .2 Address (10.16.0.2). .2 is reserved in every subnet. This is the Route 53 resolver for public and associated private hosted zones. Private hosted zones are only accessible from within a VPC which makes hybrid network integration problematic. AWS instances use the Route 53 resolvers. 
+
+Historically this has no ability to forward queries to on-premises resolvers, and so on-premises clients and resolvers had no connectivity to the Route 53 resolver in AWS. There is a DNS boundary between the two environments because the DNS infrastructure cannot communicate.
+
+Before Route 53 endpoints were introduced, a DNS forwarder can be implemented in the AWS VPC through DHCP option sets to forward queries to the on-premises resolver. In this way, AWS resources can maintain their networking and be integrated with on-premises DNS infrastructure.
+
+Route 53 endpoints are made of ENIs accessible over VPN or Direct Connect. They support inbound and outbound traffic so that on-premises DNS queries can be forwarded to the Route 53 resolver. Outbound traffic includes conditional forwarders, Route 53 to on-premises. Rules control what requests are forwarded. Route 53 endpoints are HA and scalable and can handle up to 10,000 queries per second.
+
+
 ## CDN in AWS
+
+### CloudFront Architecture
+
+CloudFront is AWS' CDN solution using caching and the AWS global network. Content is served from an origin, either an S3 origin or a custom origin. A distribution is the configuration unit of CloudFront. Edge locations hold the local cache of data. Regional edge caches are a larger version of an edge location. It provides another layer of caching. Distributions can have different behaviors based on path patterns.
+
+TTL by default is set to 24 hours but other minimum and maximum TTL values can be set. More frequent cache hits equal a lower origin load. Origin headers include `Cache-Control max-age` and `Cache-Control s-maxage` which both set a TTL in seconds. The `Expires` header sets a specific date or time for the cache expiration. Cache invalidation is performed on a distribution and applies to all edge locations, but not immediately as the cache invalidation requires time to propagate. Versioned file names are helpful for managing content caching and preventing the need for cache invalidation.
+
+When first generated, CloudFront generates a default domain name for a `CNAME` record. SSL is supported by default using the `*.cloudfront.net` certificate. Alternate domain names `CNAME` can be used. Verify ownership using a matching certificate. Generate or importing into ACM in `us-east-1`. There are two SSL connection when using CloudFront, viewer to CloudFront and origin to Cloudfront. Both need valid public certificates, self-signed do not qualify.
+
+Historically, every SSL site needed its own IP. Encryption starts at the TCP connection level. Host headers are added later at layer 7 traffic. To reduce the need to generate SSL certificates for every IP. TLS evolved to have SNI as an extension which allows the host to be included in the certificate. This results in many SSL certificates and hosts using a shared IP. Old browsers do not support SNI, so CloudFront charges extra for a dedicated IP ($600 per IP per month per distribution).
+
+Origins need to have certificates issued by a trusted authority (CA). ALB can use ACM, but others (EC2) need to use an external generated certificate that is not self-signed. S3 Origins handle certificates natively.
+
+To secure CloudFront delivery, OAI and cusotm origins can be used. An OAI is a type of identity that can be associated with CloudFront distributions. CloudFront becomes that OAI that can be used in S3 bucket policies. The policy denies all but one or more OAI's. To secure custom origins, custom headers or IP-based FW blocks can be used.
+
+CloudFront Geo Restriction can white or blacklist viewers based on country code. Third party services can be used for more precise geolocation restrictions.
+
+
+### AWS Certificate Manager
+
+HTTP is simple and insecure, containing many invulnerabilities. HTTPS adds an SSL/TLS layer of encryption added to HTTP. Data is encrypted in-transit. Certificates prove identity via a chain of trust signed by a trusted authority. ACM lets the user run a public or private certificate authority (CA). Applications need to trust the private CA, browsers trust public CAs.
+
+ACM can generate or import certificates. If generated, it can automatically renew. If imported, the customer is responsible for certificate renewal. Certificates can be deployed out to supported services. Note that EC2 is not supported by ACM. Certificates cannot leave the region they are generated or imported into. Certificates cannot be applied across regions. CloudFront operates within `us-east-1` and so CloudFront certificates are always in `us-east-1`.
+
+
 
 ## Networking Security, Risk, and Compliance
 
+### S3 Access Points
+
+S3 Access Points simplify access management to S3 buckets and objects. Rather than being limited to one bucket with one bucket policy, many access points can be created with different policies, different network access controls, and each access point has its own endpoint address. It can be created with `aws s3control create-access-point`.
+
+### ip-ranges.json
+
+`ip-ranges.json` is a [JSON file](https://ip-ranges.amazonaws.com/ip-ranges.json) that provides a published structure of all public service IP range usage for all AWS regions. The file can be passed into scripts and the AWS CLI to automate security group rules. A SNS Topic and Lambda function can also automate service configuration based on the file.
+
+### AWS Shield and Web Application Firewall
+
+AWS Shield provides AWS resources with DDoS protection. Shield comes in Standard and Advanced versions. Shield Standard includes free usage for Route53 and CloudFront. It provides protection against Layer 3 and Layer 4 DDoS attacks. Shield Advanced offers $3,000 p/m. EC2, ELB, CloudFront, Global Accelerator and Route 53 are only available with Shield Advanced. Shield Advanced also includes a DDoS Response Team and financial insurance.
+
+WAF is a Layer 7 firewall that protects against SQL injections or cross-site scripting and includes geo blocks and rate awareness. It provides a Web Access Control List (WEBACL) integrated with ALB, API Gateway, and CloudFront. Rules are added to a WEBACL and evaluated when traffic arrives.
+
+WAF Rules include WEBACL with rule groups. WEBACL Capacity Units (WCU) account for the complexity of rules. AWS accounts are charged per rules, requests, and WEBACLs per month. WEBACL have a default action: allow or block. Rule actions can allow, block, or count. Rules can be regular or rate-based. Regular rules based on the actions within a rule while rate-based rules are based on activity.
+
+Shield and WAF are often used together to optimize security.
+
+
+### URL Filtering in a VPC
+
+To approve or deny traffic to particular URLs in a VPC, a self-managed proxy server (layer 7) is needed. NAT Instances and NAT Gateway are not layer 7 and cannot do this. ALBs cannot do this either as they are anti-pattern. Security Groups are layer 5 and do not have URL awareness. NACLs are layer 4 and do not have URL awareness.
+
+A proxy server in a subnet will accept traffic on a proxy server port (usually port 3128) and conditionally forward traffic to the Internet if the URL is not filtered out.
 ## VPC Peering
 
+VPC peering is a direct encrypted network link between two VPCs. It works in the same or cross-region and same or cross-account. It is possible to have public hostnames resovle to private IPs. Same region security groups can reference peer security groups. VPC Peering does not support transitive peering between many VPCs. It only connects one VPC to one other VPC. VPC Peering connections cannot be created where there is overlap in the VPC CIDRs. It is best practice to never use the same address ranges in multiple VPCs.
+
+Security groups are tied to a VPC in a region. They are attached to ENIs and can reference each other. In the same region, security groups can reference each other. In the same account they can use just security group ID, in different accounts they should reference `account ID/SG ID`. This cannot be done across AWS regions. NACLs are required instead across regions. 
+
+DNS resolves in a public IPv4 DNS to a private IPv4 address. Outside a VPC it resolves to a public or elastic IPv4 address. It can peer across a VPC. There is requester and accepter DNS resolution that can be configured in VPC Peering DNS Options. Both VPCs must be enabled for DNS hostnames and DNS resolution for VPC Peering DNS to work.
+
+There are few ways to work with overlapping CIDR ranges with VPC peering. Routing can be split by placing a separate route table in separate subnets in the original VPC and having each route table route to each conflicting VPC Peers. This means that the VPC Peer is only available from the subnet with its associated route table.
+
 ## VPC Hybrid Networking (Virtual)
+
+### IPSEC VPN Fundamentals
+
+IPSEC is a group of protocols that set up a secure tunnels across insecure networks between two peers (local and remote). It provides authentication and encryption. Any data within the VPC tunnels is encrypted and secure.
+
+IPSEC has two phases: (1) establish a secure channel and (2) negotiate the IPsec SA for authenticating traffic. IKE Phase 1 is slow and heavy. Authenticated and asymmetric encryption is established and IKE SA is created (phase 1 tunnel). IKE Phase 2 (fast and agile) uses the keys agreed in phase one. They agree on encryption method and use keys for bulk data transfer.
+
+IKE Phase 1 starts with a certificate or pre-shared key authentication. Each side creates a DH (Diffie Hellman) private key and derives a public key which are then exchanged over the public Internet. Each side takes their private key and the remote peer's public key independelty generates the same shared DH key. They use this key to exchange key materials and agreements over the Internet. Each side generates a symmetrical key using DH key and exchanged material.
+
+In IKE Phase 2, the symmetricla key is used to encrypt and decrypt agreements and pass more key material. Best shared encryption and integrity methods are communicated and agreed on. The DH key and exchanged key material is used to create a symmetrical IPSEC key. The IPSEC key is used for bulk encryption and decryption of interesting traffic. This creates two one-way tunnels.
+
+VPNs can be policy-based or route-based. Policy-based VPNs have rule sets which match traffic and can have different rules or security settings. Route-based VPNs have target matching with prefixes. Route-based feature a single SA pair and single IPSEC key. Policy-based VPNs have a SA pair and unique IPSEC key for each kind of tunnel.
+
+
+### Virtual Private Gateway
+
+A virtual private gateway (VGW) is a VPN concentrator on the Amazon side of the Site-to-Site VPN connections. It is a gateway object between AWS VPC and non-AWS networks. It can be attached to one VPC max at a time and can be detached and reattached as needed. It maintains its connections even when re-attached to a different VPC. VGWs can be integrated with DX for terminating a Private VIF (if it is in the same region), a DX Gateway, and Site-2-Site VPN (public IPs). It has a private ASN that defaults to 64512. It is highly available by default with multiple AZs. Any VPC route tables with enabled route propagation will have any VGW learned routes added automatically.
+
+A VPN CloudHub architecture would consist of VGW advertizing to other CGWs using the same VGW. Dynamic site-2-site VPNs are created between multiple customer sites and a shared Virtual Private Gateway. Unique BGP ASNs are available for each site. Each business site advertizes a unique CIDR range to the VGW.
+
+### AWS Site-to-Site VPN
+
+A logical connection between a VPC and on-premises network are encrypted using IPSec, running over the public Internet. It is fully highly available if designed and implemented correctly. Site-to-site VPNs are quick to provision and should take less than an hour. It includes a VGW, a customer gateway (CGW), and a VPN connection between the VGW and CGW.
+
+A static VPN uses static routes for the remote siede and added to route tables as static routes. Networks for remote side statically configured on the VPN connection. No load balancing or multi connection failover for a static VPN. 
+
+A dynamic VPN uses the border gateway protocol and is configured on both the customer and AWS side using (ASN). Networks are exchanged via BGP. Routes for the remote side are added to the route tables as tatic routes and then propagated from the route table automatically. This allows for multiple VPN connections and provide HA and traffic distribution.
+
+A VPN has a speed cap of 1.25 GB/s on the AWS but this can be lower depending on customer-side limitations. Latency considerations are inconsistent because they run over the public Internet. Billing is based on hourly cost, GB out cost, and data-cap (on-premises). The main advantage is that they are quick to setup. They can be used with Direct Connect or as a backup to it.
+
+### Border Gateway Protocol (BGP)
+
+BGP is basd on an autonomous system (AS). Routers are controlled by one entity, a network in BGP. ASN are unique and allocated by IANA (0-65535). ASN between 64512 and 65534 are private. BGP operates over `tcp/179`. It is reliable. It is not automatic as peering is manually configured. BGP is a path-vector protocol. It exchanges the best path to a destination between peers. This is the ASPATH. `iBGP` is internal BGP which routes within an AS. `eBGP` is external BGP for routing  between different AS's. BGP exchanges the shortest ASPATH between peers, even if a longer fibre would provide better performance. This can be circumvented through AS Path Prepending which artificially makes the satellite path look longer making the fibre path preferred.
+
+### AWS Global Accelerator
+
+Global Accelerator is an alternative for CloudFront to improve performance. Global Accelerator starts with two anycast IP addresses. Anycast IPs allow a single IP to be in multiple locations. Routing moves traffic to the closest location. Traffic initially uses the public Internet and enters a global accelerator edge location. From the edge, data transits globally across the AWS global backbone network. This means less hops and significantly better performance. Unlike CloudFront, Global Accelerator can carry non-HTTP/S traffic such as TCP or UDP traffic. It also does not cache any content.
+
+### Accelerated VPN
+
+This an enhanced version of the Site-to-Site VPN product. Historically, Site-to-Site VPN uses VGW and CGWs with resilient public space endpoints. It creates two IPSEC tunnels for transit over the public Internet. This means variable performance, latency, and consistency. Alternatively, the VPN can be run over a DX Public VIF for better performance but can be costly.
+
+Logically 2 IPSEC tunnels between the VGW and CGW but physically the transit path is indirect. A Transit Gateway allows a pair of VPN tunnels to provide access to many VPCs but this still uses the public Internet. With Global Accelerator, VPN tunnel IPs are global, and connections are routed to the closest global accelerator edge location. This means low latency, less jitter, and higher throughput. Acceleration can be enabled when creating a TGW VPN attachment. Not compatible with VPNs using a VGW.
+
+### AWS Transit Gateway (TGW)
 
 ## VPC Hybrid Networking (Physical)
 
