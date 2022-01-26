@@ -220,7 +220,7 @@ Record types:
 
 A LAN is a shared broadcast domain that braodcasts to stations. This does not scale well with more stations added on. Each port is a separate collision domain which limits outages to one station. Physical LANs would divide departments into individual switches which are not connected and thus need their own broadcast domain. This limits inter-department communication especially if a staff member changes to another department but remains at the same desk.
 
-Frame tagging (802.1Q & 802.1AD) introduces new standards in teh frame format by adding a new 32 bit payload for the VLAN ID (VLID). Tagging frames with a VLAN ID helps create separate virtual LANs in the same L2 physical network. They each have a separate broadcast domain and are isolated from all others. 
+Frame tagging (802.1Q & 802.1AD) introduces new standards in the frame format by adding a new 32 bit payload for the VLAN ID (VLID). Tagging frames with a VLAN ID helps create separate virtual LANs in the same L2 physical network. They each have a separate broadcast domain and are isolated from all others. 
 
 An issue could potentially arise if two different customers for a communications provider use the same VLAN ID such as 1337. The standard 802.1AD was introduced to resolve this by adding another 32 bit space in the frame for a customer tag (C-TAG) which is distinct from the service tag (S-TAG). A customer can divided their VLANs with S-TAGs while having their own C-TAG.
 
@@ -613,10 +613,82 @@ When peering TGWs, no route propagation occurs across peering attachments. They 
 
 Client VPN is a managed implementation of Open VPN that allows client devices to connect securely into AWS VPCs. Any client with OpenVPN software is supported. It connects to a client VPN endpoint associated with one VPC and one or more target networks. Billing is based on network associations. Connection logs are stored in CloudWatch Logs. 
 
-Client routes only occur over the VPN. An alternative is split-tunnel Client VPN. It is not the default, but split tunnel means the ClientVPN routes are added to existing ones. This allows for efficient access to local networks, or the public Internet--avoiding the VPN tunnel.
+Client routes only occur over the VPN. An alternative is split-tunnel Client VPN. It is not the default, but split tunnel means the ClientVPN routes are added to existing ones. This allows for efficient access to local networks, or the public Internet--avoiding the VPN tunnel. Because it is not default, it must be specifically enabled.
 
+### AWS Routing Policy
 
+IPv4 and IPv6 routes are independent and treated separately.
+
+Routing priority:
+1. Longest prefix length (`/32` is a single IP, `/24` is a class C network with 256 addresses, and `/0` represents all IPv4 addresses.)
+2. Static routes
+3. Prefix lists
+4. Propagated routes
+
+Within propagated routes, there is also a routing priority:
+1. BGP propagated routes through Direct Connect
+2. Static routes for a Site-to-Site VPN Connection
+3. BGP propagated routes through Site-to-Site VPN Connection
+4. Shortest AS_PATH
+5. Lowest multi-exit discriminator (MED) set at the remote side which indicates preferred entry path.
 ## VPC Hybrid Networking (Physical)
+
+### AWS Direct Connect (DX)
+
+AWS Direct Connect (DX) is a physical connection of 1, 10, or 100 GB/s set up between a physical business premise and a DX location which is then connected to an AWS region. Port allocaiton occurs at a DX location. Billing is based on port hourly cost and outbound data transfer. Provisioning takes time because of physical cable set-up. Because it is a physical cable, there is no built-in resilience. The main advantage of DX is it offers low and consistent latency with high speeds. DX can access AWS private services within a VPC or AWS public services. It does not have built-in Internet access.
+
+DX physical connection face several limitations. It is a single-mode fibre, not copper, and so the router must be able to handle a fibre cable. There are different transceiver requirements for different speed tiers:
+* 1 GB/s: 1000BASE-LX (1310 nm) transceiver
+* 10 GB/s: 10GBASE-LR (1310 nm) transceiver
+* 100 GB/s: 100GBASE-LR4
+
+Auto-negotiation must be disabled and port speed and full duplex must be manually set. It also requires Border Gateway Protocol (BGP) and BGP MD5 authentication. MACsec and Bidrectional Forwarding Detection (BFD) are optional.
+
+DX MACsec is an IEEE 802.1AE-2018 standard that provides data confidentiality, integrity, replay protection and origin authenticity. It is a frame encryption at Layer 2 with a hop-by-hop encryption architecture between two switches and routers. It is not end-to-end and so does nto replace IPSEC over DX. It is designed to allow for super high speed encryption on terabit networks.
+
+MACSec depends on unidirectional secure channels with one in and one out. Secure channels are assigned identifiers (SCI). Sessions on SC are known as secure associations and one generally exists at a time except for when the secure association are being replaced and exchanged. MACsec encapsulation contains 16 bytes of MACsec tag and 16 byte Integrity Check Value (ICV). MACsec key agreement covers discovery, authenticaiton, and key generation. The Cipher Suite controls how data is encrypted, packets per key, and rotation.
+
+The DX connection process consists of several steps. A DX connection begins in a DX location which contains AWS equipment and customer/provider equipment. AWS does not own the latter, it is rented from a data center operator. Only the data-center staff can connect this equipment together. Authorization is needed from all parties, and this is known as Letter of Authorization Customer Facility Access (LOA-CFA) to give data-center staff authorization to change equipment connections.
+
+It starts with a customer lodging a DX request with AWS. A DX port is allocated on an AWS DX router. The customer downloads the LOA-CFA form and sends it to the DX location staff. DX location staff will set up a physical layer 1 connection for Direct Connect.
+
+### BGP Session + VLAN
+
+DX connections are a layer 2 connection. To connect to multiple types of layer 3 IP networks, VIFs are necessary. Virtual Interfaces (VIFs) allow users to run multiple L3 network over L2 DX. A VIF consists of a BGP peering session and a VLAN. VLANs allow multiple isolated connection between the customer and AWS DX Router. VLAN isolates, BGP exchanges routes and authenticates. There are three kinds of VIFs: public, private, and transit. BGP is between the customer DX router and the AWS DX router and can be extended to customer premises.
+
+In an example architecture, there can multiple high speed resilient links between DX location and the AWS region. Each interface has BGP peering configured with ASN & local/remote peer IPs configured. BGP sessions exchange routes between the customer and AWS. BGP sessions are authenticated via MDS. VLAN/BGP session can be extended to customer premises as required via Q-in-Q.
+
+### Private VIFs
+
+Private VIFs are used to access private AWS services in 1 VPC using private IPs. TGWs and DXGWs can be used to access resources outside the 1 VPC. The Private VIF can only attach to a VPC in the same region as the DX location. 1 private VIF = 1 VGW = 1 VPC. There is no encryption on private VIFs, but applications can layer on encryption such as L7 HTTPS. Private VIFs can have a MTU of 1500 or 9001 (jumbo frames). Using VGW with route propagation enabled by default.
+
+Private VIFs can connect to a VGW by default or a DXGW. The interface can be owned by this account or another. VLAN - 802.1Q needs to match customer config. ASN is configurable on the VIF. If private, use 64512 to 65535. Peer IPs or auto-generated. AWS will advertize the VPC CIDR and the BGP peer IPs (`/30`). The user can advertize default or specific corp prefixes (up to 100). IPv4 or IPv6 compatible with separate BGP peering connection. 
+
+### Public VIFs
+
+Public VIFs can access public zone services using elastic IPs and public services. Public VIFs cannot directly access private VPC services. Can access all public zone region across the AWS global network. AWS advertizes all AWS public IP ranges. Any customer-owned public IPs can be adverized over BGP. Public VIFs are not transitive, these prefixes do not leave AWS.
+
+Creating a public VIF can be done by picking the connection the VIF will run over, the interface owner account, the VLAN 802.1Q, the BGP ASN of on-premises public or private (64512-65535). MD5 authentication, optional peering IPs, and which prefixes should be advertized.
+
+Neither public nor private VIFs offer encryption. Public VIFs + IPSec VPN is a way to provide access to private VPC resources, using an encrypted IPSEC tunnel for transit. However, VPN has more cryptographic overhead versus MACsec and limits speeds. Public VIF + VPN can be used while DX is being set up or as a DX backup. A VPN tunnel creates a private VPC connection between a CGW and an AWS VGW or TGW. It uses a public VIF but creates a private connection.
+
+### Bidirectional Forwarding Detection
+
+
+### BGP Communities
+
+
+### Direct Connect Gateway
+
+
+### DX, Transit VIFs, and TGW
+
+
+
+### DX LAGs
+
+
+### Advanced VPC Routing
 
 ## Hybrid Services
 
