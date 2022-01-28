@@ -635,7 +635,7 @@ Within propagated routes, there is also a routing priority:
 
 ### AWS Direct Connect (DX)
 
-AWS Direct Connect (DX) is a physical connection of 1, 10, or 100 GB/s set up between a physical business premise and a DX location which is then connected to an AWS region. Port allocaiton occurs at a DX location. Billing is based on port hourly cost and outbound data transfer. Provisioning takes time because of physical cable set-up. Because it is a physical cable, there is no built-in resilience. The main advantage of DX is it offers low and consistent latency with high speeds. DX can access AWS private services within a VPC or AWS public services. It does not have built-in Internet access.
+AWS Direct Connect (DX) is a physical connection of 1, 10, or 100 GB/s set up between a physical business premise and a DX location which is then connected to an AWS region. Port allocation occurs at a DX location. Billing is based on port hourly cost and outbound data transfer. Provisioning takes time because of physical cable set-up. Because it is a physical cable, there is no built-in resilience. The main advantage of DX is it offers low and consistent latency with high speeds. DX can access AWS private services within a VPC or AWS public services. It does not have built-in Internet access.
 
 DX physical connection face several limitations. It is a single-mode fibre, not copper, and so the router must be able to handle a fibre cable. There are different transceiver requirements for different speed tiers:
 * 1 GB/s: 1000BASE-LX (1310 nm) transceiver
@@ -652,7 +652,9 @@ The DX connection process consists of several steps. A DX connection begins in a
 
 It starts with a customer lodging a DX request with AWS. A DX port is allocated on an AWS DX router. The customer downloads the LOA-CFA form and sends it to the DX location staff. DX location staff will set up a physical layer 1 connection for Direct Connect.
 
-### BGP Session + VLAN
+DX is by default non-resilient because it depends on a single physical cable. To build resilience, the customer could set up two separate customer DX routers to set up with separate AWS DX routers. This is resilient against hardware failure in one path. Better than this would be routing DX to two separate DX locations from separate business premises. A customer could combine these two strategies and have two separate DX locations with two DX routers in each location, creating a total of four DX routes. 
+
+### VIF:BGP Session + VLAN
 
 DX connections are a layer 2 connection. To connect to multiple types of layer 3 IP networks, VIFs are necessary. Virtual Interfaces (VIFs) allow users to run multiple L3 network over L2 DX. A VIF consists of a BGP peering session and a VLAN. VLANs allow multiple isolated connection between the customer and AWS DX Router. VLAN isolates, BGP exchanges routes and authenticates. There are three kinds of VIFs: public, private, and transit. BGP is between the customer DX router and the AWS DX router and can be extended to customer premises.
 
@@ -666,7 +668,7 @@ Private VIFs can connect to a VGW by default or a DXGW. The interface can be own
 
 ### Public VIFs
 
-Public VIFs can access public zone services using elastic IPs and public services. Public VIFs cannot directly access private VPC services. Can access all public zone region across the AWS global network. AWS advertizes all AWS public IP ranges. Any customer-owned public IPs can be adverized over BGP. Public VIFs are not transitive, these prefixes do not leave AWS.
+Public VIFs can access public zone services using elastic IPs and public services. They are a VLAN and BGP session. Public VIFs cannot directly access private VPC services. Can access all public zone region across the AWS global network. AWS advertizes all AWS public IP ranges. Any customer-owned public IPs can be adverized over BGP. Public VIFs are not transitive, these prefixes do not leave AWS.
 
 Creating a public VIF can be done by picking the connection the VIF will run over, the interface owner account, the VLAN 802.1Q, the BGP ASN of on-premises public or private (64512-65535). MD5 authentication, optional peering IPs, and which prefixes should be advertized.
 
@@ -674,24 +676,60 @@ Neither public nor private VIFs offer encryption. Public VIFs + IPSec VPN is a w
 
 ### Bidirectional Forwarding Detection
 
+BFD is a detection protocol that provides fast forward path failure detection times. In other words, it improves failover time. By default, BGP has a keep alive of 30 seconds. The hold-down timer starts at 0 and counts to 90. Every keep-alive reset to 0. If the hold-down timer reaches 90, the VIF is considered unreachable. BFD improves with by reducing failover to less than a second. AWS BFD liveness detection has an interval of 300 ms. BFD liveness detection multiplier is three. A failover will occur in about 900s. AWS VIFs enabled by default but customer side configuration is required with BGP options.### BGP Communities. BFD is enabled by default with DX.
 
 ### BGP Communities
+
+BGP communities are basically tags or metadata for BGP prefixes. Well known communities include:
+* `NO_EXPORT` - do not advertize to external peers
+* `NO_ADVERTISE` do not advertize to any peers
+
+Regular communities are 32 bit value, split into 2 x 16. They have an AS_NUMBER:OPERATOR_ASSIGNED_VALUE. BGP operators act on advertisements based on communities. Any requests originating in the same region as the DX Location will be tagged with the BGP community `7224:8100`. Anything in the same continent will have `7224:8200`. Global prefixes have no tag.
 
 
 ### Direct Connect Gateway
 
+DX Gateway provides additional functionality. By default, DX is a regional service with access between customer premises and one or more DX locations. Public VIF can access all AWS public regions. Private VIF can only access VPCs in the same AWS region via VGWs.
 
+DX Gateways are a global network device accessible in all regions. Private VIFs can connect to DX Gateways which are associated with VGWs attached to VPCs globally. This allows for bilateral VPC and on-premises gateways. This does not allow for VPC to VPC connections on the same DX Gateway. 1 Private VIF can connect to 1 DX Gateway and 10 VGW per DX Gateway. 1 DX can have 50 private VIFs which means up to 50 DXGWs and 500 VPCs.
+
+DX Gateways also work cross-account.
 ### DX, Transit VIFs, and TGW
 
+Transit VIF can connect up to 3 TGWs to a DXGW. A DXGW can be associated with VPC and private VIFs on the one hand or TGWs and a Transit VIFs on the other, but not both. Each TGW supports up to 5,000 attachments and with up to 50 peering attachments, each peered TGW can have its own 5,000 attachments. There canbe a max of up to 20 DXGW per TGW.
 
+DX Gateways cannot route traffic between DX locations by default. TGWs can circumvent this limitation. A TGW connected to a DXGW for each DX location will allow traffic to flow from one DX location to another via the TGW in the VPC. This only works in a single AWS region though. For multiple regions, each region's VPC would need a TGW and peering attachments set up across regions for each TGW. TGWs will route to and from DX Gateway attachments even across TGW peers.
 
 ### DX LAGs
 
+LAGs (link aggregation groups) allow for multiple physical connections acting as one. This increases speed through an active/active architecture with a maximum of four connections per LAG. However, all connections need to be the same speed and terminate at the same location. A LAG has a `minimumLinks` attribute, the LAG is active as long as this value or more connections are active.
 
 ### Advanced VPC Routing
 
+Subnets are associated with one route table only, either the VPC main route table or a custom route table. RTs can also be associated with an IGW or VGW. IPv4 and IPv6 are handled separately. Routes send traffic based on destination to a target. All routes are evaluated with highest-priority matching with the longest prefix being selected first. Static routes take priority over propagated routes. Propagated routes are evaluted from DX, VPN static, VPN BGP, to AS_PATH.
+
+Peering between overlapping CIDR is not supported, but VPCs with overlapping CIDR ranges can be routed to separate subnet RTs within a single VPC. Ingress routing can occur at the IGW to forward traffic to route tables (such as a security appliance)
+
 ## Hybrid Services
+
+Skipped.
 
 ## Network Billing and Cost Management in Depth
 
+### VPC Cost Management
+
+Traffic within a VPC to an IGW and traffic from an IGW to public AWS services in the same region is free. Data transferred through a NATGW has a per-GB charge and an hourly charge. Any data transferred out to the public Internet has a charge based on the service and the region of the service. Data transferred in from the Internet is free. Data transfer between regions has a fee based on source and destination regions. Traffic via public addresses will also be charged, even if in the same AZ. Some services such as EC2 and RDS have cross-AZ traffic in and out charges.
+
+VPC peering is billed based on several factors. Intra-AZ VPC traffic is not charged. Cross AZ transfers have ingress and egress charges. Cross-region VPC peered traffic is charged for egress traffic but not ingress traffic. Data is only charged inter-region rates when it exits the region, not when it enters.
+
+### Transit Gateway Billing
+
+Each attachment has an hourly charge for the attachment owner as well as a per GB data processing charge for data sent from each attachment billed to the attachment owner. Data sent over a TGW has a per GB charge billed to the owner of the sending TGW, there is no charge at the receiving end.
+
+### Direct Connect Cost Management
+
+A DX port has an hourly fee based on the speed and location. Data transferred out has a per GB fee based on the source location and the DX location. Data transferred in has a charge. There are no fees for using a DXGW and data transferred in is free of charge. There is a per/GB fee for data out based on all source regions and DX locations to a DX router.
+
 ## AWS Disaster Recovery
+
+Skipped.
