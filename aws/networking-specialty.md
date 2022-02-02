@@ -102,7 +102,7 @@ Layer 1 on the destination device hands off the raw data to the frame on Layer 2
 
 ### IP Routing
 
-Outside of a local network. Subnet mask and desitnation IP show the destination IP is not local. It wraps it up in a frame. ARP is used to find the MAC address of the default gateway. The packet is given the router's IP and encapsulated in a frame. The destination is the router.
+Outside of a local network. Subnet mask and destination IP show the destination IP is not local. It wraps it up in a frame. ARP is used to find the MAC address of the default gateway. The packet is given the router's IP and encapsulated in a frame. The destination is the router.
 
 The router removes the frame around the packet and reviews packet IP destination. The router has a route for the network that the destination IP is in. It creates a new frame with a second router as the destination MAC. The packet is unchanged as it remains in the frame payload. The frame is sent to the sefcond router.
 
@@ -218,7 +218,7 @@ Record types:
 
 #### VLANS ####
 
-A LAN is a shared broadcast domain that braodcasts to stations. This does not scale well with more stations added on. Each port is a separate collision domain which limits outages to one station. Physical LANs would divide departments into individual switches which are not connected and thus need their own broadcast domain. This limits inter-department communication especially if a staff member changes to another department but remains at the same desk.
+A LAN is a shared broadcast domain that broadcasts to stations. This does not scale well with more stations added on. Each port is a separate collision domain which limits outages to one station. Physical LANs would divide departments into individual switches which are not connected and thus need their own broadcast domain. This limits inter-department communication especially if a staff member changes to another department but remains at the same desk.
 
 Frame tagging (802.1Q & 802.1AD) introduces new standards in the frame format by adding a new 32 bit payload for the VLAN ID (VLID). Tagging frames with a VLAN ID helps create separate virtual LANs in the same L2 physical network. They each have a separate broadcast domain and are isolated from all others. 
 
@@ -239,7 +239,7 @@ Jumbo frames are not supported outside a single VPC, over VPN connections, over 
 
 ### DHCP
 
-The Dynamic Host Configuration Protocol (DHCP) provides an automatic configuration for network resources. It is a standard for passing configuration information to hosts on a TCP/IP network. The `options` field of a DHCP message contains configuration parameters including the domain name, DNS, and `netbios-node-typ`. It starts with L2 broadcast to get info the DHCP server.
+The Dynamic Host Configuration Protocol (DHCP) provides an automatic configuration for network resources. It is a standard for passing configuration information to hosts on a TCP/IP network. The `options` field of a DHCP message contains configuration parameters including the domain name, DNS, and `netbios-node-type`. It starts with L2 broadcast to get info the DHCP server.
 
 AWS automatically creates a set of DHCP options alongside a VPC, which can be manually configured. Each VPC is provided two domain names, an `AmazonProvidedDNS` and a custom DNS domain.
 
@@ -427,7 +427,7 @@ NLBs are best for unbroken encryption, static IP for whitelisting, fastest perfo
 
 ### Other Load Balancing Topics
 
-Connection draining controls what happens when instance are unhealthy or deregistered. Normally all connections are closed and no new conneciton are accepted. Connection draining allows in-flight requests to complete. They are defined on Classic Load Balancers only. They have a timeout between one and 3,600 seconds with a default of 300. `InService` means instance deregistration is in progress. Auto scaling waits for all connections to complete or timeout.
+Connection draining controls what happens when instance are unhealthy or deregistered. Normally all connections are closed and no new connections are accepted. Connection draining allows in-flight requests to complete. They are defined on Classic Load Balancers only. They have a timeout between one and 3,600 seconds with a default of 300. `InService` means instance deregistration is in progress. Auto scaling waits for all connections to complete or timeout.
 
 De-registration delay is supported on ALB, NLB and Gateway LBs. They are defined on the target group, not the LB itself. It stops sending requests to deregistering targets while existing connections can continue until they either complete naturally or the deregistration delay is reached. This deregistration delay is also between one and 3,600 seconds with a default of 300 seconds.
 
@@ -469,7 +469,7 @@ Geoproximity routing serves traffic based on the geographic location of users, m
 
 ### Route 53 Health Checks
 
-Health checks are separate from Route 53 records but they are used by them. Health checkers are located globally. Health checkers check every 30 seconds (can be set to 10 seconds for a higher price). It can check with TCP, HTTP/HTTPS/ and HTTP/HTTPS with String Matching. If 18% or more of health checkers report as healthy, the health check is reported as healthy. An endpoint can either be healthy or unhealthy. Checks can be endpoint checks, CloudWatch Alarm checks, or checks of checks (calculated).
+Health checks are separate from Route 53 records but they are used by them. Health checkers are located globally. Health checkers check every 30 seconds (can be set to 10 seconds for a higher price). It can check with TCP, HTTP/HTTPS and HTTP/HTTPS with String Matching. If 18% or more of health checkers report as healthy, the health check is reported as healthy. An endpoint can either be healthy or unhealthy. Checks can be endpoint checks, CloudWatch Alarm checks, or checks of checks (calculated).
 
 
 ### Route 53 Interoperability
@@ -544,7 +544,7 @@ To approve or deny traffic to particular URLs in a VPC, a self-managed proxy ser
 A proxy server in a subnet will accept traffic on a proxy server port (usually port 3128) and conditionally forward traffic to the Internet if the URL is not filtered out.
 ## VPC Peering
 
-VPC peering is a direct encrypted network link between two VPCs. It works in the same or cross-region and same or cross-account. It is possible to have public hostnames resovle to private IPs. Same region security groups can reference peer security groups. VPC Peering does not support transitive peering between many VPCs. It only connects one VPC to one other VPC. VPC Peering connections cannot be created where there is overlap in the VPC CIDRs. It is best practice to never use the same address ranges in multiple VPCs.
+VPC peering is a direct encrypted network link between two VPCs. It works in the same or cross-region and same or cross-account. It is possible to have public hostnames resolve to private IPs. Same region security groups can reference peer security groups. VPC Peering does not support transitive peering between many VPCs. It only connects one VPC to one other VPC. VPC Peering connections cannot be created where there is overlap in the VPC CIDRs. It is best practice to never use the same address ranges in multiple VPCs.
 
 Security groups are tied to a VPC in a region. They are attached to ENIs and can reference each other. In the same region, security groups can reference each other. In the same account they can use just security group ID, in different accounts they should reference `account ID/SG ID`. This cannot be done across AWS regions. NACLs are required instead across regions. 
 
@@ -556,13 +556,13 @@ There are few ways to work with overlapping CIDR ranges with VPC peering. Routin
 
 ### IPSEC VPN Fundamentals
 
-IPSEC is a group of protocols that set up a secure tunnels across insecure networks between two peers (local and remote). It provides authentication and encryption. Any data within the VPC tunnels is encrypted and secure.
+IPSEC is a group of protocols that set up secure tunnels across insecure networks between two peers (local and remote). It provides authentication and encryption. Any data within the VPC tunnels is encrypted and secure.
 
 IPSEC has two phases: (1) establish a secure channel and (2) negotiate the IPsec SA for authenticating traffic. IKE Phase 1 is slow and heavy. Authenticated and asymmetric encryption is established and IKE SA is created (phase 1 tunnel). IKE Phase 2 (fast and agile) uses the keys agreed in phase one. They agree on encryption method and use keys for bulk data transfer.
 
 IKE Phase 1 starts with a certificate or pre-shared key authentication. Each side creates a DH (Diffie Hellman) private key and derives a public key which are then exchanged over the public Internet. Each side takes their private key and the remote peer's public key independelty generates the same shared DH key. They use this key to exchange key materials and agreements over the Internet. Each side generates a symmetrical key using DH key and exchanged material.
 
-In IKE Phase 2, the symmetricla key is used to encrypt and decrypt agreements and pass more key material. Best shared encryption and integrity methods are communicated and agreed on. The DH key and exchanged key material is used to create a symmetrical IPSEC key. The IPSEC key is used for bulk encryption and decryption of interesting traffic. This creates two one-way tunnels.
+In IKE Phase 2, the symmetrical key is used to encrypt and decrypt agreements and pass more key material. Best shared encryption and integrity methods are communicated and agreed on. The DH key and exchanged key material is used to create a symmetrical IPSEC key. The IPSEC key is used for bulk encryption and decryption of interesting traffic. This creates two one-way tunnels.
 
 VPNs can be policy-based or route-based. Policy-based VPNs have rule sets which match traffic and can have different rules or security settings. Route-based VPNs have target matching with prefixes. Route-based feature a single SA pair and single IPSEC key. Policy-based VPNs have a SA pair and unique IPSEC key for each kind of tunnel.
 
@@ -585,7 +585,7 @@ A VPN has a speed cap of 1.25 GB/s on the AWS but this can be lower depending on
 
 ### Border Gateway Protocol (BGP)
 
-BGP is basd on an autonomous system (AS). Routers are controlled by one entity, a network in BGP. ASN are unique and allocated by IANA (0-65535). ASN between 64512 and 65534 are private. BGP operates over `tcp/179`. It is reliable. It is not automatic as peering is manually configured. BGP is a path-vector protocol. It exchanges the best path to a destination between peers. This is the ASPATH. `iBGP` is internal BGP which routes within an AS. `eBGP` is external BGP for routing  between different AS's. BGP exchanges the shortest ASPATH between peers, even if a longer fibre would provide better performance. This can be circumvented through AS Path Prepending which artificially makes the satellite path look longer making the fibre path preferred.
+BGP is based on an autonomous system (AS). Routers are controlled by one entity, a network in BGP. ASN are unique and allocated by IANA (0-65535). ASN between 64512 and 65534 are private. BGP operates over `tcp/179`. It is reliable. It is not automatic as peering is manually configured. BGP is a path-vector protocol. It exchanges the best path to a destination between peers. This is the ASPATH. `iBGP` is internal BGP which routes within an AS. `eBGP` is external BGP for routing  between different AS's. BGP exchanges the shortest ASPATH between peers, even if a longer fibre would provide better performance. This can be circumvented through AS Path Prepending which artificially makes the satellite path look longer making the fibre path preferred.
 
 ### AWS Global Accelerator
 
@@ -593,7 +593,7 @@ Global Accelerator is an alternative for CloudFront to improve performance. Glob
 
 ### Accelerated VPN
 
-This an enhanced version of the Site-to-Site VPN product. Historically, Site-to-Site VPN uses VGW and CGWs with resilient public space endpoints. It creates two IPSEC tunnels for transit over the public Internet. This means variable performance, latency, and consistency. Alternatively, the VPN can be run over a DX Public VIF for better performance but can be costly.
+This is an enhanced version of the Site-to-Site VPN product. Historically, Site-to-Site VPN uses VGW and CGWs with resilient public space endpoints. It creates two IPSEC tunnels for transit over the public Internet. This means variable performance, latency, and consistency. Alternatively, the VPN can be run over a DX Public VIF for better performance but can be costly.
 
 Logically 2 IPSEC tunnels between the VGW and CGW but physically the transit path is indirect. A Transit Gateway allows a pair of VPN tunnels to provide access to many VPCs but this still uses the public Internet. With Global Accelerator, VPN tunnel IPs are global, and connections are routed to the closest global accelerator edge location. This means low latency, less jitter, and higher throughput. Acceleration can be enabled when creating a TGW VPN attachment. Not compatible with VPNs using a VGW.
 
@@ -646,7 +646,7 @@ Auto-negotiation must be disabled and port speed and full duplex must be manuall
 
 DX MACsec is an IEEE 802.1AE-2018 standard that provides data confidentiality, integrity, replay protection and origin authenticity. It is a frame encryption at Layer 2 with a hop-by-hop encryption architecture between two switches and routers. It is not end-to-end and so does nto replace IPSEC over DX. It is designed to allow for super high speed encryption on terabit networks.
 
-MACSec depends on unidirectional secure channels with one in and one out. Secure channels are assigned identifiers (SCI). Sessions on SC are known as secure associations and one generally exists at a time except for when the secure association are being replaced and exchanged. MACsec encapsulation contains 16 bytes of MACsec tag and 16 byte Integrity Check Value (ICV). MACsec key agreement covers discovery, authenticaiton, and key generation. The Cipher Suite controls how data is encrypted, packets per key, and rotation.
+MACSec depends on unidirectional secure channels with one in and one out. Secure channels are assigned identifiers (SCI). Sessions on SC are known as secure associations and one generally exists at a time except for when the secure association are being replaced and exchanged. MACsec encapsulation contains 16 bytes of MACsec tag and 16 byte Integrity Check Value (ICV). MACsec key agreement covers discovery, authentication, and key generation. The Cipher Suite controls how data is encrypted, packets per key, and rotation.
 
 The DX connection process consists of several steps. A DX connection begins in a DX location which contains AWS equipment and customer/provider equipment. AWS does not own the latter, it is rented from a data center operator. Only the data-center staff can connect this equipment together. Authorization is needed from all parties, and this is known as Letter of Authorization Customer Facility Access (LOA-CFA) to give data-center staff authorization to change equipment connections.
 
