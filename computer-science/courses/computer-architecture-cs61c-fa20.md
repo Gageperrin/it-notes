@@ -4,9 +4,9 @@ These are my notes for UC Berkeley's CS61C FA20 course "Great Ideas in Computer 
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Number Representation](#number-representation)
-3. Introduction to C
+1. [Introduction](#lecture-1---intro)
+2. [Number Representation](#lecture-2---number-representation)
+3. [Introduction to C](#lecture-3---introduction-to-c)
 4. Floating Point
 5. RISC-V
 6. Compilation, Assembly, Linking, Loading
@@ -53,10 +53,10 @@ Numerals are representations of numbers. Computer science in one sense can be un
 
 By default, numbers are written in base 10.
 
-Base 1 - tally system (|)
-Base 2 - binary (0 and 1). bits are *bi*nary digi*ts*
-Base 10 - decimal (0-9)
-Base 16 - hexadecimal (0-9 and a-f)
+* Base 1 - tally system - |||
+* Base 2 - binary (0 and 1). bits are *bi*nary digi*ts*
+* Base 10 - decimal (0-9)
+* Base 16 - hexadecimal (0-9 and a-f)
 
 Example conversions:
 * Binary 1101 -> 2^3+2^2+0+2^0 -> 8+4+0+1 -> 13 in decimal
@@ -112,3 +112,34 @@ Two's Complement addresses many of the issues found in sign and magnitude and on
 Bias (or Excess-N) is another method to represent signed numbers, where a fixed number, known as the "bias," is added to the actual number to keep all representations positive. For example, if the bias is 15 and the range is 5 bits, then the number zero is represented as 01111 (15 in binary), and the maximum positive value would be represented as 11110 (30 in binary, which is 15 + 15), while the maximum negative value starts from 00000 (which is -15 in this scheme). This method is less common in general-purpose computing but can be found in specific applications like floating-point number representations.
 
 Unsigned numbers, Two's complement, and Bias Representation are the most common ways for handling number representation today.
+
+## Lecture 3 - Introduction to C
+
+ENIAC was the first electronic general-purpose computer in 1946. It could multiply in 2.8ms but needed 2-3 days to program using patch cords and switches.
+
+EDSAC was the first general stored-program computer in 1949 which could hold numbers in memory. Bits are not just the numbers but the instructions on how to manipulate the numbers.
+
+### Great Idea #1 - Abstraction
+
+THe layers of computing:
+* High level language program - C
+* Compiled by an Assembly Language Program - RISC-V
+* Assembled by a Machine Language Program - RISC-V
+* Hardware architecture description - block diagram
+* Logic circuit description - circuit schematic diagram
+
+First developed in the early 1970s, C enabled the first operating system not written in assembly. UNIX became a portable OS (1973).
+
+### Compile vs. Interpret
+
+C compilers map C programs directly into architecture-specific machine code. For C, programs are first compiled from `.c` files to `.o` files then linking the `.o` files into executables. Assembling is hidden to the user.
+
+Compile advantages:
+* Makefiles require only modified files to recompiled, not every file
+* Excellent run-time performance
+
+Compile disadvantages:
+* Compiled files and executables are architecture-specific and depend on both processor type and the OS
+* Because of this, the executable must be rebuilt on each new system
+* The iteration cycle of change, compile, run can be slow during development.
+* Linking can introduce bottlenecks
