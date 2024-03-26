@@ -143,3 +143,114 @@ Compile disadvantages:
 * Because of this, the executable must be rebuilt on each new system
 * The iteration cycle of change, compile, run can be slow during development.
 * Linking can introduce bottlenecks
+
+### C Pre-Processor (CPP)
+
+C source files first pass through macro processor (CPP) before compiler sees code. CCP commands begin with `#` such as `#include "file.h"`. `-save-temps` options can be used with gcc to see result of pre-processing.
+
+CPP macros can be defined to create small functions to change the text of the function (e.g. `#define` is string replacement). This can produce unintentional errors when these functions have unintentional side-effects.
+
+### C Language
+
+* Function oriented
+* Programming unit at function level
+* Compilation: `gcc hello.c`
+* Execution: `a.out`
+* Storage: manual (`malloc`, `free`)
+* Comments: `/* */`
+* Constants: `#define`, `const`
+* Variable declaration at beginning of a block
+* No clear naming conventions in C
+* Libraries accessed with `#include`
+
+Hello World example
+
+```
+#include <stdio.h>
+int main<void>
+{
+    printf("Hi\n");
+    return 0;
+}
+```
+
+C99 is an update to C which adds:
+* Declaration in `for` loops
+* `//` at end of line
+* Variable-length non-global arrays
+* `<inttypes.h>` - explicit integer types
+* `<stdboolh>` for boolean logic definitions
+
+C11 and C18 were further updates with:
+* Multi-threading
+* Unicode strings and constants
+* Removal of `gets()`
+* Type-generic Macros
+
+### C Syntax
+
+To get the `main` function to accept arguments use `int main (int argc, char *argv[])`.
+
+`argc` will contain the number of strings on the command lines, with the executable counting as one. `argv` is a pointer to an array containing the arguments as strings.
+
+C by default is true except for `0`, `null`, and boolean false types defined in `stdbool.h`.
+
+Types:
+* `int` - signed integers of at least 16b
+* `unsigned int` - unsigned integers
+* `float` - floating point decimal
+* `double` - equal or higher precision floating point
+* `char` - single character
+* `long` - longer `int` of at least 32b
+* `long long` - even long `int` of at least 64b
+
+Integer type should be the most efficient type for the processor.
+
+Constant is assigned a typed value once in declaration, and the value cannot change during the entire execution of the program. Enums are a group of related integer constants. Color and card suits are an example of enums.
+
+Functions in C are typed. Every function needs an explicit return type or it can be specified as `void` to indicate no value will be returned. Variables and functions must be declared before they are used.
+
+`typedef` allows you to define new types. `struct` is for a structured group of variables.
+
+If else - `if (expression) statement1 else statement2`
+While - `while (expression) statement` or `do statement while (expression)`
+For - `for (initialize; check; update) statement`
+Switch -
+```
+switch (expression) {
+    case const1: statements
+    case const2: statements
+    default: statements
+    }
+    break;
+```
+
+`goto` - An advanced technique for navigating non-local control flow
+
+### Memory Addressing and Pointers
+
+Memory is a single huge array. Each cell of the array has an address associated with it and stores some value. The address refers to the memory location not the value of the location itself. The address points to a memory location. A pointer is a variable that contains the address of a variable.
+
+Pointer syntax:
+* `int *p` - The variable `p` is the address of an `int`.
+* `p = &y` - The address of y is assigned to the variable `p`.
+* `z = p*` - The value at address stored in `p` is assigned to the variable `z`
+
+Pointers are useful when dealing with large data values as it can pass along a reference to the data without the data itself. No need to copy large data amounts. Pointers can point any data type (even functions) but normally only one type. `void *` can point to anything but is dangerous to use.
+
+The drawback is that pointers are typically one of the largest source of bugs in C programming, especially with dynamic memory management, dangling references, and memory leaks.
+
+For structures, pointers can use arrow or dot notation to access properties. Pointer arithmetic can be used to move a certain number of bytes along memory address.
+
+Pointers can be reassigned or point to another pointer. 
+Null pointers can cause the program to crash is it is used to read or write. However, tests can evaluate for the null pointer (since it is false) to easily handle exceptions.
+
+Modern machines are byte-addressable with memory composed of 8-bit storage cells with a unique address. A C pointer is abstracted memory address. The type declaration tells compiler how many bytes to fetch on each access through the pointer. The `sizeof()` operator returns the number of bytes in an object.
+
+### Arrays
+
+Arrays are a contiguous block of memory. They are almost identical to pointers (`char *string` and `char string[]`). They differ in a subtle way. Arrays are declared as filled and are not incremented as pointers are. An array variable is a pointer to the first element. Declared arrays are only allocated while the scope is valid.
+
+Arrays maintain a single source of truth through indirection that allows you to forego multiple copies of the same memory value.
+
+The pitfall is that an array in C does not know its own length and does not check its bound. You can thus accidentally access outside the end of an array, so the array and its size must be passed to a procedure. Because of this shortcoming, segmentation faults and bus errors can emerge and these are difficult to solve.
