@@ -254,3 +254,72 @@ Arrays are a contiguous block of memory. They are almost identical to pointers (
 Arrays maintain a single source of truth through indirection that allows you to forego multiple copies of the same memory value.
 
 The pitfall is that an array in C does not know its own length and does not check its bound. You can thus accidentally access outside the end of an array, so the array and its size must be passed to a procedure. Because of this shortcoming, segmentation faults and bus errors can emerge and these are difficult to solve.
+
+### Dynamic Memory Allocation
+
+The `sizeof()` gives the size of objects in bytes, includign arrays. To allocate room for something new, use `malloc()` with the help of a typecast. `malloc()` initializes a memory location with garbage.
+
+To dynamically free space, use `free(ptr)`. The program frees all memory on exit, however be wary for when `main` may become a subroutine that is never freed. 
+
+Common stumbling blocks include running `free()` on the same memory value twice or calling `free()` on something not gotten back from `malloc()`.
+
+The memory heap can be managed with `realloc(p, size)`. It resizes a previously allocated block at `p` to a new size. If `p` is null, then `realloc` behaves like `malloc`. If size is 0, then `realloc` behaves like `free`, deallocatingteh block from the heap. This returns the new address of the memory block which likely has moved.
+
+Dynamic memory management introduces additional overhead due to the requirements of freeing memory afterward.
+
+#### Example: Linked List ####
+```
+struct Node {
+    char *value;
+    struct Node *next;
+};
+typedef struct Node *List;
+
+/* Initialize an empty list */
+List ListNew(void)
+{ return NULL; }
+
+/* Add a string to an existing list */
+List list_add(List list, char *string)
+{
+    struct Node *node = (struct Node*) malloc(sizeof(struct Node));
+    node -> value = (char*) malloc(strlen(string) + 1);
+    strcpy(node->value, string);
+    node->next = list;
+    return node;
+}
+```
+
+### Memory Locations
+
+Structure declaration does not allocate memory, but variable declaration does.
+
+Memory can be allocated to declare a local variable, for dynamic allocation at runtime, or to declare data outside of any procedure (global variables).
+
+C has three pools of memory:
+* Static storage - global variable storage, permanent during entire runtime.
+* Stack - local variable storage, parameters, return address
+* Heap - dynamic `malloc()` storage
+
+Address space container four region:
+* `stack` local variables, grows downward
+* `heap` space requested for pointers via `malloc()`, grows upward
+* `static data` is locked during runtime
+* `code` is locked during runtime
+
+Variables declared outside a procedure are allocated in static storage. Variables declared inside a procedure are allocated on the stack and freed when the procedure returns.
+
+The heap is a large pool of memory not allocated in contiguous order. External fragmentation is when most of free memory is in many small chunks.
+
+`malloc()` searches the free list for a block that is big enough. If none is found, more memory is requested from the OS. If it can't find sufficient memory it fails. `free()` checks if the blocks adjacent to the fred block are also free. If they are it coalesces the blocks into a larger, free block of memory.
+
+`malloc()` can choose blocks of memory based on best fit, first fit, and next fit
+
+Pointers are used for passing large structs or arrays of data but also cause the most bugs in conjunction with dynamic memory management. Segmentation faults are when a program tries to read or write memory at illegal locations.
+
+Common examples:
+* A dangling reference occurs if you use `ptr` before `malloc()`.
+* A memory leak occurs if the tardy is free and loses the pointer. 
+* A buffer overflow occurs when a pointer writes off the end of an array.
+* Trying to free unallocated or deallocated data
+*  `realloc` can move data which means that reads can be corrupted if they point to the wrong, original address space via a stale pointer.
