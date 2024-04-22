@@ -323,3 +323,57 @@ Common examples:
 * A buffer overflow occurs when a pointer writes off the end of an array.
 * Trying to free unallocated or deallocated data
 *  `realloc` can move data which means that reads can be corrupted if they point to the wrong, original address space via a stale pointer.
+
+
+## Floating Point
+
+In the representation of fractions, binary point like a decimal point signifies the boundary between the integer and fractional parts.
+
+Example: 10.1010 in binary = 2.625 in base ten 
+
+xx.yyyy
+
+The last y is 2^-4
+
+If we assume a fixed binary point, range of 6-bit representation is 0 to 3.97375 (almost 4).
+
+Addition and multiplication can also be represented with fixed point.
+
+Fixed binary points face limitations with size, floating point is much more flexible and an efficient use of limited bits.
+
+With floating point representation, each numeral carries an exponent field recording the locations of its binary point. The binary point can be outside the stored bits, so very large and small numbers can be represented.
+
+Normalized form of decimal notation means there are no leading zeros. The four components of scientific decimal and binary notation are the mantissa, binary point, the radix, and the exponent.
+
+With floating point notation there is a sign, an exponent, and a significand.
+
+If the result is too large, it causes overflow where the exponent is larger than the represented exponent field. If the result is too small (close to zero), it causes underflow where the negative exponent is larger than the represented 8-bit exponent field.
+
+IEEE 754 Floating Point Standard uses a biased exponent representation. Designers want to used fixed point numbers even without fixed point hardware. With this standard, number are ordered exactly the same as in sign-magnitude.
+
+Biased notation is where bias is a number subtracted to get a real number. IEEE 754 uses bias of 127 for single precision. Double precision identical except with an exponent bias of 1023 (half, quad similar).
+
+### Special Numbers
+
+To represent infinity, use the most positive exponent (255) with significands of all zeros.
+
+Zero is represented with an exponent and significands of all zeros.
+
+If exponent is 255 and significand is nonzero, it is a NaN (Not a number). These are useful for debugging.
+
+If exponent is zero, and significand is nonzero, it is a denorm. There is gap among representable numbers when they get exceedingly close to zero. There is a limit at smallest representable positive number. Normalization and implicit 1 is to blame. A denormalized number has no implied leading 1, with an implicit exponent of -126.
+
+Example of decimal equivalents of floating point notation...
+
+### Issues with Floating Point
+
+* Floating Point is not associative because it only approximates the real result.
+* With floating point hardware, two extra bits are included for rounding.
+* IEEE FP Rounding Modes
+   * Round toward positive or negative infinity
+   * Truncate - round to 0
+   * Unbiased rounding - round to even in binary
+
+FP addition with floats is more difficult than with integers because the significands cannot simply be added to each other. First the values must be denormalized to match exponents, then the significands must be added to get the result. Keep the same exponent and then normalize it.
+
+Casting floats to ints and vice versa uses truncation in C.
