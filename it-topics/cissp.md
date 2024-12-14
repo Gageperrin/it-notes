@@ -74,17 +74,177 @@ Intellectual property is an intangible product of human intellect protected by l
 
 In addition to this, there are import and export controls at the national law to manage which products, technologies, and information can move in and out of those countries:
 * The Wassenar Arrangement is an agreement by a number of countries to share cryptographic information with one another while also protecting it from terrorists
-* Internatioanl Traffic in Arms Regulation (ITAR) is a US regulation built to ensure control over any exports of items belonging to the United States Munitions List (USML). It falls under the Department of State's Directorate of Defense Trade Controls (DDTC)
+* International Traffic in Arms Regulation (ITAR) is a US regulation built to ensure control over any exports of items belonging to the United States Munitions List (USML). It falls under the Department of State's Directorate of Defense Trade Controls (DDTC)
 * Export Administration Regulations (EAR) focuses on export controls around commercial use items. It falls under the US Department of Commerce's Bureau of Industry and Security (BIS)
 
-Privacy also falls under legal scope. Privacy is the state or condiiton of being free from being observed or disturbed by other people. This can include Personally Identifiable Information (PII), Personal Health Information (PHI), Sensitive Personal Information (SPI), and Personal Cardholder Information (PCI). These combined with IP are sensitive data.
+Privacy also falls under legal scope. Privacy is the state or condition of being free from being observed or disturbed by other people. This can include Personally Identifiable Information (PII), Personal Health Information (PHI), Sensitive Personal Information (SPI), and Personal Cardholder Information (PCI). These combined with IP are sensitive data.
 
-Personal data may include direct or indirect identfiers. Direct identifiers are unique identifiers for an individual (phone number, SSN) while indirect identifiers may be used to narrow the scope of identification (age, zip code).
+Personal data may include direct or indirect identifiers. Direct identifiers are unique identifiers for an individual (phone number, SSN) while indirect identifiers may be used to narrow the scope of identification (age, zip code).
 
 Privacy policies are required to speak to how:
 * Data owners have defined accountabilities regarding the collection and protection of customer data
 * Data custodians need to have defined responsibilities based on the input of owners
-* Data prcoessors need to have clearly defined responsibilities when processing data on behalf of the owner
+* Data processors need to have clearly defined responsibilities when processing data on behalf of the owner
 * Data subjects which are the individuals that the data belongs to
 
-General Data Protection Regulation (GDPR) principles:
+General Data Protection Regulation (GDPR) is a single set of rules that applies to all EU member states. Each state has a Supervisory Authority (SA) to hear and investigate complaints. Data subjects have the right to lodge a complaint with a SA. There are seven principles that describe lawful processing of personal data: lawfulness, purpose limitation, data minimization, accuracy, storage limitation, integrity and confidentiality, and lastly accountability. GDPR also stipulates that privacy breaches must be reported within 72 hours.
+
+The Organization for Economic Cooperation and Development (OECD) also has its own set of standards and policies. These include the following principles:
+* Collection Limitation Principle: Limit the collection of personal data to only what is needed to provide a service.
+* Data Quality Principle: Personal data should be relevant, accurate, and complete, and it should be kept up to date.
+* Purpose Specification Principle: The purposes for which personal data is collected should be clearly specified at the time of collection.
+* Use Limitation Principle: Personal data should only be used based on the purposes for which it was collected and with consent of the data subject or by authority of law; in other words, if an organization says it has collected personal data for a specific purpose, they should only use the personal data for that purpose.
+* Security Safeguards Principle: Personal data should be protected by reasonable security safeguards against loss, unauthorized access, destruction, use, modification, etc. Essentially, security controls must be put in place, because privacy is unattainable without security.
+* Openness Principle: The culture of the organization collecting personal data should be one of openness, transparency, and honesty about how personal data is being used and in what context.
+* Individual Participation Principle: When an individual--data subject--provides personal data to an organization, that individual should have the right to obtain their data from the data controller as well as have their data removed. In other words, the individual should have the chance to participate or choose whether to share their personal information or withhold it. The term data subject refers to the individual to whom the personal data pertains.
+* Accountability Principle: A data controller should be accountable for complying with the other principles. What this basically means is that an organization collects personal data is now accountable for the protection of that information.
+
+Because of the importance of privacy, Privacy Impact Assessments (PIA) and Data Protection Impact Assessments (DPIA) may be taken to assess an organization's handling of data in accordance of privacy standards. PIA takes the following steps:
+1. Identify the need for a DPIA
+2. Describe the data processing
+3. Assess necessity and proportionality
+4. Consult interested parties
+5. Identify and assess risks
+6. Identify measures to mitigate the risks
+7. Sign off and record outcomes
+8. Monitor and review
+
+## 1.6 - Understand requirements for investigation types
+Cf. 7.1
+
+## 1.7 - Develop, document, and implement security policies, procedures, standards, baselines, and guidelines
+
+The board or CEO often institutes as Overarching Security Policy which is a broader statement of goals and objectives that also grants authority to security activities. Functional policies then extend this to provide more specificity that can be applied to:
+* Standards: Specific hardware and software solutions, mechanisms, and products
+* Procedures: Step-by-step descriptions on how to perform a task
+* Baselines: Defined minimal implementation methods/levels for security mechanisms and products
+* Guidelines: Recommended or suggested actions
+
+## 1.8 - Identify, analyze, and prioritize business continuity (BC) requirements
+Cf. 7.1
+
+## 1.9 - Contribute to and enforce personnel security policies and procedures
+
+Personnel security includes controls like:
+* Personnel security policies implemented through procedures, and regularly reviewed
+* Candidate screening and hiring
+* Employment agreements and policies through separation of duties and job rotation
+* Process for employee duress
+* Need-to-know and least privilege
+* Nondisclosure agreements (NDA's)
+* Noncompete agreements (NCA's)
+
+## 1.10 - Understand and apply risk management concepts
+
+Risk management is the identification, assessment, and prioritization of risks and the cost-efficient application of resources to minimize the probability or impact of these risks.
+
+It consists of the following steps:
+1. Value: Quantitative or qualitative value analysis
+2. Risk Analysis: Threat, Vulnerability, Impact, Probability/likelihood
+3. Treatment: Avoid, Transfer, Mitigate, Accept
+
+Risk = (threat * vulnerability / probability) * impact
+
+Risk management terms include:
+* Threat agent: Entity that has the potential to cause damage to an asset
+* Threat: Any potential danger
+* Attack: Any harmful action that exploits a vulnerability
+* Vulnerability: A weakness in an asset tha could be exploited by a threat
+* Risk: Significant exposure to a threat or vulnerability
+* Asset: Anything valued by the organization
+* Exposure/Impact: Negative consequences to an asset if the risk is realized
+* Countermeasures and Safeguards: Controls implemented to reduce threat agents, threats, and vulnerabilities and reduce the negative impact of a risk being realized
+* Residual risk: The risk that remains after countermeasures and safeguards are implemented
+
+One form of quantitative risk analysis is the Annualized Loss Expectancy which expresses the annual cost of the risk materializing.
+
+ALE = SLE * (AV * EF ) * ARO
+
+* Single Loss Expectancy (SLE) - Denotes the cost if the risk occurs once
+* Asset Value (AV) - The cost of the asset in a monetary value
+* Exposure Factor (EF) - Measured as a percentage and expresses how much of the asset's value stands to be lost in case of a risk materializing
+* Annualized Loss Expectancy - Expresses the annual cost of the risk materializing.
+
+Risk can be managed by:
+1. *Avoiding* it, which means not doing the thing that exposes the risk
+2. *Transferring* it, by moving the cost of the risk elsewhere, such as an insurance company
+3. *Mitigate* it, implement controls to reduce the risk to an acceptable level
+4. *Accept* it, the asset owner or senior management (the accountable party) accepts the risk.
+
+There are seven major kinds of risk controls:
+1. Directive controls - direct, confine, or control the actions of subjects to encourage compliance with security policies.
+2. Deterrent controls - discourage violation of security policies
+3. Preventive controls - prevent undesired action or events.
+4. Detective controls - identify if the risk has occurred.
+5. Corrective controls - minimize the negative impact of a risk occurring.
+6. Recovery controls - recover the system or process and return to normal operation.
+7. Compensating controls - auxiliary support of other controls.
+
+These can be combined in some form of preventive, detective, and corrective controls to create *complete control*. Safeguards are proactive controls that are designed to deter or prevent the risk. Countermeasures are reactive controls that are triggered after the risk has occurred, whether that be administrative, technical, or physical.
+
+Each control should have a functional aspect (it works) and an assurance aspect (it can be proven that it works).
+
+Security controls should be selected or advocated based on the appropriate risk metrics for an organization and presented to the decision-making audience in a way that relates it to a big picture.
+
+Risk management should undergo continuous improvement through the four steps of plan, do, check, and act.
+
+Risk management must be applied to very link in the supply chain, including vendors and service providers.
+
+There are four primary risk management frameworks:
+1. NIST SP 800-37 (RMF) - describes the risk management framework (RMF) and provides guidelines for applying it to information systems and organizations.
+2. ISO 31000 - a family of standards and best practices relating to risk management.
+3. COSO - a definition to essential enterprise risk management components, reviewing ERM principles and concepts
+4. ISACA Risk IT Framework - ISACA's RIsk IT Framework contains guidelines and practices fo risk optimization, security, and business value. It aligns with COBIT.
+
+For the CISSP exam, NIST SP 800-37 Rev. 2 should be the focus.
+1. Prepare to execute the RMF
+2. Categorize Information Systems
+3. Select Security Controls
+4. Implement Security Controls
+5. Assess Security Controls
+6. Authorize Information System
+7. Monitor Security Controls
+
+## 1.11 - Understand and apply threat modeling concepts and methodologies
+
+Threat modeling is the systematic identification, enumeration, and prioritization of threats related to an asset. Three major threat modeling methodologies are STRIDE, PASTA, and DREAD.
+
+STRIDE was developed by Microsoft and focuses on applications and operating systems.
+S - Spoofing - This violates authentication
+T - Tampering - This violates integrity
+R - Repudation - This violates nonrepudation
+I - Information Disclosure - This violates confidentiality
+D - Denial of Service - This violates availability
+E - Elevation of Privilege - This violates authorization
+
+The Process for Attack Simulation and Threat Analysis (PASTA) is attacker-focused and include seven stages.
+1. Define objectives related to application risk profiles
+2. Define technical scope so as to decompose the technology stack into understandable and assessable components.
+3. Application decomposition understands the data flows among application components and services in the application threat model
+4. Threat analysis reviews threat assertions from within the environment
+5. Vulnerability and weakness analysis at the level of application design and code and how those correlate with the findings from threat analysis
+6. Attacking modeling emulates attacks that could exploit identified weaknesses/vulnerabilities.
+7. Risk and impact analysis centers around remediating vulnerabilities and weaknesses in code or design that can facilitate attack patterns.
+
+DREAD is often used to rank threat severity in conjunction with STRIDE with each key point having an assigned score of 1-3.
+D - Damage
+R - Reproducibility
+E - Exploitability
+A - Affected Users
+D - Discoverability
+
+
+Social engineering consists of deception or intimidation to get people to provide sensitive information that should not be accessible to the exploiting party. The most common forms of social engineering include but are not limited to: phishing, spear phishing, whaling, smishing, vishing, pretexting, baiting, or tailgating and piggybacking.
+
+## 1.12 - Apply supply chain risk management (SCRM) concepts
+
+Security must be considered for all acquisitions during the procurement process, and security requirements must be clearly communicated to suppliers/vendors/service providers.
+
+These include:
+* Service Level Requirements (SLR's) that outline detailed service descriptions, service level targets, and mutual responsibilities.
+* Service Level Agreements (SLA's) that include service levels, governance, security, compliance, and outlines liability and indemnification.
+* Service Level Reports issued by the vendor or service provider that includes achievement of metrics defined in the SLA, identification of issues, reporting channels, management, and third party SOC reports.
+
+## 1.13 - Establish and maintain a security awareness, education, and training programs
+
+Everyone in the organization is responsible for security and this consists of promoting awareness, pinpointed training, and general education on fundamental concepts. These trainings should prioritize topics, review concepts regularly, and evaluate program effectiveness.
