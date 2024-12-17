@@ -194,7 +194,7 @@ There are four primary risk management frameworks:
 1. NIST SP 800-37 (RMF) - describes the risk management framework (RMF) and provides guidelines for applying it to information systems and organizations.
 2. ISO 31000 - a family of standards and best practices relating to risk management.
 3. COSO - a definition to essential enterprise risk management components, reviewing ERM principles and concepts
-4. ISACA Risk IT Framework - ISACA's RIsk IT Framework contains guidelines and practices fo risk optimization, security, and business value. It aligns with COBIT.
+4. ISACA Risk IT Framework - ISACA's Risk IT Framework contains guidelines and practices fo risk optimization, security, and business value. It aligns with COBIT.
 
 For the CISSP exam, NIST SP 800-37 Rev. 2 should be the focus.
 1. Prepare to execute the RMF
@@ -212,7 +212,7 @@ Threat modeling is the systematic identification, enumeration, and prioritizatio
 STRIDE was developed by Microsoft and focuses on applications and operating systems.
 S - Spoofing - This violates authentication
 T - Tampering - This violates integrity
-R - Repudation - This violates nonrepudation
+R - Repudiation - This violates nonrepudiation
 I - Information Disclosure - This violates confidentiality
 D - Denial of Service - This violates availability
 E - Elevation of Privilege - This violates authorization
@@ -248,3 +248,64 @@ These include:
 ## 1.13 - Establish and maintain a security awareness, education, and training programs
 
 Everyone in the organization is responsible for security and this consists of promoting awareness, pinpointed training, and general education on fundamental concepts. These trainings should prioritize topics, review concepts regularly, and evaluate program effectiveness.
+
+# Domain 2: Asset Security
+
+## 2.1 - Identify and classify information and assets
+
+Asset classification is assigning assets the level of protection they require, based on their value to the organization.
+
+Classifying information can help identify critical information, its sensitivity to modification as well as promote commitment to both protecting valuable assets and keep it confidential where applicable.
+
+Data classification ensures that data receives an appropriate level of protection. It consists of the following steps:
+1. Asset inventory
+2. Determine and assign ownership
+3. Classify based on value
+4. Protect and handle based on classification
+5. Assess and review
+
+Classification orders objects and their classes according to value while categorization sorts objects into defined classifications.
+
+This depends on either labeling for system-readable association of security attributes with subjects and objects represented by internal data structures, based on system-based enforcement, while marking is human-readable association of security attributes with objects for process-based enforcement.
+
+## 2.2 - Establish information and asset handling requirements
+
+Handling requirements are based on the classification of the asset, not the type of media. The asset owner determines who may access media, and the requirements for its storage, retention, and destruction.
+
+## 2.3 - Provision resource securely
+
+The owner is ultimately accountable for an asset including how it is classified and categorized, managing its access, and ensuring appropriate controls are in place based on the asset's classification. Owners can delegate responsibility for an asset, but they always remain accountable for the protection of the asset. In other words, accountability cannot be delegated to anyone else. The owner can delegate the responsibility, but accountability remains with the owner.
+
+The data owner is accountable for the protection of data, the data processor is responsible for processing it on behalf of the owner, the custodian has the technical responsibility for data, the data steward has the business responsibility for data, and the data subject is the entity to which the data pertains.
+
+## 2.4 - Manage data life cycle
+
+Data must be protected in each stage of its lifecycle whether it be creation, collection, its update, storage, use, sharing, archiving, or final disposal and destruction.
+
+When destroying data, defensible destruction means being able tgo prove there is no possible way for anyone to recover the data.
+
+To destroy data is to physically destroy the media and is most effective. To purge uses logical/physical techniques to sanitize data so that it cannot be reconstructed. Clearing data uses logical techniques but the data may be reconstructed. Various techniques that employ this include incineration, shredding, disintegration, drilling holdes, degaussing, crypto shredding, overwriting, wiping, erasing, or formatting.
+
+Object reuse is a security method that overwrites data from media. SSD's present a problem for this with how they use flash memory technology to represent binary data. SSD vendors generally provide their own tols to securely remove data. If all else fails, it can be physically destroyed.
+
+## 2.5 - Ensure appropriate asset retention
+
+Some forms of data may be required to be retained for certain periods of time, sometimes for years. These are determined by laws, regulations, and industry standards. Data archival depends on understanding the media type, the security requirements, the availability requirements, the retention period, and associated costs.
+
+## 2.6 - Determine data security controls and compliance requirements
+
+Security controls often need to be determined for the different states of data:
+* At rest - encryption, access control, backup + restoration
+* In transit - access control, network encryption
+* In use - homomorphic encryption, RBAC, DRP, DLP
+
+Network encryption can take the following forms:
+* End-to-end encryption means the data portion of a packet is encrypted when transmitted from the source node and remains encrypted through every node until it reaches its destination.
+* Link encryption means the packet header and data are encrypted between each node but decrypted and re-encrypted again with each hop. This is not a very secure option.
+* Onion encryption is the most secure of the three as multiple layers of encryption are wrapped at the first node then each subsequent node unwraps one layer and passes it along. This can help provide anonymity and confidentiality to the data.
+
+Beyond this information can also be obfuscated through concealing, pruning, fabricating, trimming, or encrypting data.
+
+Digital Rights Management (DRM) protects intellectual property assets in their use, modification, or sharing, as stipulated by NIST SP 500-241. DRM technologies have been developed to protect mass-produced media, and these same technologies have been adopted for protecting sensitive organization data using Information Rights Management (IRM) tooling.
+
+Data Loss Prevention (DLP) is a system's ability to identify, monitor, and protect data in use, motion and at rest using deep packet content inspection, contextual security analysis of the transaction originator, data object, medium, timing, recipient, destination, etc. within a centralized management framework.
