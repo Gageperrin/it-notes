@@ -9,7 +9,7 @@ Sources include:
 
 ## - 1.1 Professional ethics
 
-CISSP holders are subject to the (ISC)^2 Code of Professional Ethics whose preamble holds to the fhollwoing: "The safety and welfare of society and the common good, duty to our principals, and to each other, requires that we adhere to, and be seen to adhere, to the highest ethical standards of behavior."
+CISSP holders are subject to the (ISC)^2 Code of Professional Ethics whose preamble holds to the following: "The safety and welfare of society and the common good, duty to our principals, and to each other, requires that we adhere to, and be seen to adhere, to the highest ethical standards of behavior."
 
 The (ISC)^2 Code of Ethics holds the following canons, prioritized in order of importance:
 1. Protect society, the common good, necessary public trust and confidence, and the infrastructure
@@ -20,17 +20,17 @@ The (ISC)^2 Code of Ethics holds the following canons, prioritized in order of i
 ## - 1.2 Understand and apply security concepts
 
 The CIA triad consists of confidentiality, integrity, and availability:
-* Confidentiality: Protects assets using important principlpes such as need-to-know and least privilege; prevents unauthorized disclosure
+* Confidentiality: Protects assets using important principles such as need-to-know and least privilege; prevents unauthorized disclosure
 * Integrity: Protects and adds value to assets by making them more accurate, more timely, more current, more meaningful; prevents unauthorized or accidental changes to assets such as information
-* Availability: Protects critical assets based on value to ensure organizational assets are available when required by stekholders
+* Availability: Protects critical assets based on value to ensure organizational assets are available when required by stakeholders
 
 These three pillars have been supplemented by two more:
-* Authenticity: Proves assets are legitimate and bona fide, and verifies that htey are trusted and verified. Proves the source and origin of important valuable assets. Also referred to as "proof of origin".
+* Authenticity: Proves assets are legitimate and bona fide, and verifies that they are trusted and verified. Proves the source and origin of important valuable assets. Also referred to as "proof of origin".
 * Nonrepudiation: Provides assurance that someone cannot dispute the validity of something; the inability to refute accountability or responsibility. Also, inability to deny having done something.
 
 ## - 1.3 Evaluate and apply security governance principles
 
-Governance is intended to enhance organizational value based on the goals and objectives of the organizaiton. Security must be managed top donw.
+Governance is intended to enhance organizational value based on the goals and objectives of the organization. Security must be managed top down.
 
 Two key parts of this are (1) scoping and (2) tailoring. Scoping determines which potential control elements are in scope. Tailoring then considers in scope security control elements and further refines or enhances them so they are most effective and aligned with the goals of the organization.
 
@@ -38,13 +38,13 @@ When enforcing these policies, only one person, group, or entity should be accou
 
 At a high level:
 * Owners/Controllers/Senior Management are *accountable* for (1) ensuring appropriate security controls are implemented, (2) determining the appropriate sensitivity or classification levels, and (3) determining access privileges
-* Security Professionals/IT Security Officers are responsible for design, implementation, management, and review of the organization's security policies, standards, baselines, procedurers, and guidelines
-* IT Officers are responsible for developing and implementing technology solutions, working with the security officers to evaluate security strategies, andworking closely with Business Continuity managers to ensure continuity of operations should disruption occur
+* Security Professionals/IT Security Officers are responsible for design, implementation, management, and review of the organization's security policies, standards, baselines, procedures, and guidelines
+* IT Officers are responsible for developing and implementing technology solutions, working with the security officers to evaluate security strategies, and working closely with Business Continuity managers to ensure continuity of operations should disruption occur
 * IT Function is responsible for implementing and adhering to security policies
-* Operators/Administrators are responsible for managing, troubleshooting, and applying hardware and software patches to systems as necessary, managing user permissions per owner specifications, and administrering and managing specific applications and services
+* Operators/Administrators are responsible for managing, troubleshooting, and applying hardware and software patches to systems as necessary, managing user permissions per owner specifications, and administering and managing specific applications and services
 * Network Administrators are responsible for maintaining computer networks and installing and configuring networking equipment and resolving problems
 * Information system auditors are responsible for providing management with independent assurance that the security objectives are appropriate, determining whether the security policy, standards, baselines, procedures, and guidelines are appropriate and effective given the company's security objectives, and determining whether the objectives have been met
-* Users are responsible for adherence to security and ToS policies. Preserving the availabilty, integrity, and confidentiality of assets when accessing and using them
+* Users are responsible for adherence to security and ToS policies. Preserving the availability, integrity, and confidentiality of assets when accessing and using them
 
 A key distinction lies in custodians versus owners. Custodians are caretakers or users of an asset who may not necessarily own that asset but are entrusted with its protection. However, accountability for the asset will always rest ultimately on the asset owner.
 
@@ -73,7 +73,7 @@ Intellectual property is an intangible product of human intellect protected by l
 * Trademark: Color, sound or symbols used to distinguish products and companies from another. This is primarily rooted in protecting consumers from confusion
 
 In addition to this, there are import and export controls at the national law to manage which products, technologies, and information can move in and out of those countries:
-* The Wassenar Arrangement is an agreement by a number of countries to share cryptographic information with one another while also protecting it from terrorists
+* The Wassenaar Arrangement is an agreement by a number of countries to share cryptographic information with one another while also protecting it from terrorists
 * International Traffic in Arms Regulation (ITAR) is a US regulation built to ensure control over any exports of items belonging to the United States Munitions List (USML). It falls under the Department of State's Directorate of Defense Trade Controls (DDTC)
 * Export Administration Regulations (EAR) focuses on export controls around commercial use items. It falls under the US Department of Commerce's Bureau of Industry and Security (BIS)
 
@@ -99,7 +99,7 @@ The Organization for Economic Cooperation and Development (OECD) also has its ow
 * Individual Participation Principle: When an individual--data subject--provides personal data to an organization, that individual should have the right to obtain their data from the data controller as well as have their data removed. In other words, the individual should have the chance to participate or choose whether to share their personal information or withhold it. The term data subject refers to the individual to whom the personal data pertains.
 * Accountability Principle: A data controller should be accountable for complying with the other principles. What this basically means is that an organization collects personal data is now accountable for the protection of that information.
 
-Because of the importance of privacy, Privacy Impact Assessments (PIA) and Data Protection Impact Assessments (DPIA) may be taken to assess an organization's handling of data in accordance of privacy standards. PIA takes the following steps:
+Because of the importance of privacy, Privacy Impact Assessments (PIA) and Data Protection Impact Assessments (DPIA) may be taken to assess an organization's handling of data in accordance with privacy standards. PIA takes the following steps:
 1. Identify the need for a DPIA
 2. Describe the data processing
 3. Assess necessity and proportionality
@@ -114,7 +114,7 @@ Cf. 7.1
 
 ## 1.7 - Develop, document, and implement security policies, procedures, standards, baselines, and guidelines
 
-The board or CEO often institutes as Overarching Security Policy which is a broader statement of goals and objectives that also grants authority to security activities. Functional policies then extend this to provide more specificity that can be applied to:
+The board or CEO often institutes an Overarching Security Policy which is a broader statement of goals and objectives that also grants authority to security activities. Functional policies then extend this to provide more specificity that can be applied to:
 * Standards: Specific hardware and software solutions, mechanisms, and products
 * Procedures: Step-by-step descriptions on how to perform a task
 * Baselines: Defined minimal implementation methods/levels for security mechanisms and products
@@ -149,7 +149,7 @@ Risk management terms include:
 * Threat agent: Entity that has the potential to cause damage to an asset
 * Threat: Any potential danger
 * Attack: Any harmful action that exploits a vulnerability
-* Vulnerability: A weakness in an asset tha could be exploited by a threat
+* Vulnerability: A weakness in an asset that could be exploited by a threat
 * Risk: Significant exposure to a threat or vulnerability
 * Asset: Anything valued by the organization
 * Exposure/Impact: Negative consequences to an asset if the risk is realized
@@ -188,13 +188,13 @@ Security controls should be selected or advocated based on the appropriate risk 
 
 Risk management should undergo continuous improvement through the four steps of plan, do, check, and act.
 
-Risk management must be applied to very link in the supply chain, including vendors and service providers.
+Risk management must be applied to every link in the supply chain, including vendors and service providers.
 
 There are four primary risk management frameworks:
 1. NIST SP 800-37 (RMF) - describes the risk management framework (RMF) and provides guidelines for applying it to information systems and organizations.
 2. ISO 31000 - a family of standards and best practices relating to risk management.
 3. COSO - a definition to essential enterprise risk management components, reviewing ERM principles and concepts
-4. ISACA Risk IT Framework - ISACA's Risk IT Framework contains guidelines and practices fo risk optimization, security, and business value. It aligns with COBIT.
+4. ISACA Risk IT Framework - ISACA's Risk IT Framework contains guidelines and practices for risk optimization, security, and business value. It aligns with COBIT.
 
 For the CISSP exam, NIST SP 800-37 Rev. 2 should be the focus.
 1. Prepare to execute the RMF
@@ -217,7 +217,7 @@ I - Information Disclosure - This violates confidentiality
 D - Denial of Service - This violates availability
 E - Elevation of Privilege - This violates authorization
 
-The Process for Attack Simulation and Threat Analysis (PASTA) is attacker-focused and include seven stages.
+The Process for Attack Simulation and Threat Analysis (PASTA) is attacker-focused and includes seven stages.
 1. Define objectives related to application risk profiles
 2. Define technical scope so as to decompose the technology stack into understandable and assessable components.
 3. Application decomposition understands the data flows among application components and services in the application threat model
@@ -232,7 +232,6 @@ R - Reproducibility
 E - Exploitability
 A - Affected Users
 D - Discoverability
-
 
 Social engineering consists of deception or intimidation to get people to provide sensitive information that should not be accessible to the exploiting party. The most common forms of social engineering include but are not limited to: phishing, spear phishing, whaling, smishing, vishing, pretexting, baiting, or tailgating and piggybacking.
 
@@ -255,7 +254,7 @@ Everyone in the organization is responsible for security and this consists of pr
 
 Asset classification is assigning assets the level of protection they require, based on their value to the organization.
 
-Classifying information can help identify critical information, its sensitivity to modification as well as promote commitment to both protecting valuable assets and keep it confidential where applicable.
+Classifying information can help identify critical information, its sensitivity to modification as well as promote commitment to both protecting valuable assets and keeping it confidential where applicable.
 
 Data classification ensures that data receives an appropriate level of protection. It consists of the following steps:
 1. Asset inventory
@@ -282,11 +281,11 @@ The data owner is accountable for the protection of data, the data processor is 
 
 Data must be protected in each stage of its lifecycle whether it be creation, collection, its update, storage, use, sharing, archiving, or final disposal and destruction.
 
-When destroying data, defensible destruction means being able tgo prove there is no possible way for anyone to recover the data.
+When destroying data, defensible destruction means being able to prove there is no possible way for anyone to recover the data.
 
-To destroy data is to physically destroy the media and is most effective. To purge uses logical/physical techniques to sanitize data so that it cannot be reconstructed. Clearing data uses logical techniques but the data may be reconstructed. Various techniques that employ this include incineration, shredding, disintegration, drilling holdes, degaussing, crypto shredding, overwriting, wiping, erasing, or formatting.
+To destroy data is to physically destroy the media and is most effective. To purge uses logical/physical techniques to sanitize data so that it cannot be reconstructed. Clearing data uses logical techniques but the data may be reconstructed. Various techniques that employ this include incineration, shredding, disintegration, drilling holes, degaussing, crypto shredding, overwriting, wiping, erasing, or formatting.
 
-Object reuse is a security method that overwrites data from media. SSD's present a problem for this with how they use flash memory technology to represent binary data. SSD vendors generally provide their own tols to securely remove data. If all else fails, it can be physically destroyed.
+Object reuse is a security method that overwrites data from media. SSD's present a problem for this with how they use flash memory technology to represent binary data. SSD vendors generally provide their own tools to securely remove data. If all else fails, it can be physically destroyed.
 
 ## 2.5 - Ensure appropriate asset retention
 
@@ -309,3 +308,22 @@ Beyond this information can also be obfuscated through concealing, pruning, fabr
 Digital Rights Management (DRM) protects intellectual property assets in their use, modification, or sharing, as stipulated by NIST SP 500-241. DRM technologies have been developed to protect mass-produced media, and these same technologies have been adopted for protecting sensitive organization data using Information Rights Management (IRM) tooling.
 
 Data Loss Prevention (DLP) is a system's ability to identify, monitor, and protect data in use, motion and at rest using deep packet content inspection, contextual security analysis of the transaction originator, data object, medium, timing, recipient, destination, etc. within a centralized management framework.
+
+# Domain 3: Security Architecture and Engineering
+
+## 3.1 Research, implement, and manage engineering processes using secure design principles
+
+Architecture, broadly speaking, implies the cohesion of multiple components inside a unified umbrella framework. Security architecture is the security (policies, knowledge, experience) that is superimposed upon the enterprise's architecture to protect the organization. Engineering consists of designing a solution by walking through a series of steps and phases to put the components together so they can work in harmony as an architecture.
+
+Secure design principles include threat modeling, least privilege, defense in depth, secure defaults, fail securely, separation of duties, keep it simple, zero trust, trust but verify, privacy by design, shared responsibility.
+
+Zero Trust can be broken down into eight principles:
+1. Know your architecture
+2. Know your identities
+3. Know the health of users, devices, and services
+4. Use policies to authorize requests
+5. Authenticate everywhere
+6. Focus your monitoring
+7. Don't trust any network
+8. Choose services designed for zero trust
+
