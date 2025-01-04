@@ -48,3 +48,61 @@ $$
 To be real-valued, a tuple must have *real* numbers in its ordered list.
 
 Real coordinate space can be extended to *n* dimensions.
+
+#### Adding Vectors
+
+To add two vectors, we add their corresponding components. If we have two vectors, $\mathbf{v}$ and $\mathbf{w}$, their sum is:
+
+$$
+\mathbf{v} = 
+\begin{bmatrix}
+v_1 \\ 
+v_2 \\ 
+v_3
+\end{bmatrix}, \quad
+\mathbf{w} = 
+\begin{bmatrix}
+w_1 \\ 
+w_2 \\ 
+w_3
+\end{bmatrix}
+$$
+
+The sum of the vectors is:
+
+$$
+\mathbf{v} + \mathbf{w} = 
+\begin{bmatrix}
+v_1 + w_1 \\ 
+v_2 + w_2 \\ 
+v_3 + w_3
+\end{bmatrix}
+$$
+
+Thus, vector addition is performed through the components.
+
+#### Multiplying a Vector by a Scalar
+
+When multiplying a vector by a scalar (a real number), we multiply each component of the vector by the scalar. If $\mathbf{v}$ is a vector and $c$ is a scalar, then:
+
+$$
+\mathbf{v} = 
+\begin{bmatrix}
+v_1 \\ 
+v_2 \\ 
+v_3
+\end{bmatrix}
+$$
+
+Multiplying $\mathbf{v}$ by the scalar $c$ results in:
+
+$$
+c\mathbf{v} = 
+\begin{bmatrix}
+c v_1 \\ 
+c v_2 \\ 
+c v_3
+\end{bmatrix}
+$$
+
+This operation scales the vector by the factor $c$, which can stretch or shrink the vector while keeping its direction unchanged (if $c$ is positive) or reversing it (if $c$ is negative).
