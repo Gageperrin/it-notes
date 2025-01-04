@@ -327,3 +327,95 @@ Zero Trust can be broken down into eight principles:
 7. Don't trust any network
 8. Choose services designed for zero trust
 
+## 3.2 Understand the fundamental concepts of security models
+
+A security model is a representation of what security should look like in an architecture being built. Some of these models include Bell-LaPadula, Biba, Clark-Wilson, and Brewer-Nash (the Chinese Wall model).
+
+Security is only as strong as the weakest link in the chain, every component of the architecture should be fully decomposed and understood.
+
+The three most popular enterprise security architecture models are Zachman, Sherwood Applied Business Security Architecture (SABSA), and The Open Group Architecture Framework (TOGAF).
+
+Lattice-based models like Bell-LaPadula and Biba visualize security as layers. Rule-based models provide specific rules to dictate security (e.g. Information Flow, Clark-Wilson, Brewer-Nash, Graham-Denning, Harrison-Ruzzo-Ullmann).
+
+![Bell-LaPadula Model](https://media.geeksforgeeks.org/wp-content/uploads/20200709152516/BellLaPadula.png)
+
+The Bell-LaPadula model consists of three principles:
+1. Simple security property - "no read up" - you cannot access data at a higher security level
+2. Star property - "no write down" - data cannot move from more secure to less secure environments.
+3. Strong star property - A subject should only be able to read or write at their layer
+
+
+![Biba Model](https://media.geeksforgeeks.org/wp-content/uploads/20200709152715/Biba.png)
+
+The Biba model focuses on data integrity:
+1. Simple integrity property - "no read down" - you cannot depend on data with a lower level of integrity
+2. Star property - "no write up" - you cannot write to data that is has a higher integrity level than yours
+3. Invocation property - Data cannot be sent to someone with a higher layer of integrity
+
+
+The Lipner implementation combines these two models.
+
+
+Rule-based models feature several common rules. Information flow models track the flow of data throughout its lifecycle. Covert channels are unintentional communication paths that may lead to the disclosure of confidential information.
+
+The Clark-Wilson model focuses on integrity by focusing on three goals:
+1. Prevent unauthorized subjects from making changes
+2. Prevent authorized subjects from making bad changes
+3. Maintain system consistency
+
+These can be upheld by three specific rules:
+1. Well-formed transactions
+2. Separation of Duties
+3. Access Triple - Subject, Program, Object
+
+The Brewer-Nash model is concerned with preventing a conflict of interest by separating departments or environments (e.g. development + production).
+
+The Graham-Denning Model provides rules for allowing subjects to access objects.
+
+The Harrison-Ruzzo-Ullman model provides a finite set of rules for editing the access rights of a subject. Generic rights can be added to groups of individuals.
+
+---
+
+Security implementation can be certified and accredited. Certification is the comprehensive technical analysis of a solution to ensure it meets the desired needs, while accreditation is concerned with official management signoff of certification for a set period of time.
+
+Evaluation criteria include TCSEC (the Orange book) and ITSEC.
+
+The Orange book was developed by the Department of Defense in the early 80s and has a number of functional levels:
+* A1 - Verified Design
+* B3 - Security labels, verification of no covert channels, and must stay secure during start up
+* B2 - Security labels and verification of no covert channels
+* B1 - Security labels
+* C2 - Strict login procedures
+* C1 - Weak protection mechanisms
+* D1 - Failed or was not tested
+
+The Orange book is only concerned with *confidentiality*.
+
+ITSEC was published in 1991 and gained traction in European security decision making. ITSEC improves upon CTSEC by including coverage for network environments and ways to measure function:
+* E6 - Formal end-to-end security tests + source code reviews
+* E5 - Semi-formal system + unit tests and source code review
+* E4 - Semi-formal system + unit tests
+* E3 - Informal system + unit tests
+* E2 - Informal system tests
+* E1 - System in development
+* E0 - Inadequate assurance
+
+Both of these were replaced in 2005 by Common Criteria (ISO 15408) which provides industry wide confidence outside national boundaries.
+
+Its components include:
+* Protection Profile - The security capabilities that a type or category of security products should possess.
+* Target of Evaluation - The vendor's product to be assessed
+* Security Targets - what is covered by the assessment both in terms of functional and assurance capabilities.
+
+Based upon this evaluation, the TOE is provided an Evaluation Assurance Level (EAL) grade:
+* EAL7 - Formally verified, designed, and tested
+* EAL6 - Semi-formally verified, designed, and tested
+* EAL5 - Semi-formally designed and tested
+* EAL4 - Methodically designed, tested, and reviewed
+* EAL3 - Methodically tested and checked
+* EAL2 - Structurally tested
+* EAL1 - Functionally tested
+
+However, products that are above EAL4 typically do not sell well because of their strict requirements and overhead to maintain. Once attained though, the EAL level will be maintained for that product throughout its lifecycle even through patches or firmware updates.
+
+
