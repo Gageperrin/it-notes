@@ -433,3 +433,47 @@ Only a particular set of security control frameworks are applicable to any one o
 * FISMA - Federal Information Security Management (FISMA) Act of 2002 requires US federal agencies to develop, document, and implement agency-wide security programs to information securities for federal operations.
 * FedRAMP - Federal Risk and Authorization Management Program (FedRAMP) provides a standardized approach to security asessment, authorization, and continuous monitoring for cloud products and services. Any cloud services that hold US federal government data must be FedRAMP authorized.
 * SOX - Sarbanes-Oxley (SOX) Act is a direct result of Enron's fraud and is designed to prevent financial fraud.
+
+## 3.4 - Understand security capabilities of information systems (IS)
+
+A subject is an active entity (person, process, or program) that tries to access an object. An object is a passive entity (file, server, hardware) that is accessed by a subject.
+
+The Reference Monitor Concept (RMC) is the concept of a subject accessing an object through a mediation based on a set of rules. The RMC must mediate all access, be protected from modification, be verifiable as correct, and always be invoked.
+
+The implenentation of the RMC is known as a security kernel. An implemented security kernel should contain three properties:
+1. Completeness: Impossible to bypass
+2. Isolation: Mediation rules are tamperproof
+3. Verifiability: Logging and monitoring and testing to ensure the kernel functions as intended
+
+The Trusted Computing Base (TCB) encompasses all security controls that would be implemented to protect an architecture. This term refers to the protection mechanisms within a system or architecture. The TCB is the totality of protection mechanisms within an architecture. Processors, memory, storage, firmware, OS, and the system kernel are all found in the TCB.
+
+A central processing unit (CPU) is the brain of a computer that processes all of the instructions. It operates through four steps of fetching, decoding, executing, and storing. CPU's operate in one of two processor states: the supervisor or problem state. These states are privilege levels (i.e. restrictions on the operations that can be performed). The supervisor state has a higher privilege level and is typically where the system kernel runs, allowing full access to all the instructions and capabilities of a CPU. The problem state is a lower privilege level with limited access to CPU instructions and is the standard operating mode of a CPU. It is called the problem state because that is the fundamnetal role of the CPU, to solve problems.
+
+Process isolation prevents interactions or conflicts that could have negative consequences. There are two general methods to accomplish this:
+1. Time-division multiplexing allows the CPU to determine process isolation by allocating very small slots of time to each process and rapidly switching between them as needed.
+2. Memory segmentation relates more to Random Access Memory (RAM) found in computer systems. Memory segmentation assigns memory to one and only one application until it is released.
+
+Storage consists of two types:
+1. Primary storage is fast, volatile, ephemeral, and generally small. Examples include caching, CPU registers, and RAM.
+2. Secondary storage is slow, durable, and generally larger. Examples include magnetic hard drives, optical media, tapes, and SSD.
+
+Primary sotrage is also referred to as volatile memory as it is temporary. This can often lead to getting "filled up" and causing the sytem to crash. This can be mitigated by virtual memory which moves certain processes out of RAM and into the hard drive temporarily to give specific processes prioritized use of RAM.
+
+The system kernel is the core of the operating system that has complete control overything and relies on privilege levels for smooth and safe operation. The system kernel drives the computing system. (Note this is very distinct from the security kernel which is the implementation of the RMC, not a computing process).
+
+Privilege levels establish operational trust boundaries for software running on a computer.
+
+The hardware is accessed via the kernel in kernel mode. This includes a very small set of processes such as the process manager, the security monitor, the memory manager, the I/O manager, the device drivers, and the hardware abstraction. The user mode is used by virtually everything else and has a lower level of trust.
+
+The ring protection model is a form of conceptual layering that segregates and protects operational domains from each other. Ring 0 is the most trusted and secure ring (e.g. firmware). Everything else runs in the concentric rings outside Ring 0.
+
+Middleware acts as an intermediary between two applications. It is a layer of software that can speak the languages of two disparate applications and facilitate communication between them.
+
+Abstraction refers to the underlying complexity of a system and keeps them hidden/simplified/removed from view.
+
+Virtualization is one mode of abstraction that creates a virtual version of something to abstract away from the true underlying hardware. or software.
+
+Defense-in-depth implements multiple control layers whether physical, logical, operational, etc. to protect data.
+
+Trusted platform modules (TPM) are pieces of hardware that implement an ISO standard, resulting in the ability to establish trust involving security and prviacy. Comptuers that contain a TPM create and encrypt keys using a specific endorsement key so that only the TPM can decrypt them. This is known as binding and serves to prevent the key's disclosure. Keys are sealed as they are associated to the TPM via specific configuration settings and parameters used at the time of the key's creation.
+
