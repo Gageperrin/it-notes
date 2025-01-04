@@ -311,7 +311,7 @@ Data Loss Prevention (DLP) is a system's ability to identify, monitor, and prote
 
 # Domain 3: Security Architecture and Engineering
 
-## 3.1 Research, implement, and manage engineering processes using secure design principles
+## 3.1 - Research, implement, and manage engineering processes using secure design principles
 
 Architecture, broadly speaking, implies the cohesion of multiple components inside a unified umbrella framework. Security architecture is the security (policies, knowledge, experience) that is superimposed upon the enterprise's architecture to protect the organization. Engineering consists of designing a solution by walking through a series of steps and phases to put the components together so they can work in harmony as an architecture.
 
@@ -327,7 +327,7 @@ Zero Trust can be broken down into eight principles:
 7. Don't trust any network
 8. Choose services designed for zero trust
 
-## 3.2 Understand the fundamental concepts of security models
+## 3.2 - Understand the fundamental concepts of security models
 
 A security model is a representation of what security should look like in an architecture being built. Some of these models include Bell-LaPadula, Biba, Clark-Wilson, and Brewer-Nash (the Chinese Wall model).
 
@@ -418,4 +418,18 @@ Based upon this evaluation, the TOE is provided an Evaluation Assurance Level (E
 
 However, products that are above EAL4 typically do not sell well because of their strict requirements and overhead to maintain. Once attained though, the EAL level will be maintained for that product throughout its lifecycle even through patches or firmware updates.
 
-## 3.3
+## 3.3 - Select controls based upon systems security requirements
+
+Only a particular set of security control frameworks are applicable to any one organization. There are a number of security frameworks with particular sets of focus and scope.
+
+* COBIT - The Control Objectives for Information Technologies is particularly useful for IT assurance in the case of audits or gap assessments. It was created by ISACA
+* ITIL - Information Technology Infrastructure Library defines the processes in a well-run IT department.
+* NIST SP 800-53 - This is a set of best practices, standards, and recommendations that help an organization improve its cybersecurity controls.
+* PCI DSS - The Payment Card Industry Data Security Standard helps handle credit card data.
+* ISO-27001 specifies the requirements for establishing, implementing, maintaining, and continually improving an information security management system within the context of an organization. It also includes requirements for the assessment and treatment of information security risks tailored to the needs of an organization. Organizations can be certified against ISO 27001
+* ISO 27002 provides guidelines for organizational information security standards and information security management practices.
+* COSO - The Committee of Sponsoring Organization of the Treadway Commission (COSO) is a voluntary private sector initiative dedicated to improving organizational performance and governance.
+* HIPAA - Health Insurance Portability and Accountability Act (HIPAA) relates to security controls in the healthcare industry for PHI.
+* FISMA - Federal Information Security Management (FISMA) Act of 2002 requires US federal agencies to develop, document, and implement agency-wide security programs to information securities for federal operations.
+* FedRAMP - Federal Risk and Authorization Management Program (FedRAMP) provides a standardized approach to security asessment, authorization, and continuous monitoring for cloud products and services. Any cloud services that hold US federal government data must be FedRAMP authorized.
+* SOX - Sarbanes-Oxley (SOX) Act is a direct result of Enron's fraud and is designed to prevent financial fraud.
