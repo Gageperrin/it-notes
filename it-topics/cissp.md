@@ -477,3 +477,104 @@ Defense-in-depth implements multiple control layers whether physical, logical, o
 
 Trusted platform modules (TPM) are pieces of hardware that implement an ISO standard, resulting in the ability to establish trust involving security and prviacy. Comptuers that contain a TPM create and encrypt keys using a specific endorsement key so that only the TPM can decrypt them. This is known as binding and serves to prevent the key's disclosure. Keys are sealed as they are associated to the TPM via specific configuration settings and parameters used at the time of the key's creation.
 
+## 3.5 - Assess and mitigate the vulnerabilities of security architectures, designs, and solution elements
+
+There are a number of common vulnerabilities across security architectures.
+
+A single point of failure refers to the minimum necessary but sufficient condition of failure that would cause a failure in teh system. Points of failure can be mitigated through redundancy to support high availability and failover.
+
+Bypass controls are intended methods to bypass and access administration settings but do introduce a risk vector in the security architecture. Strong protections around these bypass contorls can help mitigate or prevent their exploitation. This can be done via segregation of duties, logging and monitoring, and physical security.
+
+Time-of-Check Time-of_use (TOCTOU) is a short window between when something is used and when authorization or access for that use is checked. This window is a risk vector for exploitation and can be referred to as a "race condition". Frequency of access checks can help mitigate this.
+
+Emanations manifest in the forms of unseen things leaking out of systems usch as radio or magnetic waves like Wi-Fi or Bluetooth. Properly equipped listeners can eavesdrop on such emanations. Shielding, white noise, and control zones can protect against this.
+
+Hardening is the process of looking at individual components of a system and then securing each component to reduce overall vulneerabilities. Hardening can include, disabling unnecessary services, installing security patches, closing certain ports, installing anti-malware, installing host-based firewall/IDS, enabling encryption, requiring strong passwords, and taking back-ups.
+
+Mobile systems present their own kinds of risks that can be managed through mobile device management (MDM) and mobile application management (MAM). MDM is concerned with the devices themselves while MAM is concerned with the applications on those devices.
+
+Policies can reduce, mitigate, or acknowledge risk associated with mobile devices. There should be clearly defined processes related to the loss or theft of stolen devices. Remote access security, endpoint security, and application whitelisting are methods of increasing the security of devices.
+
+OWASP has a Mobile Top 10 which identifies the top ten risks with mobile devices:
+1. M1 - Improper platform usage
+2. M2 - Insecure data storage
+3. M3 - Insecure communication
+4. M4 - Insecure authentication
+5. M5 - Insufficient cryptography
+6. M6 - Insecure authorization
+7. M7 - Poor client code quality
+8. M8 - Code tampering
+9. M9 - Reverse engineering
+10. M10 - Extraneous functionality
+
+The OWASP foundation has provided a Mobile Security Testing Guide (MSTG) to identify a security baseline for mobile applications.
+
+Distributed systems are spread out across a network and while present a number of advantages also introduce a variety of security concerns. Distributed file systems (DFS) for example allow files to be hosted by multiple hosts and shared across a network. This raises additional overhead for integrity and nonrepudability. Grid computing is like distributed systems but are directly connected via a high-speed network.
+
+Data warehouses perform data analytics from a number of data sets with the hope of identifying interesting bits of information. These have been in use for decades but with the rise of cloud computing raises the question "where is the data island(s) located physically?" Data warehouses because they are large can be a single point of failure.
+
+Big data is a more recent evolution of the data warehouse and includes variety, volume, and depends on velocity. Data mining and analytics read from big data. One must consider the integrity of the data aggregation process in which data is collected, gathered, and combined as well as the inference process where information is deduced (or perhaps accessed without proper authentication or authorization).
+
+Polyinstantiation reduces the risk of unauthorized inference by allowing information to exist in different classification levels for the purpose of preventing unauthorized inference and aggregation.
+
+Industrial control system (ICS) is a general term used to describe control systems related to industrial processes and critical infrastructure. Three primary types include: Supervisory Control and Data Acquisition (SCADA), Distributed Control System (DCS), and Programmable Logic Controller (PLC).
+
+ICS can be vulnerable to attack and it is best to air gap them to protect them from Internet access. Often ICS are not patched as much as possible because patching critical systems may cause unintended failure or downtime. These require dedicated patching strategies to guarantee availability as much as possible. This can be done through logging, monitoring, anomaly detection, conducting vulnerability assessments, and using VLAN's or zoning techniques to prevent an attacker from iterating through ICS systems if an individual one is breached.
+
+SCADA is a system architecture that comprises computers, networking, and proprietary devices as well as UI for the management of an entire system. Manages small and large-scale industrial, infrastructure, and facility processes.
+
+DCS monitors, controls, and gathers data from components like controllers, sensors and other devices. unlike SCADA it include local and remote management capabilities but is usually controlled locally.
+
+PLC is an industrial computer specifically used for the control of manufacturing processes. Key features include high reliability, ease of programming, and diagnosis of process problems. It is often networked with other PLC devices and SCADA systems.
+
+The Internet of Things refers to a large fleet of devices connected, often on a low level network. By their very nature, IoT architectures introduce considerable security risk and for security-centric architectures should be avoided.
+
+Cloud computing is an on-demand self-service set of services and resources that offer on-demand access across a broad network with substantial resource pooling, rapid elasticity and scalability, measured service, and multitenancy to empower organizations through a variety of cloud service models (IaaS, PaaS, SaaS, CaaS, FaaS, etc.) and deployment models (public, private, physically isolated).
+
+* SaaS provides access to an application that is web-based and usually paid via a subscription fee or agreement.
+* IaaS is a virtual data center with virtualized, storage, compute, and networking components. It provides virtualization up to but not including the OS layer.
+* PaaS is a middleground between IaaS and SaaS which allows customers to build custom application on top of other layers of hardware and software. It provides support but to the runtime layer.
+
+Cloud computing operates under the shared responsibility model for customer and service provider have a distinct set of responsibilities.
+
+Public clouds are available over the public Internet at no charge, private cloud is only accessible to paying customers. A community cloud is shared by a group of organizations or providers and is restricted to a trusted set of users. Hybrid is any combination of the three.
+
+Regardless of the deployment model or service, every organization should be concerned with the protection and privacy of their cloud data.
+
+Cloud compute consists of various layers of service models. 
+
+Virtual machines are run on top of an underlying hypervisor (software that runs directly on hardware to allow multiple operating systems to share a single physical machine). A virtual machine resembles a computer except everything is emulated and each VM can host an operating system and its applications.
+
+Virtual machines can be built off baseline images which present the most dangerous threat vector as a tampered base image provides a route to attack each VM created from that image.
+
+By contrast, containers are a more lightweigh option. These run an application with its bins and libraries on top of a containerization engine which in turn runs on top of the Operating System. Containers are more efficient and portable. but they do run in a shared operating system which can expose them to a common threat vector.
+
+---
+
+Cloud forensics depends on "securing the scene" and can depend on the deployment model. For SaaS, the consumer is entirely dependent upon the service provider. For PaaS, the consumer is only dependent for application layer code they have deployed. For IaaS, consumrs can perform forensic investigations on their VM's and relevant network traffic, memory snapshots, etc.
+
+A cloud service customer often establishes a service level agreement (SLA) with the cloud service provider in which accountability always remains with the asset owner for service. Between these, cloud service brokers provide aggregation services that help with various elements of engaging with cloud services (architecture, developmnet, etc.)
+
+Identity and access management is particularly crucial in the realm of cloud computing. Traditionally organizations have used Active Directory (AD) or Lightweight Directory Access Protocol (LDAP) to manage IAM. Since then, many platforms offer Identity as a Service (IDaaS) to streamline the IAM process.
+
+Federated identity management (FIM) in a similar vein provides protocols , standards, and policies to support identity portability and trust relationships among disparate organizations and resources. These include SPML (deprecated), SAML, OAuth, and OpenID.
+
+---
+
+As web applications continue to proliferate two new common forms of attack are XSS and CSRF. Cross-site scripting XSS is either Type I (stored or persistent) or Type II (reflected or nonpersistent).
+
+Type I XSS is when an attacker identifies a vulnerable website, injects malicious code into a page on the website, the victim then uses the compromised code, and the victim's brwoser executes the malicious code that may send data to the attacker, disclose files, or install malicious applications.
+
+Type II XSS is when an attacker sends a malicious URL to the victim, the victim clicks on it and the vulnerable website reflects malicious code on to the victim and the vicitm's browser executes it.
+
+In the first type, malicious code is stored on the web server itself. In the second type, malicious code is reflected back to the victim even if not stored on the site itself.
+
+DOM-based attacks modify the client-side document object model (DOM) to modify it. This can be Type I or Type II XSS. It is much more rare.
+
+Cross-Site Request forgery is when an attacker forges a request, embeds the request in a hyperlink sent to the victim, the victim clicks the link and executes the embedded logic to a service or provider, and the service provider trusting the victim's request executes the logic. CSRF is dependent upon the persistence of cookies in browsers which allows the attacker to operate using the identity of the victim.
+
+In summary, XSS exploits a user's browseer to perform an unwanted action. CSRF exploits a web server to perform an unwanted action on a trusted website.
+
+SQL injection is a method of attack that nests or embeds malicious logic into a SQL query that can be executed against the website, if there is no validation or sanitization of SQL input. User input should always be validated. Prepared statemnets, parameterized queries, or stored procedures also provide tools to mitigate or prevent SQL injections.
+
+Server-side input validation is important in general for any web application and can prevent XSS attacks. Allow list input validation can ensure only accepted characters may be used. Client-side input validation is effectively useless from a security perspective as any bad actor may modify their client side to remove such validation.
