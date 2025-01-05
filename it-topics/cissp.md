@@ -677,3 +677,32 @@ Once a key is encrypted, it must be effectively managed as a key part of encrypt
 6. Key recovery - split knowledge (cut in half), dual control (two keys), or key escrow (loan key to trusted party)
 
 Secure/Multipurpose Internet Mail Extensions (S/MIME) is standard for public key encryption and provides authentication, nonrepudiation of origin, message integrity, and confidentiality. S/MIME offers optional security services in the form of signed receipts, security labels, secure mailing lists, and an extended method of identifying the signer's certificate.
+
+## 3.7 - Understand methods of cryptanalytic attacks
+
+Cryptoanalysis is the science of decryption.
+
+There can be cryptanalytic attacks or cryptographic attacks.
+
+The primary goal of a cryptanalytic attack is to determine the key. A brute force attack tries to guess every possible key until it identifies the correct one. There are four combinations of attacks:
+1. Ciphertext only - the attacker only has the ciphertext which is most difficult
+2. Known plaintext - the attacker has both ciphertext and plaintext and can try to determine the key via their relationship.
+3. Chosen plaintext - the attacker has all elements except the key, and the attacker attacks the plaintext (feeding it into the encryption process)
+4. Chosen ciphertext - the attacker has all elements except the key, and the attacker attacks the ciphertext (feeding it into a decryption process)
+
+Other attacks include usign linear and differential cryptanalysis to deduce the key using complex mathematics or factoring cryptanalysis which tries to factor a very large number to determine the private key. This is a common strategy to attack the RSA algorithm.
+
+Cryptographic attacks tend to focus on retrieving information or executing action without necessarily accessing the key directly. 
+* Man-in-the-middle attacks is where the attacker pretends to be both parties in communication to elicit information or permissions. 
+* A replay attack is similar but where the attacker eavesdrop on information and replays it later to gain access to target system. 
+* Pass-the-hash attacks are where the attacker has the password hash and tries to access the target system using the hashed password. 
+* Temporary files attacks are where ephemeral keys or processes are hijacked to gain privileged information. 
+* Implementation attacks target the weakness of an encryption algorithm's implementation. 
+* A side-channel attack does not target the system but monitors it via indirect information such as time, emissions, or power consumption to deduce more about the system. 
+* A dictionary attack will use freqeuency analysis to brute force a password. Rainbow tables are similar in that this stores the hashes of the most common passwords. 
+* Rainbow tables can be mitigated by using a random salt value that is appended to a password before it is hashed. A pepper value may also be used but these are less secure as this is a shared value that is appended to all passwords in the system. 
+* A birthday attack attempts to identify hashing collisions to access a system. 
+* Purchase key attacks (bribery) or rubber hose attack (duress) are social engineering forms of cryptographic attacks. 
+* Kerberos attacks focus specifically focused on using information like password hashes to generate a valid Kerberos ticket that can be used to bypass authentication. 
+* A ransomware attack encrypts or locks down a user's system or data until certain demands are met. 
+* A fault injection attack attempts to leverage normally legitimate fault injections to modify hardware or software system behavior.
