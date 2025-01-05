@@ -706,3 +706,8 @@ Cryptographic attacks tend to focus on retrieving information or executing actio
 * Kerberos attacks focus specifically focused on using information like password hashes to generate a valid Kerberos ticket that can be used to bypass authentication. 
 * A ransomware attack encrypts or locks down a user's system or data until certain demands are met. 
 * A fault injection attack attempts to leverage normally legitimate fault injections to modify hardware or software system behavior.
+
+## 3.8 - Apply security principles to site and facility design
+
+Physical security like information security includes the CIA triad. Its key objectives are deterence, delay, detection, assessment, and response. Physical security must always consider the safety and protection of people first and foremost. The best physical security leverages defense in depth.
+
