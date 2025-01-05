@@ -563,9 +563,9 @@ Federated identity management (FIM) in a similar vein provides protocols , stand
 
 As web applications continue to proliferate two new common forms of attack are XSS and CSRF. Cross-site scripting XSS is either Type I (stored or persistent) or Type II (reflected or nonpersistent).
 
-Type I XSS is when an attacker identifies a vulnerable website, injects malicious code into a page on the website, the victim then uses the compromised code, and the victim's brwoser executes the malicious code that may send data to the attacker, disclose files, or install malicious applications.
+Type I XSS is when an attacker identifies a vulnerable website, injects malicious code into a page on the website, the victim then uses the compromised code, and the victim's browser executes the malicious code that may send data to the attacker, disclose files, or install malicious applications.
 
-Type II XSS is when an attacker sends a malicious URL to the victim, the victim clicks on it and the vulnerable website reflects malicious code on to the victim and the vicitm's browser executes it.
+Type II XSS is when an attacker sends a malicious URL to the victim, the victim clicks on it and the vulnerable website reflects malicious code on to the victim and the victim's browser executes it.
 
 In the first type, malicious code is stored on the web server itself. In the second type, malicious code is reflected back to the victim even if not stored on the site itself.
 
@@ -573,8 +573,107 @@ DOM-based attacks modify the client-side document object model (DOM) to modify i
 
 Cross-Site Request forgery is when an attacker forges a request, embeds the request in a hyperlink sent to the victim, the victim clicks the link and executes the embedded logic to a service or provider, and the service provider trusting the victim's request executes the logic. CSRF is dependent upon the persistence of cookies in browsers which allows the attacker to operate using the identity of the victim.
 
-In summary, XSS exploits a user's browseer to perform an unwanted action. CSRF exploits a web server to perform an unwanted action on a trusted website.
+In summary, XSS exploits a user's browser to perform an unwanted action. CSRF exploits a web server to perform an unwanted action on a trusted website.
 
-SQL injection is a method of attack that nests or embeds malicious logic into a SQL query that can be executed against the website, if there is no validation or sanitization of SQL input. User input should always be validated. Prepared statemnets, parameterized queries, or stored procedures also provide tools to mitigate or prevent SQL injections.
+SQL injection is a method of attack that nests or embeds malicious logic into a SQL query that can be executed against the website, if there is no validation or sanitization of SQL input. User input should always be validated. Prepared statements, parameterized queries, or stored procedures also provide tools to mitigate or prevent SQL injections.
 
 Server-side input validation is important in general for any web application and can prevent XSS attacks. Allow list input validation can ensure only accepted characters may be used. Client-side input validation is effectively useless from a security perspective as any bad actor may modify their client side to remove such validation.
+
+## 3.6 - Apply cryptography
+
+Cryptography is the strategic communication of information that can only be understood by specific parties. Key management is one of the most important aspects of cryptography.
+
+Cipher technology has evolved from the manual Caesar cipher of antiquity to mechanical, electro-mechanical, electronic, and even quantum cryptography systems. Cryptography can help achieve confidentiality, integrity, authenticity, nonrepudiation (either of origin or delivery), and access control.
+
+In cryptography, plaintext is the text as it is meant to be understood while ciphertext is the transferred or encrypted information that must be decoded.
+
+A key is used to encrypt plaintext into ciphertext. If it is symmetric encryption, the same key is used to decrypt the ciphertext into plaintext, or in asymmetric a separate key is used for decryption. Key clustering is when two different keys can generate the same ciphertext from the same plaintext, something which must be avoided as this undermine the integrity of encryption. The work factor is the estimated amount of time or effort required by an attacker to brute attack a cryptosystem, given no key information. The initialization vector (IV) or nonce is a random number that is used in conjunction with the key during encryption to prevent patterns or key clustering. However, if the IV is too short then the ciphertext can be vulnerable to deciphering attacks. This happened with WEP.
+
+In cryptography, confusion hides the relationship between the key and the ciphertext to make it more difficult for attackers to identify patterns. Likewise, diffusion is the idea that if a single bit of plaintext is changed then about half the bits in the ciphertext should be changed as well. 
+
+An avalanche effect can look at the degree of confusion and diffusion that an algorithm provides to assess its effectiveness.
+
+The key space refers to the unique number of keys available based on the length of a key. A 2-bit key has four possible unique keys. DES uses a 56-bit key which allows for 2^56 unique keys. Most symmetric keys today use 128 or 256 bit keys while asymmetric keys are often 1024 or 2048 bit.
+
+Encryption involves substitution (replacing one character with another) and transposition (changing the order of characters). A simple form of transposition is called Rail Fence or Zigzag and transposes the text into a table where each row represents a rail and the characters are written diagonally down-and-up each rail to transpose them.
+
+Encryption can be done synchronously where encryption/decryption requests must be performed immediately or asynchronously where they are dictated by some element that requires input (often processed in batches).
+
+Frequency patterns can also lead to vulnerabilities in tying ciphertext back to plaintext, so one solution for this is to polyalphabetic ciphers in substitution where a key has the cipher iterate through multiple alphabet ciphers in sequence to minimize patterns. Another strategy is to use running key ciphers where ciphers are consistently (or constantly) cycled through to make pattern analysis of messages much more difficult. One-time pads are when a key is only used once for encryption and never again. This is the only unbreakable cipher system. Other methods include stream ciphers which encrypt or decrypt one bit at a time or block ciphers which only encrypt or decrypt one block of bit (often 64-bit chunks) at a time. Stream ciphers are much faster and are most suitable for network or hardware encryption. Block ciphers have a higher diffusion rate though and can be very resistant to tampering.
+
+There are five primary modes of block ciphering:
+1. Electronic Codebook (ECB) - Least secure but fastest. Has no IV. Only useable with short bits of nonrepeating random text.
+2. Cipher Block Chaining (CBC) = Uses an IV, good for email
+3. Cipher Feedback (CFB) - Uses an IV, good for email
+4. Output Feedback (OFB) - Uses an IV, good for email
+5. Counter (CTR) - Uses a counter similar to an IV, almost the most secure and is fast. Good balance of speed and security, most commonly used mode of block cipher
+
+Steganography is hiding information within another kind of information such as hiding a message in an image. For instance, slack space is leftover storage when a file does not all need its allocated space and can be designated for other uses, such as steganography. A null cipher can be used by embedding a plaintext message within another plaintext message.
+
+Symmetric cryptography is extremely fast and can be used for bulk data encryption/decryption. However, anyone with the key can access this system. Out-of-band distribution of keys (using some other medium to transfer keys) can mitigate this. Another problem is scalability as more users are added and each potential communication channel needs its own key. If 1000 people needed to all communicate each with each other, that would require (1000 - 1) / 2 = 499,500 keys.
+
+The Data Encryption Standard (DES) uses an algorithm called Data Encryption Algorithm (DEA) whose key length is 56-bits but susceptible to attack. The newer International Data Encryption Algorithm (IDEA) with key length of 128 bits is stronger but is still symmetric in its algorithm. It never became popular as instead of the Double and Triple DES used compounded DES algorithms to strength the original.
+
+Most common symmetric encryption algorithms:
+
+| Name                        | Strength                  | Key-Length       | Block-Length  |
+|-----------------------------|---------------------------|------------------|---------------|
+| RC2-40                      | Weak                      | 40 bits          | 64 bits       |
+| RC5-64/16/10                | Moderate                  | 64 bits          | 64 bits       |
+| RC5-64/12/16                | Moderate                  | 64 bits          | 64 bits       |
+| RC5-65/16/17                | Moderate                  | 65 bits          | 64 bits       |
+| Skipjack                    | Moderate                  | 80 bits          | 64 bits       |
+| RC2-128                     | Strong                    | 128 bits         | 64 bits       |
+| IDEA                        | Strong                    | 128 bits         | 64 bits       |
+| Blowfish                    | Strong                    | 32-448 bits      | 64 bits       |
+| 3DES                        | Strong                    | 112 or 168 bits  | 64 bits       |
+| RC5-64/12/32                | Strong                    | 128 bits         | 64 bits       |
+| RC6                         | Very Strong               | 128, 192, 256 bits | 128 bits      |
+| Rijndael (AES)              | Very Strong               | 128, 192, 256 bits | 128 bits      |
+
+DES, 2-DES, and 3-DES all share the same basis of a 56-bit key with sixteen rounds of substitution and transposition with a 64-bit size. 2-DES doubles DES but is susceptible to man-in-the-middle attacks. 3-DES has an effective key length of 112 bits and is much stronger even if compromised by a man-in-the-middle attack.
+
+By contrast asymmetric cryptography solves the key exchange problem by using public and private key pairs. Diffie and Hellman pioneered this form of public key cryptography in the 1970s. A public key is distributed to all recipients while a private key is the only retained by the owner and never shared. The key pairs are matehmatically linked in such a way as to make their relationship indiscernible and allows for digital signatures, authenticity, confidentailtiy, and access control while also solving for scalability. However it is significantly slower and requires larger key sizes.
+
+Two hard mathematics problems are still primarily used for key generation: factorign and discrete logarithms. Factoring is when two large prime numbers are multiplied together, creating a number which would be very difficult to decompose into its two prime number factors. This is used by RSA. Another math problem is discrete logarithms used by Elliptic Curve (ECC) and Diffie-Hellman. This raises a prime number to the power of another prime number which is also very difficult to trace back to its original source. Diffie-Hellman key exchange uses this to generate symmetric keys to be exchanged between two parties.
+
+One third, deprecated math problem is the Knapsack problem but a vulnerability was identified that could break it with any algorithm it uses.
+
+Hybrid cryptography is a combination of symmetric and assymetric cryptography to achieve the benefits of each kind.
+
+Message integrity checks (MIC) help to ensure the integrity of a message between the time it is created and the time it is read. It creates a representation of the message which is sent alongside it. MIC are based upon solving math problems, and so simple math should be avoided as those are more likely to result in collisions. Hashing is very effective as a MIC and works the same way.
+
+Hashing is effectively because there is a fixed length digest. Any length input always equals the same length output. Additionally they are one way in that it is impossible to determine the input of a hashing algorithm by inspecting the output. They are also deterministic; the same input will always equal the same output. Good hashing algorithms are also collision resistant. They will generate a completely different output even if only a single bit of input is changed. It is very difficult to find two inputs that hash to the same output.
+
+The most popular hashing algorithms include:
+* MD5 - 128-bit digest
+* SHA-1 - 160-bit digest
+* SHA-2 - 224/256/384/512-bit digests (determined by version used)
+* SHA-3 - 224/256/384/512-bit digests (determined by version used)
+
+Digital signatures provide integrity, authenticity, and nonrepudiation. The sender hashes their message which produces a fixed length message digest. The sender then encrypts the hash value with their private key. These combined not only provides a way to validate the message is tamper-proof but also that is authentic in its origin. It should be noted that digital signatures do not provide confidentiality as the message itself is not encrypted and can be intercepted. Digital signatures are popularly used in code signing for software builds.
+
+Digital certificates bind an individual to their public key. All certificate authorities conform to the X.509 certificate standard. The root of trust or trust anchor is the foundation of all digital certificates and is represented by a root certificate authority (CA). As public/private key pairs ought to be periodically cycled, so too should digital certificates. If a private key is compromised, a digital certificate should be revoked too. A certificate can be pinned so that trust only needs to establish for the first visit to a web server, and a new copy is not requested on subsequent visits.
+
+The X.509 certificate standard includes fields like certificate version, serial number, encryption algorithm, issuing CA, validity period, and public key value.
+
+Root of trust or the trust anchor is the foundation of digital certificates' integrity. The root CA self-signs its certificates and then signs subordinate certificates (intermeidate CA's). Intermediate CA's can sign further subordinated certificates. These are known as Issuing CA's. Again, certificates should be rotatedas they either expire or are revoked.
+
+There are two ways to confirm if a certificate is revoked: certificate revocation list (CRL) which is an older downloadable list of serial numbers and online certificate status protocol (OCSP) where a client queries CA for revocation status of a specific certificate serial number. A certificate's life cycle consists of the following stages:
+1. Enrollment - an entity submit a certificate signing request (CSR) to a CA with proper identifying fields. The requesting entity also generates a public/private key pair, of which the public key is included in the CSR.
+2. Issuance - upon receiving the CSR, the CA will proof the identity of the entityt to ensure the information in the CSR is valid. After completing this process, the CSR will be signed by the root of trust private key, following a X.509 standard, at which point the certificate will be issued by an intermediate/issuing CA.
+3. Validation - when a certificate is invoked as part of regular web activity, the request will validate the provided certificate with the issuing CA.
+4. Revocation - a certificiate may be revoked for a number of reasons if it does not first expire.
+5. Renewal - The entity will need to renew the certificate.
+
+Public key infrastructure (PKI) is the entire suite of technology systems that allow keys to be distributed publicly and verified. A Registration Authority (RA) as part of the CA will ask for identifying information when performing identity proof on the requesting entity. Each CA maintains a dedicated DB which includes all certificates that have been issued or revoked. By contrast, a certificate store is a repository of certificates and user's private key on a user's computer.
+
+Once a key is encrypted, it must be effectively managed as a key part of encryption architecture. Kerckhoffs' principle states that a system should be secure even if everything about the system is known except its key. Key lifecycle steps include:
+1. Key creation - randomly generating a key from the entrie available key space.
+2. Key distribution - secure distributing keys either through out-of-band distribution or key wrapping using key encrypting keys (KEK)
+3. Key storage - storing keys in either a Trusted Platform Module (TPM) usually built into an individual machine or a Hardware Security Module (HSM) usually attached to a corporate network.
+4. Key rotation - replacing keys as needed
+5. Key disposition - crypto shedding or key destruction
+6. Key recovery - split knowledge (cut in half), dual control (two keys), or key escrow (loan key to trusted party)
+
+Secure/Multipurpose Internet Mail Extensions (S/MIME) is standard for public key encryption and provides authentication, nonrepudiation of origin, message integrity, and confidentiality. S/MIME offers optional security services in the form of signed receipts, security labels, secure mailing lists, and an extended method of identifying the signer's certificate.
