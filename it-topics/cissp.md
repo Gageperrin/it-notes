@@ -711,3 +711,28 @@ Cryptographic attacks tend to focus on retrieving information or executing actio
 
 Physical security like information security includes the CIA triad. Its key objectives are deterence, delay, detection, assessment, and response. Physical security must always consider the safety and protection of people first and foremost. The best physical security leverages defense in depth.
 
+## 3.9 - Design site and facility security controls
+
+Crime Prevention through Environmental Design (CPTED) is a specific professional practice that outlines guidelines and best practices regarding the design of building and surrounding structures.
+
+Considerations include threat definition, target identification, facility characteristics, life and property at stake, and operations (BCP/DRP).
+
+Perimeter controls include using landscaping design, grading, or bollards.
+
+Closed-circuit TV (CCTV) primaily serve as detective control. One must consider placement, image quality, and transmission media when adopting this strategy. Passive infrared devices are motion detectors that can pick up on infra-red light. Lighting, doors, mantraps, locks, card access, biometrics, windows, and walls can all be factors in physical security design.
+
+Infrastructure are also threat vectors whether that is through power outages (mitigated through UPS or generators), HVAC disruption, fire, or water.
+
+Fire detection tools can consist of infrared sensors, ionization detectors, photoelectric sensors, dual sensors, or VESDA (most effective and expensive), as well as a system which identifies the rising temperature.
+
+Fire suppression can consist of water-based systems like wet pipe, dry pipe, pre-action, and deluge, or it can be gas-based fire suppression systems like INERGEN, argonite, FM-200, or Aero-K. Halon used to be one of these but is now illegal.
+
+Fire extinguishers can also be used and consist of the following:
+* Class A - puts out common combustibles using water, foam, and dry chemicals
+* Class B - puts out liquid fires using gas, carbon dioxide, foam, and dry chemicals
+* Class C - puts out electrical fires using gas, carbon dioxide, and dry chemicals
+* Class D - puts out combustible metal fires using dry powders
+* Class E - puts out commercial kitchen fires using wet chemicals.
+
+Carbon dioxide is a very common suppressant agent as it is inexpensive and does not introduce as much corrosion as other suppressants but it can be deadly if used in excess with people present.
+
