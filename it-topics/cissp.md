@@ -2,12 +2,45 @@
 
 These are my collated notes for the CISSP exam.
 
+- [CISSP](#cissp)
+  - [Domain 1: Security and Risk Management](#domain-1-security-and-risk-management)
+    - [1.1 Professional Ethics](#11-professional-ethics)
+    - [1.2 Understand and Apply Security Concepts](#12-understand-and-apply-security-concepts)
+    - [1.3 Evaluate and Apply Security Governance Principles](#13-evaluate-and-apply-security-governance-principles)
+    - [1.4 Determine Compliance and Other Requirements](#14-determine-compliance-and-other-requirements)
+    - [1.5 Understand Legal and Regulatory Issues](#15-understand-legal-and-regulatory-issues)
+    - [1.6 Understand Requirements for Investigation Types](#16-understand-requirements-for-investigation-types)
+    - [1.7 Develop and Implement Security Policies](#17-develop-and-implement-security-policies)
+    - [1.8 Identify Business Continuity Requirements](#18-identify-business-continuity-requirements)
+    - [1.9 Enforce Personnel Security Policies](#19-enforce-personnel-security-policies)
+    - [1.10 Apply Risk Management Concepts](#110-apply-risk-management-concepts)
+    - [1.11 Apply Threat Modeling Concepts](#111-apply-threat-modeling-concepts)
+    - [1.12 Apply Supply Chain Risk Management](#112-apply-supply-chain-risk-management)
+    - [1.13 Establish Security Awareness Programs](#113-establish-security-awareness-programs)
+  - [Domain 2: Asset Security](#domain-2-asset-security)
+    - [2.1 Identify and Classify Assets](#21-identify-and-classify-assets)
+    - [2.2 Establish Asset Handling Requirements](#22-establish-asset-handling-requirements)
+    - [2.3 Provision Resources Securely](#23-provision-resources-securely)
+    - [2.4 Manage Data Life Cycle](#24-manage-data-life-cycle)
+    - [2.5 Ensure Appropriate Asset Retention](#25-ensure-appropriate-asset-retention)
+    - [2.6 Determine Data Security Controls](#26-determine-data-security-controls)
+  - [Domain 3: Security Architecture and Engineering](#domain-3-security-architecture-and-engineering)
+    - [3.1 Manage Engineering Processes](#31-manage-engineering-processes)
+    - [3.2 Understand Security Models](#32-understand-security-models)
+    - [3.3 Select Security Controls](#33-select-security-controls)
+    - [3.4 Understand Information Systems Capabilities](#34-understand-information-systems-capabilities)
+    - [3.5 Mitigate Security Architecture Vulnerabilities](#35-mitigate-security-architecture-vulnerabilities)
+    - [3.6 Apply Cryptography](#36-apply-cryptography)
+    - [3.7 Understand Cryptanalytic Attacks](#37-understand-cryptanalytic-attacks)
+    - [3.8 Apply Security Principles to Site Design](#38-apply-security-principles-to-site-design)
+    - [3.9 Design Facility Security Controls](#39-design-facility-security-controls)
+
 Sources include:
 * Witcher, Rob, John Berti, Lou Hablas, and Nick Mitropoulos. Destination CISSP: A Concise Guide. 1st ed. Destination Certification, Inc., 2022.
 
 # Domain 1: Security and Risk Management
 
-## - 1.1 Professional ethics
+## 1.1 - Professional ethics
 
 CISSP holders are subject to the (ISC)^2 Code of Professional Ethics whose preamble holds to the following: "The safety and welfare of society and the common good, duty to our principals, and to each other, requires that we adhere to, and be seen to adhere, to the highest ethical standards of behavior."
 
@@ -17,7 +50,7 @@ The (ISC)^2 Code of Ethics holds the following canons, prioritized in order of i
 3. Provide diligent and competent service to principals
 4. Advance and protect the profession
 
-## - 1.2 Understand and apply security concepts
+## 1.2 - Understand and apply security concepts
 
 The CIA triad consists of confidentiality, integrity, and availability:
 * Confidentiality: Protects assets using important principles such as need-to-know and least privilege; prevents unauthorized disclosure
@@ -28,7 +61,7 @@ These three pillars have been supplemented by two more:
 * Authenticity: Proves assets are legitimate and bona fide, and verifies that they are trusted and verified. Proves the source and origin of important valuable assets. Also referred to as "proof of origin".
 * Nonrepudiation: Provides assurance that someone cannot dispute the validity of something; the inability to refute accountability or responsibility. Also, inability to deny having done something.
 
-## - 1.3 Evaluate and apply security governance principles
+## 1.3 - Evaluate and apply security governance principles
 
 Governance is intended to enhance organizational value based on the goals and objectives of the organization. Security must be managed top down.
 
