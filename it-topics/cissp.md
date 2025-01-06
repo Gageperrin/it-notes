@@ -769,3 +769,196 @@ Fire extinguishers can also be used and consist of the following:
 
 Carbon dioxide is a very common suppressant agent as it is inexpensive and does not introduce as much corrosion as other suppressants but it can be deadly if used in excess with people present.
 
+# Domain 4: Communication and Network Security
+
+## 4.1 - Implement secure design principles in network architectures
+
+A network is how two or more devices communicates with one another. A protocol is a set of common rules that define network communication. The Open System Interconnection (OSI) Model is one heuristic breakdown of networking layers in seven layers.
+
+![OSI Layers](https://coderepublics.com/blog/wp-content/uploads/2023/09/WHAT-IS-OSI-MODEL-7-LAYERS-EXPLAINED.jpg)
+
+Layer 1: Physical exists as binary data, zeros and ones. Devices can conect via wired or wireless technologies. Wired technologies include twisted pair, coaxial, and fiber optic. Wireless include radio frequency, infrared/optical, and microwave.
+
+Twisted pair cable is when a pair of wires are twisted together and can be shielded (STP) or unshielded (UTP). Most people are familiar with coaxial cable for their home networks which is a single strand of copper wire sheathed in a protective coating. Fiber optic uses light pulses to represent zeroes and ones. Fiber optic is immune to the problem of crosstalk that electrical-based wiring like twisted pairs and coaxial can suffer from.
+
+Wiring can have a number of different topology models:
+* Bus topology is the most common and is when devices are connected to a central wire. One node can fail without impacting the rest. However the bus does itself represent a point of failure, and also a large-scale bus introduces the risk of a compromised device connecting to the network.
+* Tree topology can isolate transmissions to specific branches on the tree. Outages would be restricted to a branch as well.
+* Star topology connects every device to a central device which allows for network segmentation which can each have their own kind of network topology.
+* Mesh topology interconnects every device with every other device which is ideal for redundancy but less htan ideal for security.
+* Ring topology loops devices in a bus-like topology but mitigates collision issues. It is not as possible anymore.
+
+Three strategies to address collisions:
+1. Token-based collision avoidance: A token is passed from device to device, and only the device holding the token can transmit information. This is what token ring networks use.
+2. Polling: Interconnected devices poll each other to learn if any information needs to be transmitted. It introduces significant network traffic and is not used prevalently.
+3. Carrer Sense Multiple Access (CSMA): This is used by modern networks. Before transmitting information, devices check for any voltage on the wire to ensure there is potential for collisions. 
+
+Two flavors of CSMA. CSMA with Collision Avoidance (CSMA/CA) uses two lanes of communication, one for sending and one for receiving infromation. CSMA with Collision Detection (CSMA/CD) is useful for wired networks which detects collisions after the information has been transmitted.
+
+Alongside this, transmission methods include unicast (one-to-one), multicast (one-to-many), and broadcast (one-to-all).
+
+Several devices operate at Layer 1: hubs (connects multiple devices by repeating all signals), repeaters (signal boosters), and concentrators (combine all signals).
+
+Layer 2: Data Link
+
+The Data Link layer translates between the Physical Layer's bits and the Network Layer's datagrams. Devices operating in a network are physically and uniquely identified at this layer using their Media Access Control (MAC) address. It consists of 48 bits where the first 24 bits are for the organizational unique identifier (OUI) and the second 24 bits for the device, specific to the network interface controller (NIC).
+
+Address Resolution Protocol (ARP) and Reverse Address Resolution Protocol (RARP) are used to translate between IP addresses and MAC addresses. One point of attack is ARP poisoning which can spoof or masquerade device mappings.
+
+Network communications can either be circuit-switched or packet-switched. Circuit-switched networks such as the Public Switched Telephone Network (PSTN) establish connection routes between each party at the end of the communication. Circuits can be switched to establish connections as needed. For a very long time this was done via analog connections. Now VoIP or IP telephony technology allows digital data to be transmitted over analog connections.
+
+Packet-switched networks break up data into smaller packets can transfer it across a network. Switches transfer these packets from one end to the otehr.
+
+Layer 2 protocols include:
+* L2F - Layer 2 Forwarding tunneling protocol
+* PPTP - Point-to-Point Tunneling Protocol. Three auth types:
+  1. Password Authentication Protocol (PAP) - simplest and least secure
+  2. Challenge Handshake Authentication Protocol (CHAP) - More secure as password is encrypted before being sent
+  3. Extensible Authentication Protocol (EAP) - Most robust and can be combined with other protocols
+* L2TP - Layer 2 Tunneling Protocol
+* SLIP - Serial Line Internet Protocol (older used for remote access with modem connections)
+* ARP - IP to MAC
+* RARP - MAC to IP
+
+Layer 2 devices include bridges that connect networks together with no concern for traffic crossing the bridge. Switches also exist at the Layer 2 level for forwarding packets to the intended recipient.
+
+Protected Extensible Authentication Protocol (PEAP) is an improved version of EAP as it encapsulates EAP in a TLS tunnel. EAP-TLS includes both client and seerver certificates and has high security and industry support without being proprietary.
+
+Layer 3 is the network layer where data exists as packets and datagrams. It is responsible for fragmentation and IP addressing.
+
+Layer 3 protocols include:
+* ICMP - Internet Control Message Protocol is used for messaging and specifically provides feedback about problems in the network environment. `ping` and `traceroute` both use ICMP.
+* IGMP - Internet Group Management Protocol is used to establish and manage group memberships for hosts, routers, and similar devices.
+* IPsec - A tunneling protocol that supports authentication of other Layer 3 devices as well as encryption.
+* OSPF - Open Shortest Path First is a routing protocol used by routers to manage and direct network traffic properly and efficiently.
+* BGP - Border Gateway Protocol
+
+Layer 3 devices include:
+* Routers - connect and route network traffic based on IP addressing
+* Layer 3 switches - route devices on the same virtual local area network (VLAN)
+* Packet filtering firewalls - devices that make decisions based upon the header portion of a datagram
+
+IPv4 addresses are compromised of four 32-bit numbers separated by dots. Each number represents an 8-bit octet. That valid range for them is 0-255. Each packet header contains routing details like source and destination IP addresses. IPv4 is limited to just under 4.3 billion addresses. Network Address Translation (NAT) is leveraged by ISP's to translate private network IP ranges into publicly routable IP addresses. 
+
+The Institute of Electric and Electronic Engineers (IEEE) has ratified a number of standards for Layer 3 networking:
+* IEEE 802.3 defines communication standards over physical and wired networks.
+* IEEE 802.11 is a collection of communication standards specific to implementation of WLAN.
+* IEEE 802.1Q defines the standard for virtual local area networks (VLAN's).
+
+IP is the principal communications protocol for addressing and routing packets of data across networks. Internet Protocol v4 Datagram depicts the IPv4 header which includes several fields including the source and destination IP addresses. IPv6 expands IP addressing to 128 bits and includes backward compatibility with IPv4. Also, IPv6 requires IPsec which is only optional for IPv4.
+
+Private network address spaces include:
+* 10.0.0.0 -> 10.255.255.255
+* 172.16.0.0 -> 172.31.255.255
+* 192.168.0.0 -> 192.168.255.255
+
+If networks were restricted to Class A ranges it could have 2^26 IP addresses, Class B would only have 2^16, and Class C would only have 2^8. Subnetting can be used to logically divide network host environments into discrete architecture models.
+
+Layer 4 Transport: transports data between services and consists of TCP or UDP. TCP is ordered and reliable while UDP is unreliable and unordered but much faster.
+
+TCP consists of a three-way handshake. First, device A sends a synchronization (SYN) request to device B alongside a session ID. evice B responds with an acknowledge (ACK) flag set with its own SYN request and random session ID number. Device A sends a final ACK flag including the incremented session ID number to increment the SYN value it received before.
+
+To close the connection, device A sends an ACK plus FIN request. Device B would respond with n ACK and FIN request. Device A would in turn send a final ACK to end the connection gracefully.
+
+The three-way TCP handshake can be hijacked if the server is spammed with an excessive level of SYN requests and overload the server. Ports equate to services and can provide specific functionality. Ports should only be opened if they are being used. Among the 65,535 available TCP and UDP ports three classes exist: well known (e.g. HTTP), registered (IANA-assigned), and dynamic/private/ephemeral which are easily interchangeable.
+
+The most common well-known ports are:
+* FTP - 21
+* SSH - 22
+* Telnet - 23
+* SMTP - 25
+* HTTP - 80
+* HTTPS - 443
+
+Layer 5 Session: supports interhost communicatoin and maintains a logical connection between two processes on each end host. Ideal layer for identification and authentication:
+
+Conceptaully PAP, CHAP, and EAP can be labeled as Layer 5 in the OSI model even if they functionally run at Layer 2. In addition to these NetBIOS and RPC are other Layer 5 protocols.
+
+The circuit proxy firewall or gateway can be found at Layer 5. These can mask internal network traffic and activity from external parties.
+
+Layer 6: Presentation focuses on visual elements fo data like graphics, character conversions, codecs, etc.
+
+Layer 7: Application is where most functionality resides and security breaches occur. It provides a user interface through which a user gains access to communication services. Ideal place for end-to-end encryption and access control.
+
+Layer 7 protocols include:
+* Hypertext Transfer Protocol (HTTP) and Hypertext Transfer Protocol Secure (HTTPS)
+* File Transfer Protocol (FTP) and Secure FTP (SFTP)
+* DNS (port 53)
+* Telnet
+* SSH
+* SMTP/POP3
+* SNMP
+
+Layer 7 devices include gateways and application-gateway firewalls.
+
+---
+
+There are other pertinent details to understand about networking mangaement. Convergence refers to the ability of native IP networks to carry non-IP traffic via converged protocols. These include Fibre Channel over Ethernet (FCoE), Internet Small Computer Systems Interface (iSCI), and Voice over Internet Protocol (VoIP).
+
+VoIP protocols include secure real-time transport protocols (SRTP) and Session Initiation Protocol (SIP). SRTP is the secure version of RTP and supports encryption, authentication, integrity, and replay attack protection. SIP is responsible for initiating, maintaing, and terminating voice and video sessions.
+
+---
+
+Network attacks can take on a variety of forms and can be categorized as network attacks or network assessments (discovery).
+
+The four attack phases are reconnaissance, enumeration, vulnerability analysis, and exploitation. Passive attacks primarily eavesdrop or gather information. Active attacks change or modify their targets. SYN scanning using nmap can be used to identify open ports and then partially open a connection without sending the final ACK. SYN flooding will try to overload the server in the three way handshake process.
+
+Fragment attacks can either be overlapping fragmnets which attempt to use fragment overlap to bypass firewalls and IDS tools to get access to a target system or a teardrop TCP attack which sends packet of various sizes out of order with fake sequence numbers to corrupt a target system's ability to assemble a TCP packet and cause it to crash.
+
+IP spoofing attacks include a smurf attack where the attacker spoofs their IP address to match a victim's and pings a server so the victim's IP address is inundated with the response traffic. A fraggle attack sends a massive amount of UDP packets to a target system which would respond to the spoofed IP address. Neither of these are very common anymore.
+
+A denial of service (DoS) attack is an attack that impedes or denies functionality of a system or network. A distributed denial of service attack involves multiple machines acting in unison.
+
+---
+
+Radio frequency management is concerned with the placement of wireless network devices and the kind of exposure they may have considering where it is replaced with respect to the external perimeter.
+
+802.11 describes the wireless protocol family.
+
+| **802.11 Standard** | **Frequency Band(s)**          | **Top Speed (Theoretical)** |
+|---------------------|--------------------------------|-----------------------------|
+| 802.11 (original)   | 2.4 GHz                        | 2 Mbps                      |
+| 802.11a             | 5 GHz                          | 54 Mbps                     |
+| 802.11b             | 2.4 GHz                        | 11 Mbps                     |
+| 802.11g             | 2.4 GHz                        | 54 Mbps                     |
+| 802.11n (Wi-Fi 4)   | 2.4 GHz / 5 GHz                | Up to 600 Mbps              |
+| 802.11ac (Wi-Fi 5)  | 5 GHz                          | Up to ~3.46 Gbps*           |
+| 802.11ax (Wi-Fi 6)  | 2.4 GHz / 5 GHz (6 GHz\*)       | Up to 9.6 Gbps              |
+
+\* **Note**: 802.11ax (Wi-Fi 6) can also be extended to the 6 GHz band (Wi-Fi 6E), which offers additional channels but has the same maximum theoretical speeds as standard 802.11ax.
+
+Wireless security solutions have evolved over time and have included the following
+
+| **Protocol** | **Release Year** | **Access Control**            | **Authentication**                        | **Encryption**                  | **Integrity**                       |
+|--------------|------------------|--------------------------------|-------------------------------------------|---------------------------------|--------------------------------------|
+| **WEP**      | 1997             | Basic passphrase, MAC filtering| Open System or Shared Key                 | RC4 (40/104-bit keys)           | CRC-32 (weak)                       |
+| **WPA**      | 2003             | 802.1X (Enterprise) or PSK     | 802.1X/EAP (Enterprise) or Pre-Shared Key | TKIP (Temporal Key Integrity)    | Michael (TKIP-integrated integrity) |
+| **WPA2**     | 2004             | 802.1X (Enterprise) or PSK     | 802.1X/EAP (Enterprise) or Pre-Shared Key | AES-CCMP (with TKIP fallback)    | CCMP (robust integrity)             |
+| **WPA3**     | 2018             | 802.1X (Enterprise) or SAE     | SAE (Simultaneous Authentication of Equals) or 802.1X/EAP | AES-CCMP or GCMP               | GCMP (enhanced integrity)           |
+
+There are three ways to authenticate to a wireless network:
+1. Open authentication (any device can connect)
+2. Shared key (a pre-shared network key is used and shared to devices directly)
+3. EAP is used (authentication requires an authenticated key exchange mechanism)
+
+EAP can have one-factor authentication like EAP-MD5, LEAP, PEAP-MSCHAP, TTLS-MSCHAP, EAP-SIM or two-factor EAP-TLS, TTLS with OTP, and PEAP-GTC.
+
+The main encryption technologies are temporal key integrity protocol (TKIP) was a quick fix when WEP vulnerabilities were discovered. Counter-Mode-CBC-MAC Protocol (CCMP) uses Advanced Encryption Standard (AES) with 128-bit keys, used in WPA2.
+
+TKIP implements a MIC often referred to as "Michael".
+
+---
+
+Virtual Local Area Networks (VLANs) allow local networks to be created using hardware devices like Layer 3 switches. These can reduce the need for physical wiring. IEEE 802.1Q is the standard that supports VLANs on networks, including VLAN tagging.
+
+Software-Defined Networks are networks created and managed using software via application, control, and data planes. Communication between the application and control planes is facilitated by nortbound APIs while communication between data and control planes is facilitated by southbound APIs.
+
+A VLAN reduces the need for physical rewiring by creating virtual tunnels through physical networks to connect devices.
+
+Wide Area Networks (WAN) connect LANs through technologies such as dedicated leased lines, dial-up phone lines, satellite and other wireless links.
+
+WAN protocols include:
+* X.25 - One pioneer of WAN pack-switching protocols with a high error correction capability but not particularly effective today
+* Frame Relay - A successor to X.25 with a focus on speed. It uses permanent virtual circuits (PVCs) and switched virtual circuits (SVCs). PVCs support end-to-end links over a physical network, while SVCs are similar to circuit-switched networks.
+* Asynchronous Transfer Mode (ATM) - Builds on top of Frame Relay and supports very high-speed transmission needs.
+* Multi-Protocol Label Switching (MPLS) - At the forefront of current WAN connectivity solutions. It offers network connectivity that includes built-in security.
