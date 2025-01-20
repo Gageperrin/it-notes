@@ -1079,53 +1079,107 @@ Access control can be administered in several ways:
 * Decentralized: Control granted at the people/resource level by separate entities but introduces lack of standardization and has a greater risk of security holes.
 * Hybrid a combination of the two which can have the tradeoffs of each but can add additional complexity because it contains multiple architectural patterns
 
-## 5.2 - Manage identification and authentication of people, devices, and services
+## 5.2 - Manage Identification and Authentication of People, Devices, and Services
 
-Access control consists of identification, authentication, authorization, and accountability.
+Access control consists of four key elements: **identification**, **authentication**, **authorization**, and **accountability**.
 
-Identification: User identification needs to be unique, nondescriptive of role, issued securely, and used securely.
+### Identification
+User identification should be:
+- Unique
+- Nondescriptive of role
+- Issued securely
+- Used securely
 
-Authentication by: Knowledge, Ownership, Characteristic
+### Authentication
+Authentication can be based on:
+1. **What you know**: Passwords, security questions, etc.  
+   - **Least secure** due to ease of compromise.
+2. **What you have**: One-time passwords (OTP), smart cards, etc.  
+   - **More secure** but still susceptible to theft or loss.
+3. **What you are**: Biometrics like fingerprints, facial recognition, voice, or handwriting.  
+   - **Most secure** method. Retina scans are the most secure of all biometrics.
 
-Authentication by what you know: password, security questions, etc. The least secure
-Authentication by what you have: OPT, smart card, etc. More secure but can be compromised
-Authentication by what you are: fingerpint, facial features, voice, way they write. Most secure of the three. Retina scans are most secure of all biometrics.
+**Biometric authentication** must be designed to minimize:
+- **Type 2 errors**: False acceptance of unauthorized users.
+- **Type 1 errors**: False rejection of valid users.  
+The intersection of these two error types is the **Crossover Error Rate (CER)**, a key measure of biometric accuracy.
 
-Biometric authentication needs to be strongly built to prevent Type 2 errors of false acceptance of users. Type 1 errors are false rejection of valid users. The intersection of these two error types is the Crossover Error Rate (CER).
+### Single Sign-On (SSO)
+SSO improves user experience and reduces vulnerabilities from weaker authentication systems but introduces a **single point of failure**.
 
-Single Sign On (SSO) can improve user experience and prevent vulnerabilities from weaker auth systems but present a single ponit of failure.
+**Kerberos** is a widely used SSO authentication protocol:
+- The client sends an initial message to the **Authentication Service (AS)**.
+- The AS replies with:
+  - Password encrypted as a key.
+  - Ticket Granting Ticket (TGT).
+  - Ticket Granting Service's (TGS) key.
+- The client decrypts the message using their password and generates new tickets.
+- The client sends the TGT and new tickets to the TGS.
+- The TGS verifies the message and returns an encrypted **Service Ticket** and key.
+- The client uses the Service Ticket to authenticate with the service.  
+**Note**: The AS and TGS are components of the **Key Distribution Center (KDC)**.
 
-Kerberos is a major SSO authentication protocol that has been in use for some time and is considered no longer cuttting-edge. The client sends an initial message to the Authentication Service (AS). It will send a few messages back to the client including the password as an encryption key, a ticket granting ticket (TGT), and a ticket granting service's (TGS) key. The client decrypts the returned message using their password and generate new tickets. The client will send the new tickets with the still encrtpyed TGT to the TGS. The TGS will verify the message and will return them to Alice with an encrypted Service Ticket, alongisde the key. The client will then send some new meesages to the service. The AS and TGS are both components of the Key Distribution Center (KDC).
+**Disadvantages of Kerberos**:
+- Only supports symmetric encryption.
 
-One major disadvantage of Kerberos is that it only supports symmetric encryption. SESAME is one major alternative that supports asymmetric encryption but is not as popular since Kerberos is better established.
+**SESAME** is an alternative to Kerberos:
+- Supports asymmetric encryption.
+- Less widely adopted due to Kerberos's established presence.
 
-Completely Automated Public Turing test to tell Computers and Humans Apart (CAPTCHA) is a security measure to protected against automated exploitations of a system.
+### CAPTCHA
+A **Completely Automated Public Turing test to tell Computers and Humans Apart (CAPTCHA)** prevents automated exploitation of systems.
 
-Sessions also need to be properly managed to avoid hijacking by an attacker, through the use of scheduled or login limitations, timeouts, or, in the case of devices, screensavers.
+### Session Management
+Sessions must be managed to prevent hijacking by attackers. This includes:
+- Scheduled or login limitations.
+- Session timeouts.
+- Device-level protections (e.g., screensavers).
 
-Identity proofing (i.e. registration) is the process of confirming or establishing that somebody is who they claim to be.
+### Identity Proofing
+**Identity proofing** (registration) confirms or establishes an individual’s claimed identity.
 
-NIST SP 800-63B includes a section on "Authentication and Lifecycle Management' which includes three levels:
-1. AAL1 - Some assurance, single-factor auth, uses secure protocol
-2. AAL2 - High assurance, multifactor auth, secure protocol with approved cryptographic techniques
-3. AAL3 - Very high assurance, multifactor auth, secure protocol, and hard cryptographic authenticator
+### NIST SP 800-63B Authentication Levels
+1. **AAL1**: Basic assurance. Single-factor authentication with secure protocols.
+2. **AAL2**: High assurance. Multi-factor authentication with approved cryptographic techniques.
+3. **AAL3**: Very high assurance. Multi-factor authentication with hardware-based cryptographic authenticators.
 
-Federated Identity Mangement (FIM) relies on trust relationships established between different identities. The identity provider offers a baseline of trust for service provider parties to control for principal/users. Microsoft Active Directory is an example of federated identity management.
+### Federated Identity Management (FIM)
+FIM relies on trust relationships between identity providers and service providers. For example:
+- **Microsoft Active Directory** implements FIM.
 
-Federated Access Standards include SAML, WS-Federation, OpenID, and OAuth. SAML and WS-Federation provide both authentication and authorzation. OpenID provides authentication and OAuth provides authorization.
+**Federated Access Standards**:
+- **SAML**: Provides authentication and authorization.
+- **WS-Federation**: Similar to SAML with both authentication and authorization.
+- **OpenID**: Focuses on authentication.
+- **OAuth**: Focuses on authorization.
 
-SAML is based on these steps:
-1. The user requests acces to the service provider
-2. The service provider requests SAML authentication of the user
+### SAML Workflow
+1. The user requests access to the service provider.
+2. The service provider requests SAML authentication.
 3. The user relays the SAML request to the identity provider.
 4. The identity provider authenticates the user and generates a SAML assertion.
 5. The user relays the SAML assertion to the service provider.
-6. The service provider approves authorization to the user
+6. The service provider approves access.
 
-SAML terminology:
-* Assertion - Covers authentication, authorization, and other attributes. Written in XML.
-* Protocol - Defiens how entities request or respond to requests
-* Bindings - Mapping of SAML onto standard communication protocols
-* Profiles - Defines how SAML can be used for different business use cases
+**SAML Terminology**:
+- **Assertion**: Covers authentication, authorization, and attributes. Written in XML.
+- **Protocol**: Defines how entities request or respond to requests.
+- **Bindings**: Maps SAML onto standard communication protocols.
+- **Profiles**: Specifies how SAML is used for specific business use cases.
 
-Just-in-time access refers to the escalation of user privileges to an authorized user for a short period of time, to prevent ongoing or permanent escalation of permissions.
+### Just-in-Time Access
+Just-in-time access temporarily escalates user privileges for authorized tasks, preventing ongoing or permanent privilege escalation.
+
+---
+
+## 5.3 - Federated Identity with a Third-Party Service
+
+**Identity as a Service (IDaaS)** leverages cloud environments for access control. IDaaS supports:
+- Creating and managing identities in the cloud.
+- Syncing on-premises identities with the cloud.
+- Linking separate accounts.
+- Federating identities across systems.
+
+### Risks of IDaaS
+- **Availability**: Depends on third-party uptime.
+- **Data Protection**: Entrusts sensitive or proprietary data to a third party.
