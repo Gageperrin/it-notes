@@ -1195,3 +1195,7 @@ In the realm of authorization, there are several approaches:
 * Risk-Based Access Control assess the riskiness of the user's connection
 
 Non-discretionary access control means someone other than the owner gets to determine access such as an IT owner or admin.
+
+## 5.5 - Manage the identity and access provisioning life cycle
+
+Identity life cycle is composed of provisioning, review, and revocation. Access reviews should be conducted on a periodic basis whose frequency may depend on the nature of the role, the company, the industry, and compliance regulations.
