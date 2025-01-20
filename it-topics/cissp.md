@@ -1183,3 +1183,15 @@ Just-in-time access temporarily escalates user privileges for authorized tasks, 
 ### Risks of IDaaS
 - **Availability**: Depends on third-party uptime.
 - **Data Protection**: Entrusts sensitive or proprietary data to a third party.
+
+## 5.4 - Implement and manage authorization mechanisms
+
+In the realm of authorization, there are several approaches:
+* Discretionary Access Control (DAC) means an asset owner determines who can access the asset.
+   - Role-Based Access Control (RBAC) is based on user roles
+   - Rule-based Access Control is based on a set of rules (e.g. ACL)
+   - Attribute-based Access Control is based on user attribute access
+* Mandatory Access Control is a system that determines rules based on labels. It is very rare and typically only seen in government organizations where confidentality is a primary factor
+* Risk-Based Access Control assess the riskiness of the user's connection
+
+Non-discretionary access control means someone other than the owner gets to determine access such as an IT owner or admin.
