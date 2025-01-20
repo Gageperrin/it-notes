@@ -1079,3 +1079,53 @@ Access control can be administered in several ways:
 * Decentralized: Control granted at the people/resource level by separate entities but introduces lack of standardization and has a greater risk of security holes.
 * Hybrid a combination of the two which can have the tradeoffs of each but can add additional complexity because it contains multiple architectural patterns
 
+## 5.2 - Manage identification and authentication of people, devices, and services
+
+Access control consists of identification, authentication, authorization, and accountability.
+
+Identification: User identification needs to be unique, nondescriptive of role, issued securely, and used securely.
+
+Authentication by: Knowledge, Ownership, Characteristic
+
+Authentication by what you know: password, security questions, etc. The least secure
+Authentication by what you have: OPT, smart card, etc. More secure but can be compromised
+Authentication by what you are: fingerpint, facial features, voice, way they write. Most secure of the three. Retina scans are most secure of all biometrics.
+
+Biometric authentication needs to be strongly built to prevent Type 2 errors of false acceptance of users. Type 1 errors are false rejection of valid users. The intersection of these two error types is the Crossover Error Rate (CER).
+
+Single Sign On (SSO) can improve user experience and prevent vulnerabilities from weaker auth systems but present a single ponit of failure.
+
+Kerberos is a major SSO authentication protocol that has been in use for some time and is considered no longer cuttting-edge. The client sends an initial message to the Authentication Service (AS). It will send a few messages back to the client including the password as an encryption key, a ticket granting ticket (TGT), and a ticket granting service's (TGS) key. The client decrypts the returned message using their password and generate new tickets. The client will send the new tickets with the still encrtpyed TGT to the TGS. The TGS will verify the message and will return them to Alice with an encrypted Service Ticket, alongisde the key. The client will then send some new meesages to the service. The AS and TGS are both components of the Key Distribution Center (KDC).
+
+One major disadvantage of Kerberos is that it only supports symmetric encryption. SESAME is one major alternative that supports asymmetric encryption but is not as popular since Kerberos is better established.
+
+Completely Automated Public Turing test to tell Computers and Humans Apart (CAPTCHA) is a security measure to protected against automated exploitations of a system.
+
+Sessions also need to be properly managed to avoid hijacking by an attacker, through the use of scheduled or login limitations, timeouts, or, in the case of devices, screensavers.
+
+Identity proofing (i.e. registration) is the process of confirming or establishing that somebody is who they claim to be.
+
+NIST SP 800-63B includes a section on "Authentication and Lifecycle Management' which includes three levels:
+1. AAL1 - Some assurance, single-factor auth, uses secure protocol
+2. AAL2 - High assurance, multifactor auth, secure protocol with approved cryptographic techniques
+3. AAL3 - Very high assurance, multifactor auth, secure protocol, and hard cryptographic authenticator
+
+Federated Identity Mangement (FIM) relies on trust relationships established between different identities. The identity provider offers a baseline of trust for service provider parties to control for principal/users. Microsoft Active Directory is an example of federated identity management.
+
+Federated Access Standards include SAML, WS-Federation, OpenID, and OAuth. SAML and WS-Federation provide both authentication and authorzation. OpenID provides authentication and OAuth provides authorization.
+
+SAML is based on these steps:
+1. The user requests acces to the service provider
+2. The service provider requests SAML authentication of the user
+3. The user relays the SAML request to the identity provider.
+4. The identity provider authenticates the user and generates a SAML assertion.
+5. The user relays the SAML assertion to the service provider.
+6. The service provider approves authorization to the user
+
+SAML terminology:
+* Assertion - Covers authentication, authorization, and other attributes. Written in XML.
+* Protocol - Defiens how entities request or respond to requests
+* Bindings - Mapping of SAML onto standard communication protocols
+* Profiles - Defines how SAML can be used for different business use cases
+
+Just-in-time access refers to the escalation of user privileges to an authorized user for a short period of time, to prevent ongoing or permanent escalation of permissions.
