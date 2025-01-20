@@ -962,3 +962,106 @@ WAN protocols include:
 * Frame Relay - A successor to X.25 with a focus on speed. It uses permanent virtual circuits (PVCs) and switched virtual circuits (SVCs). PVCs support end-to-end links over a physical network, while SVCs are similar to circuit-switched networks.
 * Asynchronous Transfer Mode (ATM) - Builds on top of Frame Relay and supports very high-speed transmission needs.
 * Multi-Protocol Label Switching (MPLS) - At the forefront of current WAN connectivity solutions. It offers network connectivity that includes built-in security.
+
+## 4.2 - Securee network components
+
+Good network architecture consists of a combination of the following components:
+* Defense in depth - multiple layers of protection
+* Partitioning - controlling flow of traffic between segments
+* Network perimeter controls - Limited choke points for ingress or egress of traffic
+* Network segmentation - Dividing into public, private, and isolated networks or subnets
+* Bastion host - A demilitarized zone (DMZ) to segregate network access via bastion hosts or a boundary router
+* Proxy - An intelligent application that acts as an intermediary and is placed between clients and the server
+* NAT and PAT - Translates public and private IP addresses
+* Firewall - A logical entity that enfroces security rules between two or more networks.
+
+Firewall technologies can take on a number of forms today;
+* Packet filtering - Examines packet headers against access control lists (ACLs) to accept or deny access. Exists at Layeer 3 and is the simplest and fastest.
+* Stateful packet filtering - Packet state and context data is stored and updated dynamically for better tracking (RPC, UDP). Layer 3 and 4, somewhat complex but still fast.
+* Circuit-level proxy - An agnostic circuit between client or server (e.g. SOCKS). Exists at Layer 5 with more complexity and latency. Filters sessions based on rules.
+* Application-level proxy - Inspects packet payload based on the application, but can be a performance bottleneck. Layer 7 with highest latency of the four, filters based on data payload.
+
+Some firewall technologies include context-based access controls (CBAC) to intelligently filter TCP and UDP packets based on application layer protocol session information.
+
+Aside from the general firewall technologies, there are also various architectures that could be implemented:
+* A packet filtering architecture simply consists of a router between the client and the server.
+* A dual-homed host improves upon the packet filtering router by using a computer with two network cards that can understand all layers of the OSI model
+* Screened host firewalls combined packeting filtering with dual-homed host by having the packet filter peform an initial check, and if the packet is approved, pass it on to the dual-homed host.
+* Screened subnet architecture contains two firewalls encompassing a central DMZ. Traffic flows between from client and server through the firewall, switch, DMZ, second firewall, then to its destination.
+* Three-legged firewall has simply a firewall (without a switch) route to a DMZ.
+
+Intrusion Detection Systems (IDS) and Intrusion Prevention Systems (IPS) provide further defense mechanisms at the network layer.
+
+IDS could include virus scanning at the files level, stateful inspection in the state table, or content inspection. It monitors a network or host for malicious activity and reports events.
+
+IPS by contrast monitors a network or host for malicious activity or policy violations, reports events, and attempts to block them. Network-based IDS/IPS monitors network traffic transiting a network segment. Host-based IDS/IPS is installed only on the host.
+
+These can be placed in a variety of places in the network architecture depending on the layout.
+
+A port on a network device is a mirror, span, or promiscuous when traffic passing through the device is copied to the port and any device connected to it (Wireshark is an example of this).
+
+IDS/IPS can be pattern-based (focusing on known attack pattern types through signature analysis) or anomaly-based (focusing on anomalous patterns in stateful matching, statistical, protocol, or traffic level) to detect potentially malicious traffic. 
+
+Honeypots (hosts) and honeynets (two or more honeypots networked together) are technical detective controls which can detect sophisticated cyberattacks including Advanced Persistent Threats (APTs) and can trace attack paths or distract attackers, but however may unintentionally expose company patterns or systems at a more fundamental layer.
+
+Honeypots should never be used to entrap individuals, they should only entice.
+
+Endpoint security is concerned with the specific protection of client devices on corporate networks. Data leak prevention (DLP) and network access control (NAC) solutions restrict access and can help fortify device endpoints.
+
+## 4.3 - Implement Secure Communication Channels According to Design
+
+Remote access security is concerned with controls for remote access over insecure/public networks. VPN solutions are generally utilized to protect remote access traffic. VPNs are tunneling protocols with encryption; if there is no encryption, it is not a VPN, only a tunnel.
+
+Tunneling encapsulates a datagram within another. It does not provide confidentiality unless encryption is applied.
+
+Generic Routing Encapsulation (GRE) is a tunneling protocol that encapsulates a variety of protocols and routes them over IP networks, including IPv4, multicast, and IPv6. GRE is not secure on its own as it only provides encapsulation.
+
+Split tunneling allows a user to access disparate resources simultaneously without traffic passing through the VPN. This is generally considered a security risk because the end device can bypass organizational security controls by using other networks.
+
+VPN solutions exist at Layer 2 and Layer 3, depending on the protocol used. VPNs rely on symmetric encryption.
+
+### Common Tunneling Protocols
+
+| **Protocol**                     | **Includes Encryption**             | **OSI Layer**         |
+|----------------------------------|-------------------------------------|-----------------------|
+| **VXLAN (Virtual Extensible LAN)** | No                                 | Layer 2 (Data Link)   |
+| **L2TP (Layer 2 Tunneling Protocol)** | No (but can use IPSec for encryption) | Layer 2 (Data Link)   |
+| **PPTP (Point-to-Point Tunneling Protocol)** | Yes (uses MPPE encryption)      | Layer 2 (Data Link)   |
+| **GRE (Generic Routing Encapsulation)** | No                                 | Layer 3 (Network)     |
+| **IPSec (Internet Protocol Security)**  | Yes                                | Layer 3 (Network)     |
+| **WireGuard**                   | Yes                                | Layer 3 (Network)     |
+| **MPLS (Multiprotocol Label Switching)** | No                                 | Layer 2.5 (between Data Link and Network) |
+| **OpenVPN**                     | Yes                                | Layer 4 (Transport)   |
+| **SSL/TLS (for tunneling, e.g., stunnel)** | Yes                          | Layer 5 (Session)     |
+| **SOCKS**                       | No                                 | Layer 5 (Session)     |
+| **SSH (Secure Shell Tunneling)** | Yes                                | Layer 7 (Application) |
+
+IPsec is preferred for VPNs and is embedded in IPv6 by default, offering authentication via Authentication Header (AH) and encryption via Encapsulating Security Payload (ESP).
+
+IPsec can operate in:
+- **Transport Mode**: Uses the header of the original packet with the AH or ESP header, protecting the payload.
+- **Tunnel Mode**: Encapsulates the entire original IP packet (header and payload) with a new header and the AH or ESP header.
+
+IPsec depends on Internet Key Exchange (IKE) to generate the same session key at each end of the VPN. IPsec tunnels are established through a Security Association (SA), which defines attributes such as authentication and encryption algorithms, encryption keys, transport or tunnel modes, sequence numbers, and expiry.
+
+SSL/TLS provides secure client-to-server connections. SSL is considered obsolete and has been replaced by TLS. The latest SSL revision was 3.0, and TLS 1.3, released in 2018, is the most recent version of TLS. The DROWN attack is a major threat to SSLv2.
+
+### SSL/TLS Handshake Protocol
+1. The client sends a request to the server using supported algorithms.
+2. The server returns its certificate with selected algorithms.
+3. The client decrypts the server's certificate to obtain its public key.
+4. The client creates a symmetric session key and encrypts it with the server's public key.
+5. The client sends the encrypted session key to the server.
+6. The server decrypts the session key using its private key, concluding the handshake.
+
+### TLS VPN vs. IPsec VPN
+* TLS VPN operates at the Transport Layer, while IPsec operates at the Network Layer.
+* TLS encrypts traffic between processes identified by port numbers, while IPsec encrypts traffic between systems identified by IP addresses.
+* TLS encrypts connections by default, while IPsec does not.
+* TLS is easier to establish and manage with more granular configuration options, while IPsec can be more complex.
+* Attacks on TLS compromise specific applications, while attacks on IPsec compromise the entire network.
+
+### Remote Authentication Protocols
+- **Remote Authentication Dial-In User Service (RADIUS)**: An application-layer protocol that allows users to connect to and access network resources. It supports dial-in networking.
+- **Terminal Access Controller Access Control System Plus (TACACS+)**: An improvement over RADIUS that encrypts all transmitted packets.
+- **Diameter**: A successor to RADIUS that adds support for EAP authentication.
