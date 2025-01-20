@@ -1065,3 +1065,17 @@ SSL/TLS provides secure client-to-server connections. SSL is considered obsolete
 - **Remote Authentication Dial-In User Service (RADIUS)**: An application-layer protocol that allows users to connect to and access network resources. It supports dial-in networking.
 - **Terminal Access Controller Access Control System Plus (TACACS+)**: An improvement over RADIUS that encrypts all transmitted packets.
 - **Diameter**: A successor to RADIUS that adds support for EAP authentication.
+
+# Domain 5: Identity and Access Management (IAM)
+
+## 5.1 - Control physical and logical access to assets
+
+Access control is the collection of mechanisms that work together to protect the assets of an organization and allow controlled access to authorized subjects They specify which users can access which resources using which operations while maintaining individual accountability.
+
+Access control principles include: need to know, least privilege, and separation of duties
+
+Access control can be administered in several ways:
+* Centralized: One central system with SSO and central administration point manages all access control. Represents a single point of failure
+* Decentralized: Control granted at the people/resource level by separate entities but introduces lack of standardization and has a greater risk of security holes.
+* Hybrid a combination of the two which can have the tradeoffs of each but can add additional complexity because it contains multiple architectural patterns
+
