@@ -1315,4 +1315,85 @@ Regression testing ensures that previously tested and functional software remain
 - Relevant metrics for each test case.
 
 
+## 6.3 - Collect security process data
+
+Key risk and performance indicators (KRIs and KPIs) should be used to help inform security decision making. KPI's are backward-looking and historical while KRI's are forward-looking indicators. SMART metrics are specific, measureable, achievable, relevant, and timely.
+
+## 6.4 - Analyze test output and generate report
+
+Security assessments and testing should include steps related to remediation, exception handling, and ehtical disclosure.
+
+## 6.5 - Conduct or facilitate security audits.
+
+Audit plans should:
+1. Define the audit objective
+2. Define the audit scope
+3. Conduct the audit
+4. Refine the audit process
+
+Audit standards have matured over the years. SAS70 was replaced by SSAE 16 which in turn was replaced by SSAE 18. ISAE 3402 is the international standard in assurance engagements and is quite similar to SSAE 16/18 standards.
+
+System Organization Controls (SOC) Reports come in three types:
+* SOC 1 is basic and focuses on financial rpeorting risks
+* SOC 2 is much more involved and focused on the controls relating to the five trust principles: security, availability, confidentiality, processing integrity, and privacy.
+* SOC 3 reports are stripped down versions of SOC 2 reports and typically used for marketing purposes.
+
+Type 1 SOC reports focuses on a point in time while Type 2 reports focus on a period of time, covering design, and operational effectiveness. For security professionals, SOC 2 Type 2 is most desirable.
+
+Audit roles and responsibilities include the executive senior management which sets the tone from the top, the audit committee is composed of board/senior stakeholders to provide oversight of the audit program. The security officer advises on security related risks to be evaluated. The compliance manager ensures corporate compliance with applicable laws and regulations, professional standards, and company policy. Internal auditors are company employees who provide assurance that corporate internal controls are operating effectively. External auditors provide an unbiased and indepdent audit report as they are independent of the entity being audited.
+
+## 6.3 - Collect Security Process Data
+
+Key risk and performance indicators (KRIs and KPIs) are essential for informed security decision-making:
+- **KPIs:** Backward-looking, historical metrics that measure performance against goals.
+- **KRIs:** Forward-looking indicators that identify potential risks before they materialize.
+
+Metrics should adhere to the **SMART** framework:
+- **Specific**
+- **Measurable**
+- **Achievable**
+- **Relevant**
+- **Timely**
+
+---
+
+## 6.4 - Analyze Test Output and Generate Report
+
+Security assessments and testing must address:
+1. **Remediation:** Identify and fix vulnerabilities or issues found during testing.
+2. **Exception Handling:** Document and manage scenarios where identified risks cannot be remediated.
+3. **Ethical Disclosure:** Report findings responsibly to stakeholders, ensuring compliance with laws and ethical standards.
+
+---
+
+## 6.5 - Conduct or Facilitate Security Audits
+
+### Audit Planning
+Audit plans should include the following steps:
+1. **Define the Audit Objective:** Clarify the purpose and goals of the audit.
+2. **Define the Audit Scope:** Specify the systems, processes, and areas to be audited.
+3. **Conduct the Audit:** Execute the plan and gather evidence.
+4. **Refine the Audit Process:** Evaluate the audit's effectiveness and improve future audits.
+
+### Audit Standards
+- **SAS70:** Replaced by **SSAE 16**, which was later replaced by **SSAE 18**.
+- **ISAE 3402:** The international standard for assurance engagements, similar to SSAE 16/18.
+
+### SOC Reports
+- **SOC 1:** Focuses on financial reporting risks.
+- **SOC 2:** Evaluates controls related to the five trust principles: security, availability, confidentiality, processing integrity, and privacy.
+- **SOC 3:** A public-facing, simplified version of SOC 2 for marketing purposes.
+
+#### SOC Report Types:
+- **Type 1:** Examines controls at a specific point in time.
+- **Type 2:** Evaluates controls over a period, addressing design and operational effectiveness.  
+  **Note:** For security professionals, **SOC 2 Type 2** is the most comprehensive and relevant.
+
+### Audit Roles and Responsibilities
+- **Executive/Senior Management:** Establishes the audit's importance and tone from the top.
+- **Audit Committee:** Composed of senior stakeholders; oversees the audit program.
+- **Security Officer:** Advises on security-related risks and controls to be evaluated.
+- **Compliance Manager:** Ensures adherence to laws, regulations, standards, and policies.
+- **Internal Auditors:** Employees who ensure corporate internal controls are effective.
+- **External Auditors:** Independent professionals who provide unbiased audit reports.
 
