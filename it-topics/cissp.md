@@ -1,6 +1,6 @@
 # CISSP
 
-These are my collated notes for the CISSP exam.
+These are my manually compiled notes for the CISSP exam.
 
 - [CISSP](#cissp)
   - [Domain 1: Security and Risk Management](#domain-1-security-and-risk-management)
@@ -1199,3 +1199,17 @@ Non-discretionary access control means someone other than the owner gets to dete
 ## 5.5 - Manage the identity and access provisioning life cycle
 
 Identity life cycle is composed of provisioning, review, and revocation. Access reviews should be conducted on a periodic basis whose frequency may depend on the nature of the role, the company, the industry, and compliance regulations.
+
+
+# Domain 6: Security Assessment and Testing
+
+## 6.1 - Design and validate assessment, test, and audit strategies
+
+Validation identifies if the right product is being built, while verification identifies if the product is being built right by assessing completeness, correctness, and consistency.
+
+Security assessment and testing provides assurance around the architecture, application, or system, to validate and verify it meets requirements and best practices.
+
+Testing can be internal to an organization, external in the sense that someone in the organization is auditing something external, external in the sense that someone external to the company is auditing something internal, or a third-party audit where the customer, vendor, and an independent audit firm are all engaged.
+
+Security professionals are obligated to identify risk, advise on testing processes, and provide advice and support to stakeholders.
+
