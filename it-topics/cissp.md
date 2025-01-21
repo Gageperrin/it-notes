@@ -1213,3 +1213,106 @@ Testing can be internal to an organization, external in the sense that someone i
 
 Security professionals are obligated to identify risk, advise on testing processes, and provide advice and support to stakeholders.
 
+## 6.2 - Conduct Security Control Testing
+
+### Testing Lifecycle
+Tests operate with the following lifecycle stages:
+1. **Plan:** Requirements gathering.
+2. **Design:** System, architecture, and module design.
+3. **Develop:** Test suites for development processes, including unit, interface, integration, and system testing.
+4. **Deploy:** Test suites for deployment processes, such as vulnerability assessment, log analysis, performance testing, and usability testing.
+5. **Operate:** Configuration management reviews and assessment of vulnerabilities and logs.
+6. **Retire:** Ensure the integrity of data transfer and defensible destruction of data.
+
+### Types of Testing
+- **Unit Testing:** Examines and tests individual components of an application.
+- **Interface Testing:** Verifies that components connect properly.
+- **Integration Testing:** Focuses on testing groups of components as a whole.
+- **System Testing:** Tests the entire, integrated system.
+
+Testing can be conducted manually or automatically.
+
+### Application Security Testing
+- **Static Application Security Testing (SAST):** Assesses source code without executing it (white-box testing).
+- **Dynamic Application Security Testing (DAST):** Tests an application while it is running (black-box testing).
+
+### Fuzz Testing
+Fuzz testing involves chaotic inputs to identify application vulnerabilities:
+- **Dumb Fuzzers:** Randomly modify input without understanding its structure.
+- **Intelligent Fuzzers:** Generate structured input based on protocols, formatting, and documentation.
+
+### Testing Strategies
+- **Positive Testing:** Focuses on system behavior under normal conditions.
+- **Negative Testing:** Focuses on behavior under abnormal or erroneous conditions.
+- **Misuse Testing:** Evaluates the system's response to intentional exploitation or misuse.
+
+### Test Design Techniques
+- **Boundary Value Analysis:** Identifies boundaries where behavior changes (e.g., minimum password length) and tests conditions near those boundaries.
+- **Equivalence Partitioning:** Groups inputs with similar behavior for testing.
+- **Decision Table Analysis:** Captures input combinations and their corresponding system behavior in a table.
+- **State-Based Analysis:** Defines abstract states for a system and compares its actual state to the expected state.
+
+### Vulnerability Assessments and Penetration Testing
+- **Vulnerability Assessments:** Automated, non-intrusive techniques to identify weaknesses, often reporting false positives.
+- **Penetration Testing:** Manual, intrusive testing to exploit vulnerabilities and confirm their impact.
+
+#### Penetration Testing Steps:
+1. **Reconnaissance:** Passively gather publicly available information.
+2. **Enumeration:** Actively discover target IP addresses and ports.
+3. **Vulnerability Analysis:** Identify potential vulnerabilities.
+4. **Execution:** Attempt to exploit vulnerabilities.
+5. **Document Findings:** Report severity and outcomes for the audience.
+
+### Types of Testing Approaches
+- **Blind Testing:** Assessor has minimal information about the target.
+- **Double-Blind Testing:** The internal team is also unaware of the test.
+- **Black-Box Testing:** Assessor has no prior knowledge of the system.
+- **Gray-Box Testing:** Assessor has partial knowledge of the system.
+- **White-Box Testing:** Assessor has full knowledge of the system.
+
+### Vulnerability Management
+Effective vulnerability management requires:
+- **Asset Inventory:** Accurate tracking of assets.
+- **Asset Value Identification:** Data classification, ownership, and categorization.
+- **Vulnerability Identification:** Detailing remediation paths for each asset.
+- **Ongoing Management:** Regular review of the above processes.
+
+### Automated Tools
+- **Authenticated Scans:** Operate with valid user credentials.
+- **Unauthenticated Scans:** Operate without user credentials.
+- **Banner Grabbing:** Identifies software and versions of underlying systems.
+- **Fingerprinting:** Identifies unique characteristics of a system.
+
+### Common Vulnerability Resources
+- **Common Vulnerability and Exposures (CVE):** A dictionary of publicly disclosed vulnerabilities.
+- **Common Vulnerability Scoring System (CVSS):** Quantitatively measures vulnerabilities on a scale of 1 to 10.
+
+### Log Management and Monitoring
+- Regular log reviews identify errors and anomalies such as unauthorized modification or breaches.
+- Synchronize log events with a common **Network Time Protocol (NTP)**.
+
+#### Log Data Lifecycle:
+1. **Generation**
+2. **Transmission**
+3. **Collection**
+4. **Normalization**
+5. **Analysis**
+6. **Retention**
+7. **Disposal**
+
+#### Log File Management:
+- **Circular Overwrite:** Overwrites older logs to avoid storage issues.
+- **Clipping Levels:** Avoid storing irrelevant logs by setting thresholds.
+
+### Monitoring Techniques
+- **Real User Monitoring:** Passively observes user interactions with applications.
+- **Synthetic Performance Monitoring:** Runs scripted transactions to test functionality, availability, and response times.
+
+### Regression Testing
+Regression testing ensures that previously tested and functional software remains operational after updates. Key elements include:
+- Objective pass/fail criteria.
+- Tailored detail for specific audiences.
+- Relevant metrics for each test case.
+
+
+
