@@ -38,58 +38,21 @@ These are my manually compiled notes for the CISSP exam.
   - [4.1 - Implement secure design principles in network architectures](#41---implement-secure-design-principles-in-network-architectures)
   - [4.2 - Securee network components](#42---securee-network-components)
   - [4.3 - Implement Secure Communication Channels According to Design](#43---implement-secure-communication-channels-according-to-design)
-    - [Common Tunneling Protocols](#common-tunneling-protocols)
-    - [SSL/TLS Handshake Protocol](#ssltls-handshake-protocol)
-    - [TLS VPN vs. IPsec VPN](#tls-vpn-vs-ipsec-vpn)
-    - [Remote Authentication Protocols](#remote-authentication-protocols)
 - [Domain 5: Identity and Access Management (IAM)](#domain-5-identity-and-access-management-iam)
   - [5.1 - Control physical and logical access to assets](#51---control-physical-and-logical-access-to-assets)
   - [5.2 - Manage Identification and Authentication of People, Devices, and Services](#52---manage-identification-and-authentication-of-people-devices-and-services)
-    - [Identification](#identification)
-    - [Authentication](#authentication)
-    - [Single Sign-On (SSO)](#single-sign-on-sso)
-    - [CAPTCHA](#captcha)
-    - [Session Management](#session-management)
-    - [Identity Proofing](#identity-proofing)
-    - [NIST SP 800-63B Authentication Levels](#nist-sp-800-63b-authentication-levels)
-    - [Federated Identity Management (FIM)](#federated-identity-management-fim)
-    - [SAML Workflow](#saml-workflow)
-    - [Just-in-Time Access](#just-in-time-access)
   - [5.3 - Federated Identity with a Third-Party Service](#53---federated-identity-with-a-third-party-service)
-    - [Risks of IDaaS](#risks-of-idaas)
   - [5.4 - Implement and manage authorization mechanisms](#54---implement-and-manage-authorization-mechanisms)
   - [5.5 - Manage the identity and access provisioning life cycle](#55---manage-the-identity-and-access-provisioning-life-cycle)
 - [Domain 6: Security Assessment and Testing](#domain-6-security-assessment-and-testing)
   - [6.1 - Design and validate assessment, test, and audit strategies](#61---design-and-validate-assessment-test-and-audit-strategies)
   - [6.2 - Conduct Security Control Testing](#62---conduct-security-control-testing)
-    - [Testing Lifecycle](#testing-lifecycle)
-    - [Types of Testing](#types-of-testing)
-    - [Application Security Testing](#application-security-testing)
-    - [Fuzz Testing](#fuzz-testing)
-    - [Testing Strategies](#testing-strategies)
-    - [Test Design Techniques](#test-design-techniques)
-    - [Vulnerability Assessments and Penetration Testing](#vulnerability-assessments-and-penetration-testing)
-      - [Penetration Testing Steps:](#penetration-testing-steps)
-    - [Types of Testing Approaches](#types-of-testing-approaches)
-    - [Vulnerability Management](#vulnerability-management)
-    - [Automated Tools](#automated-tools)
-    - [Common Vulnerability Resources](#common-vulnerability-resources)
-    - [Log Management and Monitoring](#log-management-and-monitoring)
-      - [Log Data Lifecycle:](#log-data-lifecycle)
-      - [Log File Management:](#log-file-management)
-    - [Monitoring Techniques](#monitoring-techniques)
-    - [Regression Testing](#regression-testing)
   - [6.3 - Collect security process data](#63---collect-security-process-data)
   - [6.4 - Analyze test output and generate report](#64---analyze-test-output-and-generate-report)
   - [6.5 - Conduct or facilitate security audits.](#65---conduct-or-facilitate-security-audits)
   - [6.3 - Collect Security Process Data](#63---collect-security-process-data-1)
   - [6.4 - Analyze Test Output and Generate Report](#64---analyze-test-output-and-generate-report-1)
   - [6.5 - Conduct or Facilitate Security Audits](#65---conduct-or-facilitate-security-audits-1)
-    - [Audit Planning](#audit-planning)
-    - [Audit Standards](#audit-standards)
-    - [SOC Reports](#soc-reports)
-      - [SOC Report Types:](#soc-report-types)
-    - [Audit Roles and Responsibilities](#audit-roles-and-responsibilities)
 - [Domain 7: Security Operations](#domain-7-security-operations)
   - [7.1 - Understand and comply with investigations](#71---understand-and-comply-with-investigations)
   - [7.2 - Conduct logging and monitoring activities](#72---conduct-logging-and-monitoring-activities)
@@ -1091,7 +1054,7 @@ Split tunneling allows a user to access disparate resources simultaneously witho
 
 VPN solutions exist at Layer 2 and Layer 3, depending on the protocol used. VPNs rely on symmetric encryption.
 
-### Common Tunneling Protocols
+Common Tunneling Protocols:
 
 | **Protocol**                     | **Includes Encryption**             | **OSI Layer**         |
 |----------------------------------|-------------------------------------|-----------------------|
@@ -1117,7 +1080,7 @@ IPsec depends on Internet Key Exchange (IKE) to generate the same session key at
 
 SSL/TLS provides secure client-to-server connections. SSL is considered obsolete and has been replaced by TLS. The latest SSL revision was 3.0, and TLS 1.3, released in 2018, is the most recent version of TLS. The DROWN attack is a major threat to SSLv2.
 
-### SSL/TLS Handshake Protocol
+SSL/TLS Handshake Protocol:
 1. The client sends a request to the server using supported algorithms.
 2. The server returns its certificate with selected algorithms.
 3. The client decrypts the server's certificate to obtain its public key.
@@ -1125,14 +1088,14 @@ SSL/TLS provides secure client-to-server connections. SSL is considered obsolete
 5. The client sends the encrypted session key to the server.
 6. The server decrypts the session key using its private key, concluding the handshake.
 
-### TLS VPN vs. IPsec VPN
+TLS VPN vs. IPsec VPN:
 * TLS VPN operates at the Transport Layer, while IPsec operates at the Network Layer.
 * TLS encrypts traffic between processes identified by port numbers, while IPsec encrypts traffic between systems identified by IP addresses.
 * TLS encrypts connections by default, while IPsec does not.
 * TLS is easier to establish and manage with more granular configuration options, while IPsec can be more complex.
 * Attacks on TLS compromise specific applications, while attacks on IPsec compromise the entire network.
 
-### Remote Authentication Protocols
+Remote Authentication Protocols:
 - **Remote Authentication Dial-In User Service (RADIUS)**: An application-layer protocol that allows users to connect to and access network resources. It supports dial-in networking.
 - **Terminal Access Controller Access Control System Plus (TACACS+)**: An improvement over RADIUS that encrypts all transmitted packets.
 - **Diameter**: A successor to RADIUS that adds support for EAP authentication.
@@ -1154,14 +1117,12 @@ Access control can be administered in several ways:
 
 Access control consists of four key elements: **identification**, **authentication**, **authorization**, and **accountability**.
 
-### Identification
 User identification should be:
 - Unique
 - Nondescriptive of role
 - Issued securely
 - Used securely
 
-### Authentication
 Authentication can be based on:
 1. **What you know**: Passwords, security questions, etc.  
    - **Least secure** due to ease of compromise.
@@ -1175,7 +1136,6 @@ Authentication can be based on:
 - **Type 1 errors**: False rejection of valid users.  
 The intersection of these two error types is the **Crossover Error Rate (CER)**, a key measure of biometric accuracy.
 
-### Single Sign-On (SSO)
 SSO improves user experience and reduces vulnerabilities from weaker authentication systems but introduces a **single point of failure**.
 
 **Kerberos** is a widely used SSO authentication protocol:
@@ -1197,25 +1157,21 @@ SSO improves user experience and reduces vulnerabilities from weaker authenticat
 - Supports asymmetric encryption.
 - Less widely adopted due to Kerberos's established presence.
 
-### CAPTCHA
 A **Completely Automated Public Turing test to tell Computers and Humans Apart (CAPTCHA)** prevents automated exploitation of systems.
 
-### Session Management
 Sessions must be managed to prevent hijacking by attackers. This includes:
 - Scheduled or login limitations.
 - Session timeouts.
 - Device-level protections (e.g., screensavers).
 
-### Identity Proofing
 **Identity proofing** (registration) confirms or establishes an individual’s claimed identity.
 
-### NIST SP 800-63B Authentication Levels
+NIST SP 800-63B Authentication Levels:
 1. **AAL1**: Basic assurance. Single-factor authentication with secure protocols.
 2. **AAL2**: High assurance. Multi-factor authentication with approved cryptographic techniques.
 3. **AAL3**: Very high assurance. Multi-factor authentication with hardware-based cryptographic authenticators.
 
-### Federated Identity Management (FIM)
-FIM relies on trust relationships between identity providers and service providers. For example:
+Federated Identity Management (FIM) relies on trust relationships between identity providers and service providers. For example:
 - **Microsoft Active Directory** implements FIM.
 
 **Federated Access Standards**:
@@ -1224,7 +1180,7 @@ FIM relies on trust relationships between identity providers and service provide
 - **OpenID**: Focuses on authentication.
 - **OAuth**: Focuses on authorization.
 
-### SAML Workflow
+SAML Workflow
 1. The user requests access to the service provider.
 2. The service provider requests SAML authentication.
 3. The user relays the SAML request to the identity provider.
@@ -1238,7 +1194,6 @@ FIM relies on trust relationships between identity providers and service provide
 - **Bindings**: Maps SAML onto standard communication protocols.
 - **Profiles**: Specifies how SAML is used for specific business use cases.
 
-### Just-in-Time Access
 Just-in-time access temporarily escalates user privileges for authorized tasks, preventing ongoing or permanent privilege escalation.
 
 ---
@@ -1251,7 +1206,7 @@ Just-in-time access temporarily escalates user privileges for authorized tasks, 
 - Linking separate accounts.
 - Federating identities across systems.
 
-### Risks of IDaaS
+Risks of IDaaS
 - **Availability**: Depends on third-party uptime.
 - **Data Protection**: Entrusts sensitive or proprietary data to a third party.
 
@@ -1286,7 +1241,6 @@ Security professionals are obligated to identify risk, advise on testing process
 
 ## 6.2 - Conduct Security Control Testing
 
-### Testing Lifecycle
 Tests operate with the following lifecycle stages:
 1. **Plan:** Requirements gathering.
 2. **Design:** System, architecture, and module design.
@@ -1295,7 +1249,7 @@ Tests operate with the following lifecycle stages:
 5. **Operate:** Configuration management reviews and assessment of vulnerabilities and logs.
 6. **Retire:** Ensure the integrity of data transfer and defensible destruction of data.
 
-### Types of Testing
+Types of Testing
 - **Unit Testing:** Examines and tests individual components of an application.
 - **Interface Testing:** Verifies that components connect properly.
 - **Integration Testing:** Focuses on testing groups of components as a whole.
@@ -1303,66 +1257,64 @@ Tests operate with the following lifecycle stages:
 
 Testing can be conducted manually or automatically.
 
-### Application Security Testing
+Application Security Testing:
 - **Static Application Security Testing (SAST):** Assesses source code without executing it (white-box testing).
 - **Dynamic Application Security Testing (DAST):** Tests an application while it is running (black-box testing).
 
-### Fuzz Testing
 Fuzz testing involves chaotic inputs to identify application vulnerabilities:
 - **Dumb Fuzzers:** Randomly modify input without understanding its structure.
 - **Intelligent Fuzzers:** Generate structured input based on protocols, formatting, and documentation.
 
-### Testing Strategies
+Testing strategies:
 - **Positive Testing:** Focuses on system behavior under normal conditions.
 - **Negative Testing:** Focuses on behavior under abnormal or erroneous conditions.
 - **Misuse Testing:** Evaluates the system's response to intentional exploitation or misuse.
 
-### Test Design Techniques
+Test Design Techniques:
 - **Boundary Value Analysis:** Identifies boundaries where behavior changes (e.g., minimum password length) and tests conditions near those boundaries.
 - **Equivalence Partitioning:** Groups inputs with similar behavior for testing.
 - **Decision Table Analysis:** Captures input combinations and their corresponding system behavior in a table.
 - **State-Based Analysis:** Defines abstract states for a system and compares its actual state to the expected state.
 
-### Vulnerability Assessments and Penetration Testing
+Vulnerability Assessments and Penetration Testing:
 - **Vulnerability Assessments:** Automated, non-intrusive techniques to identify weaknesses, often reporting false positives.
 - **Penetration Testing:** Manual, intrusive testing to exploit vulnerabilities and confirm their impact.
 
-#### Penetration Testing Steps:
+Penetration Testing Steps:
 1. **Reconnaissance:** Passively gather publicly available information.
 2. **Enumeration:** Actively discover target IP addresses and ports.
 3. **Vulnerability Analysis:** Identify potential vulnerabilities.
 4. **Execution:** Attempt to exploit vulnerabilities.
 5. **Document Findings:** Report severity and outcomes for the audience.
 
-### Types of Testing Approaches
+Types of Testing Approaches:
 - **Blind Testing:** Assessor has minimal information about the target.
 - **Double-Blind Testing:** The internal team is also unaware of the test.
 - **Black-Box Testing:** Assessor has no prior knowledge of the system.
 - **Gray-Box Testing:** Assessor has partial knowledge of the system.
 - **White-Box Testing:** Assessor has full knowledge of the system.
 
-### Vulnerability Management
 Effective vulnerability management requires:
 - **Asset Inventory:** Accurate tracking of assets.
 - **Asset Value Identification:** Data classification, ownership, and categorization.
 - **Vulnerability Identification:** Detailing remediation paths for each asset.
 - **Ongoing Management:** Regular review of the above processes.
 
-### Automated Tools
+Automated Tools:
 - **Authenticated Scans:** Operate with valid user credentials.
 - **Unauthenticated Scans:** Operate without user credentials.
 - **Banner Grabbing:** Identifies software and versions of underlying systems.
 - **Fingerprinting:** Identifies unique characteristics of a system.
 
-### Common Vulnerability Resources
+Common Vulnerability Resources:
 - **Common Vulnerability and Exposures (CVE):** A dictionary of publicly disclosed vulnerabilities.
 - **Common Vulnerability Scoring System (CVSS):** Quantitatively measures vulnerabilities on a scale of 1 to 10.
 
-### Log Management and Monitoring
+Log Management and Monitoring:
 - Regular log reviews identify errors and anomalies such as unauthorized modification or breaches.
 - Synchronize log events with a common **Network Time Protocol (NTP)**.
 
-#### Log Data Lifecycle:
+Log Data Lifecycle:
 1. **Generation**
 2. **Transmission**
 3. **Collection**
@@ -1371,15 +1323,14 @@ Effective vulnerability management requires:
 6. **Retention**
 7. **Disposal**
 
-#### Log File Management:
+Log File Management:
 - **Circular Overwrite:** Overwrites older logs to avoid storage issues.
 - **Clipping Levels:** Avoid storing irrelevant logs by setting thresholds.
 
-### Monitoring Techniques
+Monitoring Techniques:
 - **Real User Monitoring:** Passively observes user interactions with applications.
 - **Synthetic Performance Monitoring:** Runs scripted transactions to test functionality, availability, and response times.
 
-### Regression Testing
 Regression testing ensures that previously tested and functional software remains operational after updates. Key elements include:
 - Objective pass/fail criteria.
 - Tailored detail for specific audiences.
@@ -1439,28 +1390,27 @@ Security assessments and testing must address:
 
 ## 6.5 - Conduct or Facilitate Security Audits
 
-### Audit Planning
 Audit plans should include the following steps:
 1. **Define the Audit Objective:** Clarify the purpose and goals of the audit.
 2. **Define the Audit Scope:** Specify the systems, processes, and areas to be audited.
 3. **Conduct the Audit:** Execute the plan and gather evidence.
 4. **Refine the Audit Process:** Evaluate the audit's effectiveness and improve future audits.
 
-### Audit Standards
+Historical Audit Standards:
 - **SAS70:** Replaced by **SSAE 16**, which was later replaced by **SSAE 18**.
 - **ISAE 3402:** The international standard for assurance engagements, similar to SSAE 16/18.
 
-### SOC Reports
+SOC Reports:
 - **SOC 1:** Focuses on financial reporting risks.
 - **SOC 2:** Evaluates controls related to the five trust principles: security, availability, confidentiality, processing integrity, and privacy.
 - **SOC 3:** A public-facing, simplified version of SOC 2 for marketing purposes.
 
-#### SOC Report Types:
+SOC Report Types:
 - **Type 1:** Examines controls at a specific point in time.
 - **Type 2:** Evaluates controls over a period, addressing design and operational effectiveness.  
   **Note:** For security professionals, **SOC 2 Type 2** is the most comprehensive and relevant.
 
-### Audit Roles and Responsibilities
+Audit Roles and Responsibilities
 - **Executive/Senior Management:** Establishes the audit's importance and tone from the top.
 - **Audit Committee:** Composed of senior stakeholders; oversees the audit program.
 - **Security Officer:** Advises on security-related risks and controls to be evaluated.
