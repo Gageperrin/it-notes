@@ -3,37 +3,96 @@
 These are my manually compiled notes for the CISSP exam.
 
 - [CISSP](#cissp)
-  - [Domain 1: Security and Risk Management](#domain-1-security-and-risk-management)
-    - [1.1 Professional Ethics](#11-professional-ethics)
-    - [1.2 Understand and Apply Security Concepts](#12-understand-and-apply-security-concepts)
-    - [1.3 Evaluate and Apply Security Governance Principles](#13-evaluate-and-apply-security-governance-principles)
-    - [1.4 Determine Compliance and Other Requirements](#14-determine-compliance-and-other-requirements)
-    - [1.5 Understand Legal and Regulatory Issues](#15-understand-legal-and-regulatory-issues)
-    - [1.6 Understand Requirements for Investigation Types](#16-understand-requirements-for-investigation-types)
-    - [1.7 Develop and Implement Security Policies](#17-develop-and-implement-security-policies)
-    - [1.8 Identify Business Continuity Requirements](#18-identify-business-continuity-requirements)
-    - [1.9 Enforce Personnel Security Policies](#19-enforce-personnel-security-policies)
-    - [1.10 Apply Risk Management Concepts](#110-apply-risk-management-concepts)
-    - [1.11 Apply Threat Modeling Concepts](#111-apply-threat-modeling-concepts)
-    - [1.12 Apply Supply Chain Risk Management](#112-apply-supply-chain-risk-management)
-    - [1.13 Establish Security Awareness Programs](#113-establish-security-awareness-programs)
-  - [Domain 2: Asset Security](#domain-2-asset-security)
-    - [2.1 Identify and Classify Assets](#21-identify-and-classify-assets)
-    - [2.2 Establish Asset Handling Requirements](#22-establish-asset-handling-requirements)
-    - [2.3 Provision Resources Securely](#23-provision-resources-securely)
-    - [2.4 Manage Data Life Cycle](#24-manage-data-life-cycle)
-    - [2.5 Ensure Appropriate Asset Retention](#25-ensure-appropriate-asset-retention)
-    - [2.6 Determine Data Security Controls](#26-determine-data-security-controls)
-  - [Domain 3: Security Architecture and Engineering](#domain-3-security-architecture-and-engineering)
-    - [3.1 Manage Engineering Processes](#31-manage-engineering-processes)
-    - [3.2 Understand Security Models](#32-understand-security-models)
-    - [3.3 Select Security Controls](#33-select-security-controls)
-    - [3.4 Understand Information Systems Capabilities](#34-understand-information-systems-capabilities)
-    - [3.5 Mitigate Security Architecture Vulnerabilities](#35-mitigate-security-architecture-vulnerabilities)
-    - [3.6 Apply Cryptography](#36-apply-cryptography)
-    - [3.7 Understand Cryptanalytic Attacks](#37-understand-cryptanalytic-attacks)
-    - [3.8 Apply Security Principles to Site Design](#38-apply-security-principles-to-site-design)
-    - [3.9 Design Facility Security Controls](#39-design-facility-security-controls)
+- [Domain 1: Security and Risk Management](#domain-1-security-and-risk-management)
+  - [1.1 - Professional ethics](#11---professional-ethics)
+  - [1.2 - Understand and apply security concepts](#12---understand-and-apply-security-concepts)
+  - [1.3 - Evaluate and apply security governance principles](#13---evaluate-and-apply-security-governance-principles)
+  - [1.4 - Determine compliance and other requirements](#14---determine-compliance-and-other-requirements)
+  - [1.5 - Understand legal and regulatory issues that pertain to information security in a holistic context](#15---understand-legal-and-regulatory-issues-that-pertain-to-information-security-in-a-holistic-context)
+  - [1.6 - Understand requirements for investigation types](#16---understand-requirements-for-investigation-types)
+  - [1.7 - Develop, document, and implement security policies, procedures, standards, baselines, and guidelines](#17---develop-document-and-implement-security-policies-procedures-standards-baselines-and-guidelines)
+  - [1.8 - Identify, analyze, and prioritize business continuity (BC) requirements](#18---identify-analyze-and-prioritize-business-continuity-bc-requirements)
+  - [1.9 - Contribute to and enforce personnel security policies and procedures](#19---contribute-to-and-enforce-personnel-security-policies-and-procedures)
+  - [1.10 - Understand and apply risk management concepts](#110---understand-and-apply-risk-management-concepts)
+  - [1.11 - Understand and apply threat modeling concepts and methodologies](#111---understand-and-apply-threat-modeling-concepts-and-methodologies)
+  - [1.12 - Apply supply chain risk management (SCRM) concepts](#112---apply-supply-chain-risk-management-scrm-concepts)
+  - [1.13 - Establish and maintain a security awareness, education, and training programs](#113---establish-and-maintain-a-security-awareness-education-and-training-programs)
+- [Domain 2: Asset Security](#domain-2-asset-security)
+  - [2.1 - Identify and classify information and assets](#21---identify-and-classify-information-and-assets)
+  - [2.2 - Establish information and asset handling requirements](#22---establish-information-and-asset-handling-requirements)
+  - [2.3 - Provision resource securely](#23---provision-resource-securely)
+  - [2.4 - Manage data life cycle](#24---manage-data-life-cycle)
+  - [2.5 - Ensure appropriate asset retention](#25---ensure-appropriate-asset-retention)
+  - [2.6 - Determine data security controls and compliance requirements](#26---determine-data-security-controls-and-compliance-requirements)
+- [Domain 3: Security Architecture and Engineering](#domain-3-security-architecture-and-engineering)
+  - [3.1 - Research, implement, and manage engineering processes using secure design principles](#31---research-implement-and-manage-engineering-processes-using-secure-design-principles)
+  - [3.2 - Understand the fundamental concepts of security models](#32---understand-the-fundamental-concepts-of-security-models)
+  - [3.3 - Select controls based upon systems security requirements](#33---select-controls-based-upon-systems-security-requirements)
+  - [3.4 - Understand security capabilities of information systems (IS)](#34---understand-security-capabilities-of-information-systems-is)
+  - [3.5 - Assess and mitigate the vulnerabilities of security architectures, designs, and solution elements](#35---assess-and-mitigate-the-vulnerabilities-of-security-architectures-designs-and-solution-elements)
+  - [3.6 - Apply cryptography](#36---apply-cryptography)
+  - [3.7 - Understand methods of cryptanalytic attacks](#37---understand-methods-of-cryptanalytic-attacks)
+  - [3.8 - Apply security principles to site and facility design](#38---apply-security-principles-to-site-and-facility-design)
+  - [3.9 - Design site and facility security controls](#39---design-site-and-facility-security-controls)
+- [Domain 4: Communication and Network Security](#domain-4-communication-and-network-security)
+  - [4.1 - Implement secure design principles in network architectures](#41---implement-secure-design-principles-in-network-architectures)
+  - [4.2 - Securee network components](#42---securee-network-components)
+  - [4.3 - Implement Secure Communication Channels According to Design](#43---implement-secure-communication-channels-according-to-design)
+    - [Common Tunneling Protocols](#common-tunneling-protocols)
+    - [SSL/TLS Handshake Protocol](#ssltls-handshake-protocol)
+    - [TLS VPN vs. IPsec VPN](#tls-vpn-vs-ipsec-vpn)
+    - [Remote Authentication Protocols](#remote-authentication-protocols)
+- [Domain 5: Identity and Access Management (IAM)](#domain-5-identity-and-access-management-iam)
+  - [5.1 - Control physical and logical access to assets](#51---control-physical-and-logical-access-to-assets)
+  - [5.2 - Manage Identification and Authentication of People, Devices, and Services](#52---manage-identification-and-authentication-of-people-devices-and-services)
+    - [Identification](#identification)
+    - [Authentication](#authentication)
+    - [Single Sign-On (SSO)](#single-sign-on-sso)
+    - [CAPTCHA](#captcha)
+    - [Session Management](#session-management)
+    - [Identity Proofing](#identity-proofing)
+    - [NIST SP 800-63B Authentication Levels](#nist-sp-800-63b-authentication-levels)
+    - [Federated Identity Management (FIM)](#federated-identity-management-fim)
+    - [SAML Workflow](#saml-workflow)
+    - [Just-in-Time Access](#just-in-time-access)
+  - [5.3 - Federated Identity with a Third-Party Service](#53---federated-identity-with-a-third-party-service)
+    - [Risks of IDaaS](#risks-of-idaas)
+  - [5.4 - Implement and manage authorization mechanisms](#54---implement-and-manage-authorization-mechanisms)
+  - [5.5 - Manage the identity and access provisioning life cycle](#55---manage-the-identity-and-access-provisioning-life-cycle)
+- [Domain 6: Security Assessment and Testing](#domain-6-security-assessment-and-testing)
+  - [6.1 - Design and validate assessment, test, and audit strategies](#61---design-and-validate-assessment-test-and-audit-strategies)
+  - [6.2 - Conduct Security Control Testing](#62---conduct-security-control-testing)
+    - [Testing Lifecycle](#testing-lifecycle)
+    - [Types of Testing](#types-of-testing)
+    - [Application Security Testing](#application-security-testing)
+    - [Fuzz Testing](#fuzz-testing)
+    - [Testing Strategies](#testing-strategies)
+    - [Test Design Techniques](#test-design-techniques)
+    - [Vulnerability Assessments and Penetration Testing](#vulnerability-assessments-and-penetration-testing)
+      - [Penetration Testing Steps:](#penetration-testing-steps)
+    - [Types of Testing Approaches](#types-of-testing-approaches)
+    - [Vulnerability Management](#vulnerability-management)
+    - [Automated Tools](#automated-tools)
+    - [Common Vulnerability Resources](#common-vulnerability-resources)
+    - [Log Management and Monitoring](#log-management-and-monitoring)
+      - [Log Data Lifecycle:](#log-data-lifecycle)
+      - [Log File Management:](#log-file-management)
+    - [Monitoring Techniques](#monitoring-techniques)
+    - [Regression Testing](#regression-testing)
+  - [6.3 - Collect security process data](#63---collect-security-process-data)
+  - [6.4 - Analyze test output and generate report](#64---analyze-test-output-and-generate-report)
+  - [6.5 - Conduct or facilitate security audits.](#65---conduct-or-facilitate-security-audits)
+  - [6.3 - Collect Security Process Data](#63---collect-security-process-data-1)
+  - [6.4 - Analyze Test Output and Generate Report](#64---analyze-test-output-and-generate-report-1)
+  - [6.5 - Conduct or Facilitate Security Audits](#65---conduct-or-facilitate-security-audits-1)
+    - [Audit Planning](#audit-planning)
+    - [Audit Standards](#audit-standards)
+    - [SOC Reports](#soc-reports)
+      - [SOC Report Types:](#soc-report-types)
+    - [Audit Roles and Responsibilities](#audit-roles-and-responsibilities)
+- [Domain 7: Security Operations](#domain-7-security-operations)
+  - [7.1 - Understand and comply with investigations](#71---understand-and-comply-with-investigations)
+
 
 Sources include:
 * Witcher, Rob, John Berti, Lou Hablas, and Nick Mitropoulos. Destination CISSP: A Concise Guide. 1st ed. Destination Certification, Inc., 2022.
@@ -1396,4 +1455,32 @@ Audit plans should include the following steps:
 - **Compliance Manager:** Ensures adherence to laws, regulations, standards, and policies.
 - **Internal Auditors:** Employees who ensure corporate internal controls are effective.
 - **External Auditors:** Independent professionals who provide unbiased audit reports.
+
+
+# Domain 7: Security Operations
+
+## 7.1 - Understand and comply with investigations
+
+Investigations are a standard practice in security operations. Investigators must conduct reliable investigations that can withstand scrutiny and cross-examination. A key requirement is securing the scene, as contaminated evidence cannot be uncontaminated.
+
+The forensic process includes identifying and securing the crime scene, properly collecting evidence to preserve integrity and chain of custody, examining all evidence, analyzing the most pertinent evidence, and preparing a final report.
+
+There are various types of evidence:
+- Real evidence refers to physical objects.
+- Direct evidence requires no inference.
+- Circumstantial evidence suggests a fact by inference.
+- Corroborative evidence supports other facts but is not a fact itself.
+- Hearsay evidence is from witnesses who were not present.
+- The best evidence rule states original evidence should be entered rather than a copy.
+- Secondary evidence is a reproduction or substitute for the original proof.
+
+Motive, Opportunity, and Means (MOM) analysis is often used to guide investigations. Locard's Exchange Principle states that every interaction leaves a trace; something is taken, and something is left behind.
+
+Digital forensics involves the scientific examination and analysis of data from storage media. Live evidence, such as data in RAM, CPU, or cache, changes when examined, creating contamination risks. Hard drives are a significant source of direct evidence, and best practices involve creating two identical bit-for-bit copies of the original drive, sealing the original, and examining the copy. Mobile device forensic analysis is challenging due to variations in firmware, operating systems, and tools, often requiring tailored methods. Forensic artifacts are remnants of a breach or attempted breach.
+
+The chain of custody is crucial for maintaining full control over evidence and ensuring its integrity.
+
+Evidence must meet five rules: authenticity, accuracy (integrity), completeness, convincing reliability, and admissibility.
+
+Investigations may be criminal (involving legal punishment), civil (resolving disputes with financial penalties), regulatory (handled by regulatory bodies), or administrative (internal to an organization).
 
