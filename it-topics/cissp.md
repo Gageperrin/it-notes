@@ -98,6 +98,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.5 - Apply resource protection techniques](#75---apply-resource-protection-techniques)
   - [7.6 - Conduct incident management](#76---conduct-incident-management)
   - [7.7 - Operate and maintain detective and preventive measures](#77---operate-and-maintain-detective-and-preventive-measures)
+  - [7.8 - Implement and support patch and vulnerability managemnet](#78---implement-and-support-patch-and-vulnerability-managemnet)
 
 
 Sources include:
@@ -1576,4 +1577,20 @@ Malware can follow into several common categories:
 * Zero day - Unprecedented malware that no one has seen before
 
 Malware detection can include using signature-based anti-malware tools that can identify malware based off known signature characteristics (but is useless against zero day) or heuristic systems which explore underlying code or behavior in a file using static or dynamic scanning techniques. Activity monitors and change detection can also be used to track for malware activity.
+
+## 7.8 - Implement and support patch and vulnerability managemnet
+
+Patch management is a proactive process to create a consistently configured environment, secured against known vulnerabilities.
+
+The patch management lifecycle flow includes:
+1. Monitor for vulnerability/release
+2. Acquire/evaluate
+3. Prioritize/schedule
+4. Test/certify
+5. Deploy
+6. Verify
+7. Document
+8. Update baselines
+
+Patch levels can be determined through a software agent, agentless remote access, or passive traffic monitoring. Patches may be deployed automatically or manually.
 
