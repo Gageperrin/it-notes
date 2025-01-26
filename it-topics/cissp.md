@@ -99,6 +99,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.6 - Conduct incident management](#76---conduct-incident-management)
   - [7.7 - Operate and maintain detective and preventive measures](#77---operate-and-maintain-detective-and-preventive-measures)
   - [7.8 - Implement and support patch and vulnerability managemnet](#78---implement-and-support-patch-and-vulnerability-managemnet)
+  - [7.9 - Understand and participate in change mangement processes](#79---understand-and-participate-in-change-mangement-processes)
 
 
 Sources include:
@@ -1593,4 +1594,18 @@ The patch management lifecycle flow includes:
 8. Update baselines
 
 Patch levels can be determined through a software agent, agentless remote access, or passive traffic monitoring. Patches may be deployed automatically or manually.
+
+## 7.9 - Understand and participate in change mangement processes
+
+Change management ensures that costs and benefits of changes are analyzed and changes ae made in a controlled manner to reduce risks. Larger companies often leverage Change Advisory Boards (CABs) which include key stakeholders from throughout an organization who are often most equipped to understand the operational impacts of proposed changes.
+
+Change management should follow these steps:
+1. Change request
+2. Assess impact
+3. Approval
+4. Build and Test
+5. Notification
+6. Implement
+7. Validation
+8. Version and Baseline
 
