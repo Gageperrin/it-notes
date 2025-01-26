@@ -101,6 +101,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.8 - Implement and support patch and vulnerability managemnet](#78---implement-and-support-patch-and-vulnerability-managemnet)
   - [7.9 - Understand and participate in change mangement processes](#79---understand-and-participate-in-change-mangement-processes)
   - [7.10 - Implement recovery strategies](#710---implement-recovery-strategies)
+  - [7.11 - Implement disaster recovery (DR) processes](#711---implement-disaster-recovery-dr-processes)
 
 
 Sources include:
@@ -1645,5 +1646,26 @@ Clustering is when multiple systems are used to work together to support a workl
 Recovery site strategies refer to actual data center sites and their geographic distribution which can be configured for cold site failover, warm site failover, hot site failover, or redundant sites running in parallel. It is also possible to distribute recovery sites between internal and external providers. Some companies leverage reciprocal agreements to support each other in case of failover.
 
 Disaster recovery solutions measure both Recovery Point Objective (RPO) which is how much data a compnay could afford to lose and Recovery Time Objective (RTO) how long it takes an organization to move from the time of disaster to operating at defined service levels with an acceptable Quality of Service (QoS).
+
+## 7.11 - Implement disaster recovery (DR) processes
+
+A disaster is something that interrupts normal business operations.
+
+Business Continuity Management (BCM) is the business function and processes that provide the structure, policies, procedures, and systems to enable the creation and maintenance of BCP and DRP plans. Business Continuity Planning (BCP) focuses on the survival of the business at a strategic level while Disaster Recovery Planning (DRP) focuses on the recovery of vital technology infrastructure and systems at a technical level.
+
+BCP/DRP should include:
+1. Develop Contingency Planning Policy
+2. Conduct BIA
+3. Identify controls
+4. Create contingency strategies
+5. Develop continency plan
+6. Ensure testing, training, and exercises
+7. Maintenance
+
+Aside from RPO and RTO, other BC/DR metrics include Work Recovery Time (WRT) which is the max tolerable time to verify system and data integrity during recovery and Maximum Tolerable Downtime (MTD) and Maximum Allowable Downtime (MAD) which assess the length of time an organization can have downtime before its viability would be called into question.
+
+Business Impact Analysis (BIA) identifies the most critical and essential business functions and documents the potential impacts of interruption for each during an incident or disaster. This should be aligned with business mission, business processes, resource requirements, and recovery priorities for system resources. It should also identify the restoration order and dependency chart for the restoration of systems to resume normal operations. The most critical business processes should be restored first.
+
+If the MTD is going to be exceeded, a disaster should be declared and the disaster response team should be activated.
 
 
