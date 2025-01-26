@@ -96,6 +96,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.3 - Perform configuration management (CM)](#73---perform-configuration-management-cm)
   - [7.4 - Apply foundational security operations concepts](#74---apply-foundational-security-operations-concepts)
   - [7.5 - Apply resource protection techniques](#75---apply-resource-protection-techniques)
+  - [7.6 - Conduct incident management](#76---conduct-incident-management)
 
 
 Sources include:
@@ -1532,3 +1533,22 @@ There are several key concepts for security operations:
 ## 7.5 - Apply resource protection techniques
 
 Data protection requirements may vary depending on the specific data retention policies for individual resources. This may help determine the medium or media upon which thes eshould be stored. The Mean Time Between Failure (MTBF) can help determine the best media to use for a given need. Operational processes must be put in place to constantly move data to new media, updating file formats consistently, the protection of data must be updated to reflect current cryptography standards.
+
+## 7.6 - Conduct incident management
+
+Incident response is the process used to both detect and respond to incidents with these goals:
+* Provide an effective and efficient response to reduce impact to the organization
+* Maintain or restore business continuuity
+* Defend against future attacks
+
+It is important to distinguish between an event (an observable occurrence) and an incident (an adverse event).
+
+Incident response should include the following stages:
+1. Preparation
+2. Detection - identify and activate incident
+3. Response - activate IR team
+4. Mitigation - containment
+5. Reporting
+6. Recovery - return to normal
+7. Remediation - prevent
+8. Lessons Learned
