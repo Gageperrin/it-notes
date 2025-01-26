@@ -92,6 +92,8 @@ These are my manually compiled notes for the CISSP exam.
     - [Audit Roles and Responsibilities](#audit-roles-and-responsibilities)
 - [Domain 7: Security Operations](#domain-7-security-operations)
   - [7.1 - Understand and comply with investigations](#71---understand-and-comply-with-investigations)
+  - [7.2 - Conduct logging and monitoring activities](#72---conduct-logging-and-monitoring-activities)
+  - [7.3 - Perform configuration management (CM)](#73---perform-configuration-management-cm)
 
 
 Sources include:
@@ -1484,3 +1486,34 @@ Evidence must meet five rules: authenticity, accuracy (integrity), completeness,
 
 Investigations may be criminal (involving legal punishment), civil (resolving disputes with financial penalties), regulatory (handled by regulatory bodies), or administrative (internal to an organization).
 
+## 7.2 - Conduct logging and monitoring activities
+
+Security Information and Event Management (SIEM) systems collect logs from multiple sources, compile and analyze log entries, and report relevant information. SIEM correlation engines provide actionable insights to security analysts, enabling them to take corrective action.
+
+SIEM-driven workflows include the following steps:
+1. **Aggregation:** Collecting logs and data from various sources.
+2. **Normalization:** Converting data into a standard format for analysis.
+3. **Correlation:** Identifying relationships and patterns between events.
+4. **Secure Storage:** Ensuring collected logs are stored securely and tamper-proof.
+5. **Analysis:** Examining data to detect trends, anomalies, and potential threats.
+6. **Reporting:** Generating insights and sharing findings with stakeholders.
+
+Event data can originate from security appliances, network devices, DLP systems, data activity monitoring tools, applications, operating systems, servers, and IPS/IDS systems.
+
+Threat intelligence encompasses all research, analysis, and understanding of current threat trends to proactively identify and mitigate risks.
+
+User and Entity Behavior Analytics (UEBA), often integrated into SIEM solutions, analyze patterns of user or entity behavior. By identifying normal patterns, UEBA helps highlight anomalies that may indicate malicious activity.
+
+A SIEM system should be continuously configured and reviewed to align with organizational needs and evolving threat trends.
+
+## 7.3 - Perform configuration management (CM)
+
+Asset management addresses the lifecycle of organizational assets. The steps in the lifecycle include:
+1. **Plan:** Define asset requirements and objectives.
+2. **Request:** Formally initiate the acquisition process.
+3. **Procure:** Acquire the asset through purchase or other means.
+4. **Receive:** Take possession and verify the asset.
+5. **Manage:** Deploy, maintain, and monitor the asset throughout its use.
+6. **Retire:** Decommission and securely dispose of the asset.
+
+Configuration management relies on standardized policies, standards, and baselines to ensure consistent and controlled management of all company assets. Automation is often employed to streamline and enforce configuration controls.
