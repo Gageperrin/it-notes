@@ -103,6 +103,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.10 - Implement recovery strategies](#710---implement-recovery-strategies)
   - [7.11 - Implement disaster recovery (DR) processes](#711---implement-disaster-recovery-dr-processes)
   - [7.12 - Test disaster recovery plans (DRP)](#712---test-disaster-recovery-plans-drp)
+  - [7.13 - Participate in business continuity (BC) planning and exercises](#713---participate-in-business-continuity-bc-planning-and-exercises)
 
 
 Sources include:
@@ -1677,3 +1678,10 @@ BCP and DRP can be tested in a variety of ways:
 * Simulation test - Like a walkthrough test but a facilitator is added to drive and narrate the scenario
 * Parallel test - A simulation test where personnel are located as they would be in an actual incident, using backup date
 * Full-interruption - Run a full simulation test using production data and systems. Very risky.
+
+## 7.13 - Participate in business continuity (BC) planning and exercises
+
+The three goals are in this order:
+1. The safety of people
+2. The minimization of damage
+3. The survival of business
