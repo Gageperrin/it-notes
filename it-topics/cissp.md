@@ -100,6 +100,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.7 - Operate and maintain detective and preventive measures](#77---operate-and-maintain-detective-and-preventive-measures)
   - [7.8 - Implement and support patch and vulnerability managemnet](#78---implement-and-support-patch-and-vulnerability-managemnet)
   - [7.9 - Understand and participate in change mangement processes](#79---understand-and-participate-in-change-mangement-processes)
+  - [7.10 - Implement recovery strategies](#710---implement-recovery-strategies)
 
 
 Sources include:
@@ -1608,4 +1609,41 @@ Change management should follow these steps:
 6. Implement
 7. Validation
 8. Version and Baseline
+
+## 7.10 - Implement recovery strategies
+
+Failure modes refer to how an environment is designed to handle failure:
+* Fail-soft, or fail-open, fails into a state of less security (e.g. a firewall falls back to allow all traffic)
+* Fail-secure, or fail-closed, fails into a state of the same or more security (e.g. a firewall falls back to deny all traffic)
+* Fail-safe prioritizes the safety of people foremost
+
+Back up storage mechanisms cna include the following:
+* Archive bit - Use 0 or 1 to indicate if there are no changes to file (no backup required) or if it has been changed (backup required)
+* Incremental backup - Perform a full backup periodically and then incremental backups regularly, targeting changes since the last **incremental** backup. This allows for the lowest cost overhead and fast backup time, but a very slow restore time
+* Differential backup - Perform a full backup periodically and then differential backups regularly, targeting changes since the last **full** backup
+* Mirror backup - An exact copy of a data set is created with zero compression. Fastest backup and restore time but can be expensive.
+
+Backup storage strategies cna include offsite storage, electronic vaulting, and tape rotation.
+
+A cyclic redundancy check (CRC) can be used to verify the integrity of data via its checksum and is useful when validating backup integrity.
+
+Spare parts strategies for hardware fall into three general categories:
+* Cold spare - Extra parts are not attached to the system and will need to be fetched and installed when there is downtime
+* Warm spare - Parts installed in a computer system but not powered or online, requires a switchover which may introduce slight downtime
+* Hot spare - Installed, powered, and available. Provides instant failover
+
+A redundant array of independent disks (RAID) refers to using multiple drives in unison to improve performance or availability.
+
+RAID patterns include:
+* RAID 0 - Striping: Files are split across hard drives for sake of read-write speed
+* RAID 1 - Mirroring: Files are writting in full to each drive for sake of redundancy
+* RAID 10 - Mirroring and Striping: Combines the two. Requires 4 drives.
+* RAID 5 - Parity Protection: Strikes a balance between RAID 0 and RAID 1 in a mroe cost effective manner. Parity data is generated and stored on the alternate drive to help with recovery in case of data corruption or loss on the primary drive. Requires 3 drives.
+
+Clustering is when multiple systems are used to work together to support a workload while redundancy is a single primary system supporting the entire workload.
+
+Recovery site strategies refer to actual data center sites and their geographic distribution which can be configured for cold site failover, warm site failover, hot site failover, or redundant sites running in parallel. It is also possible to distribute recovery sites between internal and external providers. Some companies leverage reciprocal agreements to support each other in case of failover.
+
+Disaster recovery solutions measure both Recovery Point Objective (RPO) which is how much data a compnay could afford to lose and Recovery Time Objective (RTO) how long it takes an organization to move from the time of disaster to operating at defined service levels with an acceptable Quality of Service (QoS).
+
 
