@@ -97,6 +97,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.4 - Apply foundational security operations concepts](#74---apply-foundational-security-operations-concepts)
   - [7.5 - Apply resource protection techniques](#75---apply-resource-protection-techniques)
   - [7.6 - Conduct incident management](#76---conduct-incident-management)
+  - [7.7 - Operate and maintain detective and preventive measures](#77---operate-and-maintain-detective-and-preventive-measures)
 
 
 Sources include:
@@ -1552,3 +1553,27 @@ Incident response should include the following stages:
 6. Recovery - return to normal
 7. Remediation - prevent
 8. Lessons Learned
+
+
+## 7.7 - Operate and maintain detective and preventive measures
+
+Malware can follow into several common categories:
+* Virus - Triggered by a user to execute malicious logic
+* Worm - Self-propagates to exploit a vulnerability
+* Companion - Helper software to malware itself
+* Macro - Plugins/automations that can include malware
+* Multipartite - Spreads in various ways
+* Polymorphic - Changes form as it replicates to evade detection
+* Trojan - Looks harmless but contains malicious logic
+* Botnet - Many infected systems harnessed together to act in unison
+* Boot sector infector - Install themselves in the boot sector of a hard drive
+* Hoaxes/pranks - Social engineering that are not always inteded for harm but are disruptive
+* Logic bomb - Malicious logic that will trigger given certain conditions
+* Stealth malware - Active techniques or exploitations to avoid detection
+* Ransomware - Encrypts a system or network to lock users and administrators out, demanding payment to restore access
+* Rootkit - Malware tools that are hidden in a system through some backdoor
+* Data diddler - Makes very small changes over a long period of time to avoid detection
+* Zero day - Unprecedented malware that no one has seen before
+
+Malware detection can include using signature-based anti-malware tools that can identify malware based off known signature characteristics (but is useless against zero day) or heuristic systems which explore underlying code or behavior in a file using static or dynamic scanning techniques. Activity monitors and change detection can also be used to track for malware activity.
+
