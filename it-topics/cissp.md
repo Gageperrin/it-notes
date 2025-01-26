@@ -94,6 +94,8 @@ These are my manually compiled notes for the CISSP exam.
   - [7.1 - Understand and comply with investigations](#71---understand-and-comply-with-investigations)
   - [7.2 - Conduct logging and monitoring activities](#72---conduct-logging-and-monitoring-activities)
   - [7.3 - Perform configuration management (CM)](#73---perform-configuration-management-cm)
+  - [7.4 - Apply foundational security operations concepts](#74---apply-foundational-security-operations-concepts)
+  - [7.5 - Apply resource protection techniques](#75---apply-resource-protection-techniques)
 
 
 Sources include:
@@ -1517,3 +1519,16 @@ Asset management addresses the lifecycle of organizational assets. The steps in 
 6. **Retire:** Decommission and securely dispose of the asset.
 
 Configuration management relies on standardized policies, standards, and baselines to ensure consistent and controlled management of all company assets. Automation is often employed to streamline and enforce configuration controls.
+
+## 7.4 - Apply foundational security operations concepts
+
+There are several key concepts for security operations:
+* Privileged account management refers to the access controls surrounding privileged or system administrator accounts.
+* Need to know - restriction of knowledge
+* Least privilege - restriction of actions/privileges
+* Job rotation - Switching job duties to help with fraud detection
+* Service level agreements (SLAs) - Legal contracts between a customer and vendor
+
+## 7.5 - Apply resource protection techniques
+
+Data protection requirements may vary depending on the specific data retention policies for individual resources. This may help determine the medium or media upon which thes eshould be stored. The Mean Time Between Failure (MTBF) can help determine the best media to use for a given need. Operational processes must be put in place to constantly move data to new media, updating file formats consistently, the protection of data must be updated to reflect current cryptography standards.
