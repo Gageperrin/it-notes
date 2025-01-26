@@ -102,6 +102,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.9 - Understand and participate in change mangement processes](#79---understand-and-participate-in-change-mangement-processes)
   - [7.10 - Implement recovery strategies](#710---implement-recovery-strategies)
   - [7.11 - Implement disaster recovery (DR) processes](#711---implement-disaster-recovery-dr-processes)
+  - [7.12 - Test disaster recovery plans (DRP)](#712---test-disaster-recovery-plans-drp)
 
 
 Sources include:
@@ -1668,4 +1669,11 @@ Business Impact Analysis (BIA) identifies the most critical and essential busine
 
 If the MTD is going to be exceeded, a disaster should be declared and the disaster response team should be activated.
 
+## 7.12 - Test disaster recovery plans (DRP)
 
+BCP and DRP can be tested in a variety of ways:
+* Read-through test - Read the test to ensure it follows DRP best practices and is up to date
+* Walkthrough test - Convene stakeholders and run a paper-based or tabletop scenario to test BC/DR processes verbally
+* Simulation test - Like a walkthrough test but a facilitator is added to drive and narrate the scenario
+* Parallel test - A simulation test where personnel are located as they would be in an actual incident, using backup date
+* Full-interruption - Run a full simulation test using production data and systems. Very risky.
