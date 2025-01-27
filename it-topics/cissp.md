@@ -69,6 +69,7 @@ These are my manually compiled notes for the CISSP exam.
   - [7.13 - Participate in business continuity (BC) planning and exercises](#713---participate-in-business-continuity-bc-planning-and-exercises)
 - [Domain 8: Software Development Security](#domain-8-software-development-security)
   - [8.1 - Understand and integrate security in the software development lifecycle (SDLC)](#81---understand-and-integrate-security-in-the-software-development-lifecycle-sdlc)
+  - [8.2 - Identify and apply security controls in software development ecosystems](#82---identify-and-apply-security-controls-in-software-development-ecosystems)
 
 
 Sources include:
@@ -1679,4 +1680,13 @@ It looks at software assurance from the perspective of five business functions
 3. Implementation
 4. Verification
 5. Operations
+
+## 8.2 - Identify and apply security controls in software development ecosystems
+
+Several key terms related to security in the software development ecosystem:
+* Continuous Integration (CI) - Small code changes incremented on rapidly
+* Continuous Delivery (CD) - Delivery of changes to various environments
+* Continuous Deployments (CD) - Constant deployment to production
+* Security Orchestration, Automation, and Response (SOAR) - Collection of technologies that take input data from disparate sources for the sake of vulnerability management, incident response, security operations automation
+* Software Configuration Management (SCM) - Managing changes in software
 
