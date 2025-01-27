@@ -67,6 +67,8 @@ These are my manually compiled notes for the CISSP exam.
   - [7.11 - Implement disaster recovery (DR) processes](#711---implement-disaster-recovery-dr-processes)
   - [7.12 - Test disaster recovery plans (DRP)](#712---test-disaster-recovery-plans-drp)
   - [7.13 - Participate in business continuity (BC) planning and exercises](#713---participate-in-business-continuity-bc-planning-and-exercises)
+- [Domain 8: Software Development Security](#domain-8-software-development-security)
+  - [8.1 - Understand and integrate security in the software development lifecycle (SDLC)](#81---understand-and-integrate-security-in-the-software-development-lifecycle-sdlc)
 
 
 Sources include:
@@ -1635,3 +1637,46 @@ The three goals are in this order:
 1. The safety of people
 2. The minimization of damage
 3. The survival of business
+
+# Domain 8: Software Development Security
+
+## 8.1 - Understand and integrate security in the software development lifecycle (SDLC)
+
+Security should be involved in every phase of the SDLC:
+1. Initiation - Plan and Management Approval
+2. Requirements - Risk Analysis
+3. Architecture and Design - Define Security Requirements
+4. Development - Build with Security Functionality
+5. Testing - Test for Security
+6. Deployment/Release - Secure Deployment and Baselines
+7. Operation - Ongoing Maintenance and Vulnerability Assessment
+8. Disposal - Secure Disposal of Data
+
+Development methodologies:
+* Waterfall - Complete each phase of development before flowing to the next. Cannot revisit a previous phase.
+* Structured Programming Development - Structured control flow using object-oriented programming
+* Agile - Divide the development process into multiple rapid iterations of defining, developing, and deploying with heavy customer interaction throughout the process
+* Spiral method - A risk-driven development process that follows an iterative model in the style of waterfall, repeating it incrementally
+* Cleanroom - Development process intended to produce software with a certifiable level of reliability
+
+Maturity models also exist to help improve the development process.
+
+The Capability Maturity Model (CMM) is one of the most popular models and includes five levels of maturity:
+1. Initial - Processes unpredictable, poorly controlled, and reactive
+2. Repeatable - Processes characterized but reactive
+3. Defined - Processes characterized and proactive
+4. Managed - Processes measured and controlled
+5. Optimized - Focus on process improvement
+
+Software Assurance Maturity Model (SAMM) consists of three maturity levels:
+* Level 1 - Initial Implementation
+* Level 2 - Structured Realization
+* Level 3 - Optimized Operation
+
+It looks at software assurance from the perspective of five business functions
+1. Governance
+2. Design
+3. Implementation
+4. Verification
+5. Operations
+
