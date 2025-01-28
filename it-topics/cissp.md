@@ -98,6 +98,34 @@ These three pillars have been supplemented by two more:
 * Authenticity: Proves assets are legitimate and bona fide, and verifies that they are trusted and verified. Proves the source and origin of important valuable assets. Also referred to as "proof of origin".
 * Nonrepudiation: Provides assurance that someone cannot dispute the validity of something; the inability to refute accountability or responsibility. Also, inability to deny having done something.
 
+Confidentiality can be sub-divided into the following concepts:
+* Sensitivity - the quality of the information and the harm caused if disclosed
+* Discretion - a decision by the operator to control disclosure to minimize harm
+* Criticality - the level to which information is mission critical
+* Concealment - the act of hiding or preventing disclosure through cover, obfuscation, or distraction.
+* Secrecy - The act of preventing disclosure of information.
+* Privacy - Keeping PII confidential
+* Seclusion - Storing something out-of-the-way or with strict access controls
+* Isolation - Keeping something separated from others
+
+Integrity can be sub-divided into the following concepts:
+* Accuracy - Being correct and precise
+* Truthfulness - Being a true reflection of reality
+* Validity - Being factually or logically sound
+* Accountability - Being responsible or obligated for actions and results
+* Responsibility - Being in charge or having control over something
+* Completeness - Having all necessary components or parts
+* Comprehensiveness - Being complete in scope
+
+Availability can be sub-divded into the following concepts:
+* Usability - The state of being easy to use or learn
+* Accessibility - The assurance that the widest range of subjects can interact with a resource
+* Timeliness - A prompt, timely response to a request
+
+In addition to the CIA triad is the DAD triad which represents failures in the CIA Triad: Disclosure, Alteration, Destruction/Denial. These can result from over-providing for a single dimension of the CIA triad. Too much availability can result in loss of confidentiality.
+
+Another set of security concepts are AAA services: Authentication, Authorization, and Accounting/Audit.
+
 ## 1.3 - Evaluate and apply security governance principles
 
 Governance is intended to enhance organizational value based on the goals and objectives of the organization. Security must be managed top down.
@@ -119,6 +147,8 @@ At a high level:
 A key distinction lies in custodians versus owners. Custodians are caretakers or users of an asset who may not necessarily own that asset but are entrusted with its protection. However, accountability for the asset will always rest ultimately on the asset owner.
 
 "Due care" includes the accountable protection of assets based on the goals and objectives of the organization while "Due diligence" is the ability to prove due care to stakeholders. For example, due care is requesting a penetration test. Due diligence is providing proof of addressing the vulnerabilities uncovered during that pentest.
+
+Security plans should be layered as strategic plans, tactical plans, and operational plans. Strategic plans are long-term and align with the organization's mission. Tactical plans are midterm and provide details on accomplishing the goals set forth in the strategic plan, with a life span of about a year. An operational plan is a short-term, highly detailed plan that must be updated frequently and has a short shelf life. This includes resource allotments, staffing, scheduling, and implementation procedures.
 
 ## 1.4 - Determine compliance and other requirements
 
@@ -266,6 +296,14 @@ There are four primary risk management frameworks:
 3. COSO - a definition to essential enterprise risk management components, reviewing ERM principles and concepts
 4. ISACA Risk IT Framework - ISACA's Risk IT Framework contains guidelines and practices for risk optimization, security, and business value. It aligns with COBIT.
 
+Control Obbjectives for Information and Related Technology (COBIT) is another seucrity control framework for IT security best practices with six key principles of governance:
+1. Provide Stakeholder Value
+2. Holistic Approach
+3. Dynamic Governance System
+4. Governance Distinct from Management
+5. Tailored to Enterprise Needs
+6. End-to-End Governance System
+
 For the CISSP exam, NIST SP 800-37 Rev. 2 should be the focus.
 1. Prepare to execute the RMF
 2. Categorize Information Systems
@@ -288,13 +326,13 @@ D - Denial of Service - This violates availability
 E - Elevation of Privilege - This violates authorization
 
 The Process for Attack Simulation and Threat Analysis (PASTA) is attacker-focused and includes seven stages.
-1. Define objectives related to application risk profiles
-2. Define technical scope so as to decompose the technology stack into understandable and assessable components.
-3. Application decomposition understands the data flows among application components and services in the application threat model
-4. Threat analysis reviews threat assertions from within the environment
-5. Vulnerability and weakness analysis at the level of application design and code and how those correlate with the findings from threat analysis
-6. Attacking modeling emulates attacks that could exploit identified weaknesses/vulnerabilities.
-7. Risk and impact analysis centers around remediating vulnerabilities and weaknesses in code or design that can facilitate attack patterns.
+1. DO: Define objectives related to application risk profiles
+2. DTS: Define technical scope so as to decompose the technology stack into understandable and assessable components.
+3. ADA: Application decomposition understands the data flows among application components and services in the application threat model
+4. TA: Threat analysis reviews threat assertions from within the environment
+5. WVA: Vulnerability and weakness analysis at the level of application design and code and how those correlate with the findings from threat analysis
+6. AMS: Attacking modeling emulates attacks that could exploit identified weaknesses/vulnerabilities.
+7. RAM: Risk and impact analysis centers around remediating vulnerabilities and weaknesses in code or design that can facilitate attack patterns.
 
 DREAD is often used to rank threat severity in conjunction with STRIDE with each key point having an assigned score of 1-3.
 D - Damage
