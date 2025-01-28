@@ -248,6 +248,8 @@ Risk = (threat * vulnerability / probability) * impact
 Risk management terms include:
 * Threat agent: Entity that has the potential to cause damage to an asset
 * Threat: Any potential danger
+* Threat event: Accidental or intentional occurrence that exploit a vulnerability
+* Threat vector: The attack path of exploitation that can cause harm
 * Attack: Any harmful action that exploits a vulnerability
 * Vulnerability: A weakness in an asset that could be exploited by a threat
 * Risk: Significant exposure to a threat or vulnerability
@@ -284,7 +286,7 @@ These can be combined in some form of preventive, detective, and corrective cont
 
 Each control should have a functional aspect (it works) and an assurance aspect (it can be proven that it works).
 
-Security controls should be selected or advocated based on the appropriate risk metrics for an organization and presented to the decision-making audience in a way that relates it to a big picture.
+Security controls should be selected or advocated based on the appropriate risk metrics for an organization and presented to the decision-making audience in a way that relates it to a big picture. This should account for the annual cost of the safeguard (ACS) to ensure its cost does not exceed the cost of the risk.
 
 Risk management should undergo continuous improvement through the four steps of plan, do, check, and act.
 
@@ -296,7 +298,16 @@ There are four primary risk management frameworks:
 3. COSO - a definition to essential enterprise risk management components, reviewing ERM principles and concepts
 4. ISACA Risk IT Framework - ISACA's Risk IT Framework contains guidelines and practices for risk optimization, security, and business value. It aligns with COBIT.
 
-Control Obbjectives for Information and Related Technology (COBIT) is another seucrity control framework for IT security best practices with six key principles of governance:
+NIST SP 800-37's RMF contains the following six cyclical phases:
+0. Prepare to execute the RMF from an organization and system level perspective by establishing a context and priorities.
+1. Categorize the system and the information processed, stored, and transmitted by the system based on a loss impact analysis.
+2. Select an initial set of controls for the system and tailor the controls as needed to reduce risk to an acceptable level.
+3. Implement the controls and decribe how the controls are employed within its system and operational environment.
+4. Assess the controls to determine if they are implemented correctly and producing the desired outcomes.
+5. Authorize the system or common controls based on a determination that the risk to organizational operations and assets, individuals, other organizations, and the nation is acceptable.
+6. Monitor the system and associated controls on an ongoing basis to address drift, fit, and effectiveness of the implementation.
+
+Control Objectives for Information and Related Technology (COBIT) is another seucrity control framework for IT security best practices with six key principles of governance:
 1. Provide Stakeholder Value
 2. Holistic Approach
 3. Dynamic Governance System
@@ -341,7 +352,7 @@ E - Exploitability
 A - Affected Users
 D - Discoverability
 
-Social engineering consists of deception or intimidation to get people to provide sensitive information that should not be accessible to the exploiting party. The most common forms of social engineering include but are not limited to: phishing, spear phishing, whaling, smishing, vishing, pretexting, baiting, or tailgating and piggybacking.
+Social engineering consists of deception or intimidation to get people to provide sensitive information that should not be accessible to the exploiting party. The most common forms of social engineering include but are not limited to: phishing, spear phishing, whaling, smishing, vishing, pretexting, baiting, typo squatting, influence campaigns, or tailgating and piggybacking.
 
 ## 1.12 - Apply supply chain risk management (SCRM) concepts
 
@@ -1238,6 +1249,12 @@ SAML Workflow
 Just-in-time access temporarily escalates user privileges for authorized tasks, preventing ongoing or permanent privilege escalation.
 
 ---
+
+Personnel Security and Risk Management should also be exercised as part of a robust IAM operational process.
+
+Employees and contractors should undergo proper screening and interview with signed legal agreements such as NDA's before being onboarded. They should also sign Acceptable Use Policies (AUP) to define what is acceptable or unacceptable behavior, given their role and responsibilities.
+
+User behavior analytics (UBA) and user and entity behavior analytics (UEBA) should be conducted by a SIEM to track for anomalous or potentially threatening internal behavior.
 
 ## 5.3 - Federated Identity with a Third-Party Service
 
