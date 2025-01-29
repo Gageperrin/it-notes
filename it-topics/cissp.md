@@ -166,11 +166,25 @@ There are a number of core concepts at the root of compliance:
 
 Cybersecurity must often factor in time and expense, not only for the organization. Many attacks can be effectively mitigated by making their object too time consuming or expensive to reach. At the end of the day, one must ask how the assets are protected, what are the issues pertaining to information security, and what does the current threat landscape look like?
 
+US Federal criminal laws pertaining specifically to cybercrime include:
+* Computer Fraud And Abuse Act (CFAA) of 1984. This act covers computers with a "federal interest". It has been amended five times since to target malware developers and provide legal authority to imprison or purse punishments for offenders.
+* National Information Infrastructure Protection Act of 1996 broadens CFAA to cover international and infrastructural computing systems.
+* Federal Sentencing Guidelines of 1991 formalized the *prudent person rule* which requires senior executives to take personal responsibility for ensuring due care for information security.
+* Federal Information Security Management Act (FISMA) of 2002 requires federal agencies to implement information security programs.
+* Federal Information Systems Modernization Act (FISMA) of 2014 modified the 2002 FISMA to centralize federal cybersecurity responsibility under the Department of Homeland Security.
+* Cybersecurity Enhancement Act charges NIST with responsibility for voluntary cybersecurity standards
+
+Commonly used NIST standards:
+* NIST SP 800-53 - Security and Privacy Controls for Federal Information Systems and Organizations.
+* NIST 800-171 - Protecting Controlled Unclassified Information in Nonfederal Information Systems and Organizations
+
 Intellectual property is an intangible product of human intellect protected by law from unauthorized use. There are four primary kinds of IP:
 * Trade secret: This is business information that need not be disclosed and is legally protected from misappropriation
 * Patent: Functional innovations that are protected for a set period of time if properly disclosed.
 * Copyright: The expression of idea in a fixed medium that is also protected for a set period of time if properly disclosed.
 * Trademark: Color, sound or symbols used to distinguish products and companies from another. This is primarily rooted in protecting consumers from confusion
+
+Intellectual Property is protected in the United States by the Digital Millennium Copyright Act of 1998.
 
 In addition to this, there are import and export controls at the national law to manage which products, technologies, and information can move in and out of those countries:
 * The Wassenaar Arrangement is an agreement by a number of countries to share cryptographic information with one another while also protecting it from terrorists
@@ -179,6 +193,26 @@ In addition to this, there are import and export controls at the national law to
 
 Privacy also falls under legal scope. Privacy is the state or condition of being free from being observed or disturbed by other people. This can include Personally Identifiable Information (PII), Personal Health Information (PHI), Sensitive Personal Information (SPI), and Personal Cardholder Information (PCI). These combined with IP are sensitive data.
 
+Federal U.S. Privacy laws include:
+* Electronic Communications Privacy Act of 1986 - A crime to invade the electronic privacy of an individual
+* Communications Assistance for Law Enforcement Act (CALEA) of 1994 - Requires all communications carriers to support wiretaps for law enforcement
+* Economic Espionage Act of 1996 - Extends the definition fo property to proprietary economic information
+* Health Insurance Portability and Accountability Act of 1996 (HIPAA) - Governs health insurance, health maintenance organizations (HMO's) and rights of individuals
+* Health Information Technology for Economic and Clinical Health Act of 2009 (HITECH) - Updates HIPAA and was implemented in the HIPAA Omnibus Rule of 2013
+* Children's Online Privacy Protection Act of 1998 - Protects children by requiring websites to include a privacy notice and have parental consent for data collection for children under the age of 13.
+* Gramm-Leach-Biley Act of 1999 - Relaxed regulations between financial institutions with information security stipulations
+* USA PATRIOT Act of 2001 - Broadened power of law enforcement to get blanket authorization to wire tap an individual
+* Family Educational Rights and Privacy Act (FERPA) - Protection of educational information and allows disclosure to parents/students
+* Identity Theft and Assumption Deterrence Act of 1998 - Identity theft is a crime against the victim, before it was merely defrauded creditors.
+
+The EU has its own laws around privacy:
+* The European Union Data Protection Directive of 1995 (DPD) required that all processing of personal data is done by either consent, contract, or legal obligation.
+* General Data Protection Regulation of 2016 (GDPR) is a single set of rules that applies to all EU member states. Each state has a Supervisory Authority (SA) to hear and investigate complaints. Data subjects have the right to lodge a complaint with a SA. There are seven principles that describe lawful processing of personal data: lawfulness, purpose limitation, data minimization, accuracy, storage limitation, integrity and confidentiality, and lastly accountability. GDPR also stipulates that privacy breaches must be reported within 72 hours.
+
+Canada's primary privacy law is the Personal Information Protection and Electronic Documents Act (PIPEDA) which clearly delineates PII.
+
+California has the most famous state-level law with the California Consumer Privacy Act of 2018 (CCPA) modeled after GDPR.
+
 Personal data may include direct or indirect identifiers. Direct identifiers are unique identifiers for an individual (phone number, SSN) while indirect identifiers may be used to narrow the scope of identification (age, zip code).
 
 Privacy policies are required to speak to how:
@@ -186,8 +220,6 @@ Privacy policies are required to speak to how:
 * Data custodians need to have defined responsibilities based on the input of owners
 * Data processors need to have clearly defined responsibilities when processing data on behalf of the owner
 * Data subjects which are the individuals that the data belongs to
-
-General Data Protection Regulation (GDPR) is a single set of rules that applies to all EU member states. Each state has a Supervisory Authority (SA) to hear and investigate complaints. Data subjects have the right to lodge a complaint with a SA. There are seven principles that describe lawful processing of personal data: lawfulness, purpose limitation, data minimization, accuracy, storage limitation, integrity and confidentiality, and lastly accountability. GDPR also stipulates that privacy breaches must be reported within 72 hours.
 
 The Organization for Economic Cooperation and Development (OECD) also has its own set of standards and policies. These include the following principles:
 * Collection Limitation Principle: Limit the collection of personal data to only what is needed to provide a service.
