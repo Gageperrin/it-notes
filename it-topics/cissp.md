@@ -117,7 +117,7 @@ Integrity can be sub-divided into the following concepts:
 * Completeness - Having all necessary components or parts
 * Comprehensiveness - Being complete in scope
 
-Availability can be sub-divded into the following concepts:
+Availability can be sub-divided into the following concepts:
 * Usability - The state of being easy to use or learn
 * Accessibility - The assurance that the widest range of subjects can interact with a resource
 * Timeliness - A prompt, timely response to a request
@@ -221,7 +221,16 @@ The board or CEO often institutes an Overarching Security Policy which is a broa
 * Guidelines: Recommended or suggested actions
 
 ## 1.8 - Identify, analyze, and prioritize business continuity (BC) requirements
-Cf. 7.1
+
+Business continuity planning consists of four steps:
+1. Project scope and planning
+   1. Perform a structured review of the organization from a crisis planning standpoint.
+   2. Create a BCP team with approval of senior management.
+   3. Assess the resources available to participate in business continuity activities (development, testing, training, training, maintenance, implementation).
+   4. Analyze the legal and regulatory landscape that governs an organization's response to a catastrophic event.
+2. Business Impact Analysis (BIA)
+3. Continuity Planning
+4. Implementation
 
 ## 1.9 - Contribute to and enforce personnel security policies and procedures
 
@@ -260,7 +269,8 @@ Risk management terms include:
 
 One form of quantitative risk analysis is the Annualized Loss Expectancy which expresses the annual cost of the risk materializing.
 
-ALE = SLE * (AV * EF ) * ARO
+SLE = AV * EF
+ALE = SLE * ARO
 
 * Single Loss Expectancy (SLE) - Denotes the cost if the risk occurs once
 * Asset Value (AV) - The cost of the asset in a monetary value
@@ -271,7 +281,7 @@ Risk can be managed by:
 1. *Avoiding* it, which means not doing the thing that exposes the risk
 2. *Transferring* it, by moving the cost of the risk elsewhere, such as an insurance company
 3. *Mitigate* it, implement controls to reduce the risk to an acceptable level
-4. *Accept* it, the asset owner or senior management (the accountable party) accepts the risk.
+4. *Accept* it, the asset owner or senior management (the accountable party) accepts the risk. If a risk is accepted, the reasons why must be documented alongside contingencies which may impact this decision during future review.
 
 There are seven major kinds of risk controls:
 1. Directive controls - direct, confine, or control the actions of subjects to encourage compliance with security policies.
