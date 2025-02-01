@@ -216,7 +216,8 @@ California has the most famous state-level law with the California Consumer Priv
 Personal data may include direct or indirect identifiers. Direct identifiers are unique identifiers for an individual (phone number, SSN) while indirect identifiers may be used to narrow the scope of identification (age, zip code).
 
 Privacy policies are required to speak to how:
-* Data owners have defined accountabilities regarding the collection and protection of customer data
+* Data owners have defined accountabilities regarding the collection and protection of customer data. This is generally senior management.
+* Asset owners are the person who owns the asset that processes sensitive data.
 * Data custodians need to have defined responsibilities based on the input of owners
 * Data processors need to have clearly defined responsibilities when processing data on behalf of the owner
 * Data subjects which are the individuals that the data belongs to
@@ -428,6 +429,14 @@ Classification orders objects and their classes according to value while categor
 
 This depends on either labeling for system-readable association of security attributes with subjects and objects represented by internal data structures, based on system-based enforcement, while marking is human-readable association of security attributes with objects for process-based enforcement.
 
+Government data classification consists of the layers: Top Secret, Secret, Confidential, and Unclassified. Unclassified can be further divided into Controlled Unclassified Information (CUI), For Official Use Only (FOUO), and sensitive but unclassified (SBU).
+
+Private organizations often use the following categories:
+* Confidential/Proprietary: Trade secrets, proprietary information, sensitive business data
+* Private: Employee records, customer data, personal information
+* Sensitive: Internal communications, project plans, information requiring protection
+* Public: Marketing materials or other data intended for public dissemination
+
 ## 2.2 - Establish information and asset handling requirements
 
 Handling requirements are based on the classification of the asset, not the type of media. The asset owner determines who may access media, and the requirements for its storage, retention, and destruction.
@@ -444,7 +453,7 @@ Data must be protected in each stage of its lifecycle whether it be creation, co
 
 When destroying data, defensible destruction means being able to prove there is no possible way for anyone to recover the data.
 
-To destroy data is to physically destroy the media and is most effective. To purge uses logical/physical techniques to sanitize data so that it cannot be reconstructed. Clearing data uses logical techniques but the data may be reconstructed. Various techniques that employ this include incineration, shredding, disintegration, drilling holes, degaussing, crypto shredding, overwriting, wiping, erasing, or formatting.
+To destroy data is to physically destroy the media and is most effective. To purge uses logical/physical techniques to sanitize data so that it cannot be reconstructed. Clearing data uses logical techniques but the data may be reconstructed. Various techniques that employ this include incineration, shredding, disintegration, drilling holes, degaussing, crypto shredding, overwriting, wiping, erasing, or formatting. Data remanence refers to any traces that may exist after the completion of the chosen erasure process.
 
 Object reuse is a security method that overwrites data from media. SSD's present a problem for this with how they use flash memory technology to represent binary data. SSD vendors generally provide their own tools to securely remove data. If all else fails, it can be physically destroyed.
 
@@ -464,11 +473,13 @@ Network encryption can take the following forms:
 * Link encryption means the packet header and data are encrypted between each node but decrypted and re-encrypted again with each hop. This is not a very secure option.
 * Onion encryption is the most secure of the three as multiple layers of encryption are wrapped at the first node then each subsequent node unwraps one layer and passes it along. This can help provide anonymity and confidentiality to the data.
 
-Beyond this information can also be obfuscated through concealing, pruning, fabricating, trimming, or encrypting data.
+Beyond this information can also be obfuscated through concealing, pruning, fabricating, trimming, tokenizing, or encrypting data.
 
 Digital Rights Management (DRM) protects intellectual property assets in their use, modification, or sharing, as stipulated by NIST SP 500-241. DRM technologies have been developed to protect mass-produced media, and these same technologies have been adopted for protecting sensitive organization data using Information Rights Management (IRM) tooling.
 
-Data Loss Prevention (DLP) is a system's ability to identify, monitor, and protect data in use, motion and at rest using deep packet content inspection, contextual security analysis of the transaction originator, data object, medium, timing, recipient, destination, etc. within a centralized management framework.
+Data Loss Prevention (DLP) is a system's ability to identify, monitor, and protect data in use, motion and at rest using deep packet content inspection, contextual security analysis of the transaction originator, data object, medium, timing, recipient, destination, etc. within a centralized management framework. DLP can be either network-based or endpoint-based.
+
+Cloud Access Security Broker (CASB) is software that can monitor and enforce cloud access for individual users.
 
 # Domain 3: Security Architecture and Engineering
 
