@@ -773,12 +773,18 @@ Encryption can be done synchronously where encryption/decryption requests must b
 
 Frequency patterns can also lead to vulnerabilities in tying ciphertext back to plaintext, so one solution for this is to polyalphabetic ciphers in substitution where a key has the cipher iterate through multiple alphabet ciphers in sequence to minimize patterns. Another strategy is to use running key ciphers where ciphers are consistently (or constantly) cycled through to make pattern analysis of messages much more difficult. One-time pads are when a key is only used once for encryption and never again. This is the only unbreakable cipher system. Other methods include stream ciphers which encrypt or decrypt one bit at a time or block ciphers which only encrypt or decrypt one block of bit (often 64-bit chunks) at a time. Stream ciphers are much faster and are most suitable for network or hardware encryption. Block ciphers have a higher diffusion rate though and can be very resistant to tampering.
 
+Unlike codes, ciphers can only be applied to individual characters.
+
 There are five primary modes of block ciphering:
 1. Electronic Codebook (ECB) - Least secure but fastest. Has no IV. Only useable with short bits of nonrepeating random text.
-2. Cipher Block Chaining (CBC) = Uses an IV, good for email
-3. Cipher Feedback (CFB) - Uses an IV, good for email
-4. Output Feedback (OFB) - Uses an IV, good for email
-5. Counter (CTR) - Uses a counter similar to an IV, almost the most secure and is fast. Good balance of speed and security, most commonly used mode of block cipher
+2. Cipher Block Chaining (CBC) = Uses an IV, good for email. Each block of unencrypted text is XOR'ed with the block of ciphertext immediately preceding it before it is encrypted.
+3. Cipher Feedback (CFB) - Uses an IV, good for email. Like CBC but operates in real streaming time.
+4. Output Feedback (OFB) - Uses an IV, good for email. Like CFB but XOR's with a seed value instead of preceding ciphertext.
+5. Counter (CTR) - Uses a counter similar to an IV, almost the most secure and is fast. Good balance of speed and security, most commonly used mode of block cipher. Uses an incrementing counter for each encryption or decryption operation.
+
+Other forms of encryption include:
+* Galois/Counter Mode (GCM) takes CTR and adds authentication tags to provide data authenticity controls.
+* The Counter with Cipher Block Chaining Message Authentication Code Mode (CCM) combines a confidentiality mode with GCM's data authenticity mode, using the CBC-MAC algorithm. Can only be used with ciphers with 128-bit length and require a nonce that is changed with each transaction.
 
 Steganography is hiding information within another kind of information such as hiding a message in an image. For instance, slack space is leftover storage when a file does not all need its allocated space and can be designated for other uses, such as steganography. A null cipher can be used by embedding a plaintext message within another plaintext message.
 
@@ -796,10 +802,13 @@ Most common symmetric encryption algorithms:
 | RC5-65/16/17                | Moderate                  | 65 bits          | 64 bits       |
 | Skipjack                    | Moderate                  | 80 bits          | 64 bits       |
 | RC2-128                     | Strong                    | 128 bits         | 64 bits       |
+| CAST-128                    | Strong                    | 40-128 bits      | 64 bits       |
 | IDEA                        | Strong                    | 128 bits         | 64 bits       |
 | Blowfish                    | Strong                    | 32-448 bits      | 64 bits       |
 | 3DES                        | Strong                    | 112 or 168 bits  | 64 bits       |
 | RC5-64/12/32                | Strong                    | 128 bits         | 64 bits       |
+| CAST-256                    | Strong                    | 128, 160, 192, 224, 256 bits | 128 bits |
+| Twofish                     | Very Strong               | 128, 192, 256 bits | 128 bits      |
 | RC6                         | Very Strong               | 128, 192, 256 bits | 128 bits      |
 | Rijndael (AES)              | Very Strong               | 128, 192, 256 bits | 128 bits      |
 
