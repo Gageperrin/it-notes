@@ -619,7 +619,7 @@ The implenentation of the RMC is known as a security kernel. An implemented secu
 
 The Trusted Computing Base (TCB) encompasses all security controls that would be implemented to protect an architecture. This term refers to the protection mechanisms within a system or architecture. The TCB is the totality of protection mechanisms within an architecture. Processors, memory, storage, firmware, OS, and the system kernel are all found in the TCB.
 
-A central processing unit (CPU) is the brain of a computer that processes all of the instructions. It operates through four steps of fetching, decoding, executing, and storing. CPU's operate in one of two processor states: the supervisor or problem state. These states are privilege levels (i.e. restrictions on the operations that can be performed). The supervisor state has a higher privilege level and is typically where the system kernel runs, allowing full access to all the instructions and capabilities of a CPU. The problem state is a lower privilege level with limited access to CPU instructions and is the standard operating mode of a CPU. It is called the problem state because that is the fundamnetal role of the CPU, to solve problems.
+A central processing unit (CPU) is the brain of a computer that processes all of the instructions. It operates through four steps of fetching, decoding, executing, and storing. CPU's operate in one of two processor states: the supervisor or problem state. These states are privilege levels (i.e. restrictions on the operations that can be performed). The supervisor state has a higher privilege level and is typically where the system kernel runs, allowing full access to all the instructions and capabilities of a CPU. The problem state is a lower privilege level with limited access to CPU instructions and is the standard operating mode of a CPU. It is called the problem state because that is the fundamental role of the CPU, to solve problems.
 
 Process isolation prevents interactions or conflicts that could have negative consequences. There are two general methods to accomplish this:
 1. Time-division multiplexing allows the CPU to determine process isolation by allocating very small slots of time to each process and rapidly switching between them as needed.
@@ -629,9 +629,9 @@ Storage consists of two types:
 1. Primary storage is fast, volatile, ephemeral, and generally small. Examples include caching, CPU registers, and RAM.
 2. Secondary storage is slow, durable, and generally larger. Examples include magnetic hard drives, optical media, tapes, and SSD.
 
-Primary sotrage is also referred to as volatile memory as it is temporary. This can often lead to getting "filled up" and causing the sytem to crash. This can be mitigated by virtual memory which moves certain processes out of RAM and into the hard drive temporarily to give specific processes prioritized use of RAM.
+Primary storage is also referred to as volatile memory as it is temporary. This can often lead to getting "filled up" and causing the system to crash. This can be mitigated by virtual memory which moves certain processes out of RAM and into the hard drive temporarily to give specific processes prioritized use of RAM.
 
-The system kernel is the core of the operating system that has complete control overything and relies on privilege levels for smooth and safe operation. The system kernel drives the computing system. (Note this is very distinct from the security kernel which is the implementation of the RMC, not a computing process).
+The system kernel is the core of the operating system that has complete control everything and relies on privilege levels for smooth and safe operation. The system kernel drives the computing system. (Note this is very distinct from the security kernel which is the implementation of the RMC, not a computing process).
 
 Privilege levels establish operational trust boundaries for software running on a computer.
 
@@ -648,6 +648,8 @@ Virtualization is one mode of abstraction that creates a virtual version of some
 Defense-in-depth implements multiple control layers whether physical, logical, operational, etc. to protect data.
 
 Trusted platform modules (TPM) are pieces of hardware that implement an ISO standard, resulting in the ability to establish trust involving security and prviacy. Comptuers that contain a TPM create and encrypt keys using a specific endorsement key so that only the TPM can decrypt them. This is known as binding and serves to prevent the key's disclosure. Keys are sealed as they are associated to the TPM via specific configuration settings and parameters used at the time of the key's creation.
+
+Email is also a vector for encryption. Phil Zimmerman's Pretty Good Privacy (PGP) is a secure email system from 1991 that combines the CA hierarchy with a "web of trust". Another protocol and the current de facto standard is Secure/Multipurpose Internet Mail Extension (S/MIME) which uses the RSA encryption algorithm but because of technical limitations is not supported by default in most email providers.
 
 ## 3.5 - Assess and mitigate the vulnerabilities of security architectures, designs, and solution elements
 
@@ -818,7 +820,11 @@ By contrast asymmetric cryptography solves the key exchange problem by using pub
 
 Two hard mathematics problems are still primarily used for key generation: factorign and discrete logarithms. Factoring is when two large prime numbers are multiplied together, creating a number which would be very difficult to decompose into its two prime number factors. This is used by RSA. Another math problem is discrete logarithms used by Elliptic Curve (ECC) and Diffie-Hellman. This raises a prime number to the power of another prime number which is also very difficult to trace back to its original source. Diffie-Hellman key exchange uses this to generate symmetric keys to be exchanged between two parties.
 
-One third, deprecated math problem is the Knapsack problem but a vulnerability was identified that could break it with any algorithm it uses.
+ElGamal is an extension of Diffie-Hellman and was in the public domain from its inception unlike RSA which only became public in 2000.
+
+Elliptic Curve cryptography depends on the basic equation y^2 = x^3 + ax + b where all variables are real numbers. Each elliptic curve has a corresponding elliptic curve group made up of hte points on the elliptic curve along with the point O, located at infinity.
+
+One third, deprecated math problem is the Knapsack problem but a vulnerability was identified in 1984 that could break it with any algorithm it uses.
 
 Hybrid cryptography is a combination of symmetric and assymetric cryptography to achieve the benefits of each kind.
 
@@ -827,22 +833,45 @@ Message integrity checks (MIC) help to ensure the integrity of a message between
 Hashing is effectively because there is a fixed length digest. Any length input always equals the same length output. Additionally they are one way in that it is impossible to determine the input of a hashing algorithm by inspecting the output. They are also deterministic; the same input will always equal the same output. Good hashing algorithms are also collision resistant. They will generate a completely different output even if only a single bit of input is changed. It is very difficult to find two inputs that hash to the same output.
 
 The most popular hashing algorithms include:
-* MD5 - 128-bit digest
-* SHA-1 - 160-bit digest
-* SHA-2 - 224/256/384/512-bit digests (determined by version used)
-* SHA-3 - 224/256/384/512-bit digests (determined by version used)
+| Algorithm                  | Hash Value Length                  | Currently Secure |
+|----------------------------|------------------------------------|------------------|
+| Message Digest (MD5)       | 128-bit                            | No               |
+| Secure Hash Algorithm (SHA)| Varies                             | Yes              |
+| SHA-1                      | 160-bit                            | No               |
+| SHA-2                      | 224/256/384/512-bit (determined by version used) | Yes |
+| SHA-3                      | 224/256/384/512-bit (determined by version used) | Yes |
+| The RIPE Message Digest (RIPEMD-160) | 160-bit alternative to SHA | Yes |
+| HAVAL                      | 128/160/192/224/256-bit            | No               |
+| HMAC                       | Varies (depends on underlying hash function) | Yes |
+| RIPEMD-128                 | 128-bit                            | No               |
+| RIPEMD-160                 | 160-bit                            | Yes              |
+| RIPEMD-256                 | 256-bit                            | Yes              |
+| RIPEMD-320                 | 320-bit                            | Yes              |
 
-Digital signatures provide integrity, authenticity, and nonrepudiation. The sender hashes their message which produces a fixed length message digest. The sender then encrypts the hash value with their private key. These combined not only provides a way to validate the message is tamper-proof but also that is authentic in its origin. It should be noted that digital signatures do not provide confidentiality as the message itself is not encrypted and can be intercepted. Digital signatures are popularly used in code signing for software builds.
+Digital signatures provide integrity, authenticity, and nonrepudiation. They assure the recipient the message truly came from the sender and that the message was not altered in transit.
+
+The sender hashes their message which produces a fixed length message digest. The sender then encrypts the hash value with their private key. These combined not only provides a way to validate the message is tamper-proof but also that is authentic in its origin. It should be noted that digital signatures do not provide confidentiality as the message itself is not encrypted and can be intercepted. Digital signatures are popularly used in code signing for software builds.
+
+NIST specifies the digital signature algorithms acceptable for federal government use in Federal Information Processing Standard (FIPS) 186-4, also known as Digital Signature Standard (DSS). All federally approved digital signature algorithms must use SHA-3. There are three approved encryption algorithms:
+1. Digital Signature Algorithm (DSA) as specified in FIPS 186-4.
+2. Rivest-Shamir-Adleman (RSA) as specified in ANSI X9.31
+3. Elliptic Curve DSA (ECDSA) as specified in ANSI X9.62
 
 Digital certificates bind an individual to their public key. All certificate authorities conform to the X.509 certificate standard. The root of trust or trust anchor is the foundation of all digital certificates and is represented by a root certificate authority (CA). As public/private key pairs ought to be periodically cycled, so too should digital certificates. If a private key is compromised, a digital certificate should be revoked too. A certificate can be pinned so that trust only needs to establish for the first visit to a web server, and a new copy is not requested on subsequent visits.
 
 The X.509 certificate standard includes fields like certificate version, serial number, encryption algorithm, issuing CA, validity period, and public key value.
 
+Certificate formats include:
+* Distinguished Encoding Rules (DER) is the most common binary format with the extensions (`.der`, `.crt`, `.cer`).
+* Privacy Enhanced Mail (PEM) certificate format is an ASCII text version of the DER format, stored with file extension (`.pem`, `.crt`).
+* Personal Information Exchange (PFX) is used by Windows systems in binary format (`.pfx` or `.p12`).
+* P7B are a text-based certificate also used by Windows.
+
 Root of trust or the trust anchor is the foundation of digital certificates' integrity. The root CA self-signs its certificates and then signs subordinate certificates (intermeidate CA's). Intermediate CA's can sign further subordinated certificates. These are known as Issuing CA's. Again, certificates should be rotatedas they either expire or are revoked.
 
-There are two ways to confirm if a certificate is revoked: certificate revocation list (CRL) which is an older downloadable list of serial numbers and online certificate status protocol (OCSP) where a client queries CA for revocation status of a specific certificate serial number. A certificate's life cycle consists of the following stages:
+There are two ways to confirm if a certificate is revoked: certificate revocation list (CRL) which is an older downloadable list of serial numbers and online certificate status protocol (OCSP) where a client queries CA for revocation status of a specific certificate serial number. OCSP has been extended to include certificate stapling to reduce load on certificate servers. A certificate's life cycle consists of the following stages:
 1. Enrollment - an entity submit a certificate signing request (CSR) to a CA with proper identifying fields. The requesting entity also generates a public/private key pair, of which the public key is included in the CSR.
-2. Issuance - upon receiving the CSR, the CA will proof the identity of the entityt to ensure the information in the CSR is valid. After completing this process, the CSR will be signed by the root of trust private key, following a X.509 standard, at which point the certificate will be issued by an intermediate/issuing CA.
+2. Issuance - upon receiving the CSR, the CA will proof the identity of the entity to ensure the information in the CSR is valid. After completing this process, the CSR will be signed by the root of trust private key, following a X.509 standard, at which point the certificate will be issued by an intermediate/issuing CA.
 3. Validation - when a certificate is invoked as part of regular web activity, the request will validate the provided certificate with the issuing CA.
 4. Revocation - a certificiate may be revoked for a number of reasons if it does not first expire.
 5. Renewal - The entity will need to renew the certificate.
@@ -858,6 +887,8 @@ Once a key is encrypted, it must be effectively managed as a key part of encrypt
 6. Key recovery - split knowledge (cut in half), dual control (two keys), or key escrow (loan key to trusted party)
 
 Secure/Multipurpose Internet Mail Extensions (S/MIME) is standard for public key encryption and provides authentication, nonrepudiation of origin, message integrity, and confidentiality. S/MIME offers optional security services in the form of signed receipts, security labels, secure mailing lists, and an extended method of identifying the signer's certificate.
+
+Transport Layer Security (TLS) depends on the exchange of server digital certificates and is a framework for encryption algorithms. Each TLS system provides a list of cipher suites it supports in a long string that combines the key exchange algorithm for the ephemeral key, the authentication algorithm for the identity of the client and server, the bulk encryption algorithm for symmetric encryption, and the hash algorithm for message digests.
 
 ## 3.7 - Understand methods of cryptanalytic attacks
 
@@ -887,6 +918,8 @@ Cryptographic attacks tend to focus on retrieving information or executing actio
 * Kerberos attacks focus specifically focused on using information like password hashes to generate a valid Kerberos ticket that can be used to bypass authentication. 
 * A ransomware attack encrypts or locks down a user's system or data until certain demands are met. 
 * A fault injection attack attempts to leverage normally legitimate fault injections to modify hardware or software system behavior.
+* A statistical attack exploits statistical vulnerabilities such as floating-point errors.
+* Brute-force attacks attempt every combination to attempt to guess the key or password.
 
 ## 3.8 - Apply security principles to site and facility design
 
@@ -1158,6 +1191,8 @@ Endpoint security is concerned with the specific protection of client devices on
 
 ## 4.3 - Implement Secure Communication Channels According to Design
 
+There are two primary strategies to protect data traveling over networks: link encryption (tunneling) and end-to-end encryption (e.g. TLS).
+
 Remote access security is concerned with controls for remote access over insecure/public networks. VPN solutions are generally utilized to protect remote access traffic. VPNs are tunneling protocols with encryption; if there is no encryption, it is not a VPN, only a tunnel.
 
 Tunneling encapsulates a datagram within another. It does not provide confidentiality unless encryption is applied.
@@ -1192,7 +1227,9 @@ IPsec can operate in:
 
 IPsec depends on Internet Key Exchange (IKE) to generate the same session key at each end of the VPN. IPsec tunnels are established through a Security Association (SA), which defines attributes such as authentication and encryption algorithms, encryption keys, transport or tunnel modes, sequence numbers, and expiry.
 
-SSL/TLS provides secure client-to-server connections. SSL is considered obsolete and has been replaced by TLS. The latest SSL revision was 3.0, and TLS 1.3, released in 2018, is the most recent version of TLS. The DROWN attack is a major threat to SSLv2.
+SSL/TLS provides secure client-to-server connections. SSL is considered obsolete and has been replaced by TLS. The latest SSL revision was 3.0, and TLS 1.3, released in 2018, is the most recent version of TLS. TLS is not an encryption algorithm but a framework in which other algorithms function.
+
+The DROWN attack is a major threat to SSLv2.
 
 SSL/TLS Handshake Protocol:
 1. The client sends a request to the server using supported algorithms.
