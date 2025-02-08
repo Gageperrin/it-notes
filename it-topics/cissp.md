@@ -2,6 +2,10 @@
 
 These are my manually compiled notes for the CISSP exam.
 
+Sources include:
+* Witcher, Rob, John Berti, Lou Hablas, and Nick Mitropoulos. *Destination CISSP: A Concise Guide*. 1st ed. Destination Certification, Inc., 2022.
+* Chapple, Mike, James Michael Stewart, Darril Gibson. *Certified Information Systems Security Professional*. 9th ed. Wiley and Sons, 2021.
+
 - [CISSP](#cissp)
 - [Domain 1: Security and Risk Management](#domain-1-security-and-risk-management)
   - [1.1 - Professional ethics](#11---professional-ethics)
@@ -71,9 +75,6 @@ These are my manually compiled notes for the CISSP exam.
   - [8.1 - Understand and integrate security in the software development lifecycle (SDLC)](#81---understand-and-integrate-security-in-the-software-development-lifecycle-sdlc)
   - [8.2 - Identify and apply security controls in software development ecosystems](#82---identify-and-apply-security-controls-in-software-development-ecosystems)
 
-
-Sources include:
-* Witcher, Rob, John Berti, Lou Hablas, and Nick Mitropoulos. Destination CISSP: A Concise Guide. 1st ed. Destination Certification, Inc., 2022.
 
 # Domain 1: Security and Risk Management
 
@@ -511,19 +512,21 @@ Lattice-based models like Bell-LaPadula and Biba visualize security as layers. R
 
 ![Bell-LaPadula Model](https://media.geeksforgeeks.org/wp-content/uploads/20200709152516/BellLaPadula.png)
 
-The Bell-LaPadula model consists of three principles:
+The Bell-LaPadula model is focused on confidentiality and consists of three principles:
 1. Simple security property - "no read up" - you cannot access data at a higher security level
-2. Star property - "no write down" - data cannot move from more secure to less secure environments.
-3. Strong star property - A subject should only be able to read or write at their layer
+2. Star/Confinement property - "no write down" - data cannot move from more secure to less secure environments
+3. Discretionary Security property - a system uses an access matrix to enforce access control
 
+A strong star property indicates that a subject should only be able to read or write at their layer
 
 ![Biba Model](https://media.geeksforgeeks.org/wp-content/uploads/20200709152715/Biba.png)
 
-The Biba model focuses on data integrity:
+The Biba model focuses on data integrity and inverts the Bell-LaPadula model:
 1. Simple integrity property - "no read down" - you cannot depend on data with a lower level of integrity
 2. Star property - "no write up" - you cannot write to data that is has a higher integrity level than yours
 3. Invocation property - Data cannot be sent to someone with a higher layer of integrity
 
+In both models, simple properties are always about reading while star properties are always about writing. Each properties also implies the opposite oppoeration (e.g. no write down implies write up allowed).
 
 The Lipner implementation combines these two models.
 
@@ -540,11 +543,21 @@ These can be upheld by three specific rules:
 2. Separation of Duties
 3. Access Triple - Subject, Program, Object
 
-The Brewer-Nash model is concerned with preventing a conflict of interest by separating departments or environments (e.g. development + production).
+Clark-Wilson items and procedures include:
+* A constrained data item (CDI) is any data item whose integrity is protected by the security model
+* An unconstrained data item (UDI) is any data item that is not controlled by the security model
+* An integrity verification procedure (IVP) is a procedure that scans data items and confirms their integrity
+* Transformation procedures (TP's) are the only procedures allowed to transform the CDI
 
-The Graham-Denning Model provides rules for allowing subjects to access objects.
+The Brewer-Nash model is concerned both with creating dynamic access controls and with preventing a conflict of interest by separating departments or environments (e.g. development + production).
 
-The Harrison-Ruzzo-Ullman model provides a finite set of rules for editing the access rights of a subject. Generic rights can be added to groups of individuals.
+The Goguen-Meseguer Model is an integrity model that is often considered the foundation of noninterference theories. It is concerned with providing subjects with a set of predetermined actions against predetermined objects.
+
+The Sutherland model is an integrity model focused on preventing interference in support of integrity.
+
+The Graham-Denning Model provides rules for allowing subjects to access objects. It is concerned with creating and deleting subjects and objects as well as access rights to read, grant, delete, or transfer, eight actions in total.
+
+The Harrison-Ruzzo-Ullman model provides a finite set of rules for editing the access rights of a subject. Generic rights can be added to groups of individuals. This extends the Graham-Denning model by establishing rows and columns for subjects and objects, where the intersection of those rows and columns indicates the specific permitted procedures.
 
 ---
 
@@ -606,18 +619,39 @@ Only a particular set of security control frameworks are applicable to any one o
 * FedRAMP - Federal Risk and Authorization Management Program (FedRAMP) provides a standardized approach to security asessment, authorization, and continuous monitoring for cloud products and services. Any cloud services that hold US federal government data must be FedRAMP authorized.
 * SOX - Sarbanes-Oxley (SOX) Act is a direct result of Enron's fraud and is designed to prevent financial fraud.
 
+
+Many environments can require an Authorization to Operate (ATO) as defined by the Risk Managment Framework (RMF). When an ATO is issued it lasts until the time frame has expired, the system experiences a significant breach, or the system experiences a significant security change.
+
+The AO can issue four authorization decisions:
+1. Authorization to Operate
+2. Common Control Authorization - inherit the Authorization to Operate
+3. Authorization to Use - When a third-party provider requests authorization
+4. Denial of Authorization
+
 ## 3.4 - Understand security capabilities of information systems (IS)
 
 A subject is an active entity (person, process, or program) that tries to access an object. An object is a passive entity (file, server, hardware) that is accessed by a subject.
 
 The Reference Monitor Concept (RMC) is the concept of a subject accessing an object through a mediation based on a set of rules. The RMC must mediate all access, be protected from modification, be verifiable as correct, and always be invoked.
 
-The implenentation of the RMC is known as a security kernel. An implemented security kernel should contain three properties:
+The implementation of the RMC is known as a security kernel. An implemented security kernel should contain three properties:
 1. Completeness: Impossible to bypass
 2. Isolation: Mediation rules are tamperproof
 3. Verifiability: Logging and monitoring and testing to ensure the kernel functions as intended
 
-The Trusted Computing Base (TCB) encompasses all security controls that would be implemented to protect an architecture. This term refers to the protection mechanisms within a system or architecture. The TCB is the totality of protection mechanisms within an architecture. Processors, memory, storage, firmware, OS, and the system kernel are all found in the TCB.
+The Trusted Computing Base (TCB) encompasses all security controls that would be implemented to protect an architecture. This term refers to the protection mechanisms within a system or architecture. The TCB is the totality of protection mechanisms within an architecture. Processors, memory, storage, firmware, OS, and the system kernel are all found in the TCB. The TCB is the only portion of hte system that can be trusted to enforce the security policy.
+
+The state machine model (based on the finite state machine abbreviated as FSM) describes a system that is always secure no matter what state it is in. All states of the system comply with the security model. This is the basis for both the Bell-LaPadula and Biba models.
+
+The information flow model focuses on the control of information flow, based on the state machine model. The noninterference model can extend this to be concerned with the actions of a subject at a higher security level. These can be broken down into various composition theories such as cascading (how the outputs and inputs of various systems relate), feedback (systems reciprocate inputs and outputs to one another), and hookup (a system send input to another system but also to other entities).
+
+The take-grant model employs a directed graph which dictates how rights can be passed between subjects or from subjects to objects. There are four rules at play here:
+1. Take rule: Allow a subject to take rights over an object
+2. Grant rule: Allow a subject to grant rights to an object
+3. Create rule: Allow a subject to creeate new rights
+4. Remove rule: Allow a subject to remove the rights it has
+
+An access control matrix is a table of subjects and objects that indicates the actions or funcitons that each subject cna perform on each object.
 
 A central processing unit (CPU) is the brain of a computer that processes all of the instructions. It operates through four steps of fetching, decoding, executing, and storing. CPU's operate in one of two processor states: the supervisor or problem state. These states are privilege levels (i.e. restrictions on the operations that can be performed). The supervisor state has a higher privilege level and is typically where the system kernel runs, allowing full access to all the instructions and capabilities of a CPU. The problem state is a lower privilege level with limited access to CPU instructions and is the standard operating mode of a CPU. It is called the problem state because that is the fundamental role of the CPU, to solve problems.
 
@@ -1051,7 +1085,7 @@ The most common well-known ports are:
 * HTTP - 80
 * HTTPS - 443
 
-Layer 5 Session: supports interhost communicatoin and maintains a logical connection between two processes on each end host. Ideal layer for identification and authentication:
+Layer 5 Session: supports interhost communication and maintains a logical connection between two processes on each end host. Ideal layer for identification and authentication:
 
 Conceptaully PAP, CHAP, and EAP can be labeled as Layer 5 in the OSI model even if they functionally run at Layer 2. In addition to these NetBIOS and RPC are other Layer 5 protocols.
 
