@@ -655,6 +655,13 @@ An access control matrix is a table of subjects and objects that indicates the a
 
 A central processing unit (CPU) is the brain of a computer that processes all of the instructions. It operates through four steps of fetching, decoding, executing, and storing. CPU's operate in one of two processor states: the supervisor or problem state. These states are privilege levels (i.e. restrictions on the operations that can be performed). The supervisor state has a higher privilege level and is typically where the system kernel runs, allowing full access to all the instructions and capabilities of a CPU. The problem state is a lower privilege level with limited access to CPU instructions and is the standard operating mode of a CPU. It is called the problem state because that is the fundamental role of the CPU, to solve problems.
 
+CPU has several execution types:
+* Multitasking: Handling two or more tasks simultaneously with multiple processes with one core.
+* Multicore: CPU containing multiple execution cores
+* Multiprocessing: More than one processor used
+* Multiprogramming: Like multitasking, pseudo-simultaneous execution of multiple tasks on a single processor
+* Multithreading: Multiple concurrent tasks in a single process. 
+
 Process isolation prevents interactions or conflicts that could have negative consequences. There are two general methods to accomplish this:
 1. Time-division multiplexing allows the CPU to determine process isolation by allocating very small slots of time to each process and rapidly switching between them as needed.
 2. Memory segmentation relates more to Random Access Memory (RAM) found in computer systems. Memory segmentation assigns memory to one and only one application until it is released.
@@ -672,6 +679,24 @@ Privilege levels establish operational trust boundaries for software running on 
 The hardware is accessed via the kernel in kernel mode. This includes a very small set of processes such as the process manager, the security monitor, the memory manager, the I/O manager, the device drivers, and the hardware abstraction. The user mode is used by virtually everything else and has a lower level of trust.
 
 The ring protection model is a form of conceptual layering that segregates and protects operational domains from each other. Ring 0 is the most trusted and secure ring (e.g. firmware). Everything else runs in the concentric rings outside Ring 0.
+
+Memory is a storage bank for information. 
+* Read-only memory (ROM) cannot be written to once burned at the factory
+* Programmable Read-only memory (PROM) can be written to once after manufactured but then is immutable.
+* Erasable Programmable Read-Only Memory (EPROM) are erasable as either Ultraviolet (UVEPROM) or Electronic (EEPROM) which burns or electrically zaps the chip respectively.
+* Flash memory is nonvolatile but can be electronically erased and rewritten (e.g. thumb drives, SSD)
+* Random Access Memory (RAM) is ephemeral memory and can be Real Memory or Cache RAM
+
+CPU contains alimited amount of onboard memory known as registers with direct memory address locations that the arithmetic-logical unit (ALU) of the CPU can use.
+
+Memory addressing is how the processor can access memory. The most common addressing schemes are:
+* Register addressing
+* Immediate addressing is a hard-coded data reference (e.g. Add 2 to the value in register 1)
+* Direct addressing provides the actual address of the memory location to address
+* Indirect addressing references the memory address where the actual target value is stored
+* Base + offset addressing uses a value stored in one of the CPU's registers.
+
+Secondary memory refers to magnetic, optical or flash based media not immediately available to the CPU, such as virtual memory.
 
 Middleware acts as an intermediary between two applications. It is a layer of software that can speak the languages of two disparate applications and facilitate communication between them.
 
@@ -729,9 +754,9 @@ Industrial control system (ICS) is a general term used to describe control syste
 
 ICS can be vulnerable to attack and it is best to air gap them to protect them from Internet access. Often ICS are not patched as much as possible because patching critical systems may cause unintended failure or downtime. These require dedicated patching strategies to guarantee availability as much as possible. This can be done through logging, monitoring, anomaly detection, conducting vulnerability assessments, and using VLAN's or zoning techniques to prevent an attacker from iterating through ICS systems if an individual one is breached.
 
-SCADA is a system architecture that comprises computers, networking, and proprietary devices as well as UI for the management of an entire system. Manages small and large-scale industrial, infrastructure, and facility processes.
+SCADA is a system architecture that comprises computers, networking, and proprietary devices as well as UI for the management of an entire system. Manages small and large-scale industrial, infrastructure, and facility processes. It focuses on data-gathering and events.
 
-DCS monitors, controls, and gathers data from components like controllers, sensors and other devices. unlike SCADA it include local and remote management capabilities but is usually controlled locally.
+DCS monitors, controls, and gathers data from components like controllers, sensors and other devices. unlike SCADA it include local and remote management capabilities but is usually controlled locally. It focuses on process and state.
 
 PLC is an industrial computer specifically used for the control of manufacturing processes. Key features include high reliability, ease of programming, and diagnosis of process problems. It is often networked with other PLC devices and SCADA systems.
 
