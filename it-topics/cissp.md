@@ -986,11 +986,18 @@ Physical security like information security includes the CIA triad. Its key obje
 
 ## 3.9 - Design site and facility security controls
 
-Crime Prevention through Environmental Design (CPTED) is a specific professional practice that outlines guidelines and best practices regarding the design of building and surrounding structures.
-
-Considerations include threat definition, target identification, facility characteristics, life and property at stake, and operations (BCP/DRP).
+Crime Prevention through Environmental Design (CPTED) is a specific professional practice that outlines guidelines and best practices regarding the design of building and surrounding structures. Considerations include threat definition, target identification, facility characteristics, life and property at stake, and operations (BCP/DRP).
 
 Perimeter controls include using landscaping design, grading, or bollards.
+
+A cable management policy defines the physical structure and deployment of network cabling and related devices within a facility. A cable plant is the collection of interconnected cables and intermediary devices that establish the physical network. A cable plant is generally composed of:
+* The entrance facility or demarcation point which serves as the entrance point where the provider's cable connects to the internal cable plant.
+* Equipment room: The main wiring closet of the building.
+* Backbone distribution system: Wired connections between the equipment room and the telemcommunications room or cross-floor connections.
+* Wiring closet: The connectionhub for a floor or large section of the building, connecting between the backbone distribution system and the horizontal distribution system. Also known as the premises wire distribution room, main distribution frame (MDF), intermediate distribution frame (IDF), intermediate distribution facilities, and the telecommunications room.
+* Horizontal distribution system: The connection between the various wiring closets and work areas.
+
+Protected cable distribution or protective distribution systems (PDS's) protect cables against unauthorized access or harm.
 
 Closed-circuit TV (CCTV) primaily serve as detective control. One must consider placement, image quality, and transmission media when adopting this strategy. Passive infrared devices are motion detectors that can pick up on infra-red light. Lighting, doors, mantraps, locks, card access, biometrics, windows, and walls can all be factors in physical security design.
 
@@ -998,14 +1005,14 @@ Infrastructure are also threat vectors whether that is through power outages (mi
 
 Fire detection tools can consist of infrared sensors, ionization detectors, photoelectric sensors, dual sensors, or VESDA (most effective and expensive), as well as a system which identifies the rising temperature.
 
-Fire suppression can consist of water-based systems like wet pipe, dry pipe, pre-action, and deluge, or it can be gas-based fire suppression systems like INERGEN, argonite, FM-200, or Aero-K. Halon used to be one of these but is now illegal.
+Fire suppression can consist of water-based systems like wet pipe, dry pipe, pre-action, and deluge, or it can be gas-based fire suppression systems like INERGEN, argonite, FM-200, or Aero-K. Halon used to be one of these but is now illegal due to environmental concerns.
 
 Fire extinguishers can also be used and consist of the following:
 * Class A - puts out common combustibles using water, foam, and dry chemicals
 * Class B - puts out liquid fires using gas, carbon dioxide, foam, and dry chemicals
 * Class C - puts out electrical fires using gas, carbon dioxide, and dry chemicals
 * Class D - puts out combustible metal fires using dry powders
-* Class E - puts out commercial kitchen fires using wet chemicals.
+* Class K - puts out commercial kitchen fires using wet chemicals.
 
 Carbon dioxide is a very common suppressant agent as it is inexpensive and does not introduce as much corrosion as other suppressants but it can be deadly if used in excess with people present.
 
