@@ -40,7 +40,8 @@ Sources include:
   - [3.9 - Design site and facility security controls](#39---design-site-and-facility-security-controls)
 - [Domain 4: Communication and Network Security](#domain-4-communication-and-network-security)
   - [4.1 - Implement secure design principles in network architectures](#41---implement-secure-design-principles-in-network-architectures)
-  - [4.2 - Securee network components](#42---securee-network-components)
+  - [Virtual SAN's (VSAN) have also been developed to combined multiple individual storage devices into a single consolidated network-accessible storage container. Software-designed storage (SDS) is a SDN version of SAN or NAS. Software-defined wide-area networks (SDWAN) is an evolution of SDN that can be used to manage the connectivity and control between distant data centers.](#virtual-sans-vsan-have-also-been-developed-to-combined-multiple-individual-storage-devices-into-a-single-consolidated-network-accessible-storage-container-software-designed-storage-sds-is-a-sdn-version-of-san-or-nas-software-defined-wide-area-networks-sdwan-is-an-evolution-of-sdn-that-can-be-used-to-manage-the-connectivity-and-control-between-distant-data-centers)
+  - [4.2 - Secure network components](#42---secure-network-components)
   - [4.3 - Implement Secure Communication Channels According to Design](#43---implement-secure-communication-channels-according-to-design)
 - [Domain 5: Identity and Access Management (IAM)](#domain-5-identity-and-access-management-iam)
   - [5.1 - Control physical and logical access to assets](#51---control-physical-and-logical-access-to-assets)
@@ -1028,6 +1029,25 @@ Layer 1: Physical exists as binary data, zeros and ones. Devices can conect via 
 
 Twisted pair cable is when a pair of wires are twisted together and can be shielded (STP) or unshielded (UTP). Most people are familiar with coaxial cable for their home networks which is a single strand of copper wire sheathed in a protective coating. Fiber optic uses light pulses to represent zeroes and ones. Fiber optic is immune to the problem of crosstalk that electrical-based wiring like twisted pairs and coaxial can suffer from.
 
+Coaxial cables can have problems when the cable is bent past the maximum arc radius, thus breaking the center conductor, deploying the coax cable in a length greater than its maximum recommended length, not properly terminating the ends of a coax cable with a 50 ohm resistor, or not grounding at least one end of a terminated coax cable.
+
+Twisted-pair cables can suffer from incorrect installation for twisted-pair cabling, deploying an excessively long cable, or using unshielded twisted-pair (UTP) when there is significant interference (better to use shielded twisted-pair (STP)).
+
+| Category | Throughput                  | Use Case                              |
+|----------|-----------------------------|---------------------------------------|
+| Cat 1    | Up to 1 Mbps                | Voice Only (Telephone Cables)         |
+| Cat 2    | Up to 4 Mbps                | Token Ring Networks                   |
+| Cat 3    | Up to 10 Mbps               | 10BASE-T Ethernet                     |
+| Cat 4    | Up to 16 Mbps               | Token Ring Networks                   |
+| Cat 5    | Up to 100 Mbps              | 100BASE-TX Ethernet                   |
+| Cat 5e   | Up to 1 Gbps                | Gigabit Ethernet                      |
+| Cat 6    | Up to 10 Gbps (up to 55m)   | 10GBASE-T Ethernet                    |
+| Cat 6a   | Up to 10 Gbps (up to 100m)  | 10GBASE-T Ethernet                    |
+| Cat 7    | Up to 10 Gbps (up to 100m)  | Shielded Ethernet                     |
+| Cat 8    | Up to 40 Gbps (up to 30m)   | Data Centers, High-Speed Networking   |
+
+Baseband cables can transmit only a single signal at a time while broadband can transmit multiple signals simultaneously. Their naming convention follows XXyyyyZZ where XX is the maxium speed, yyyy is baseband or broadband, and ZZZ is the maximum distance in hundreds of meters. For example 10Base2 or 100BaseT.
+
 Wiring can have a number of different topology models:
 * Bus topology is the most common and is when devices are connected to a central wire. One node can fail without impacting the rest. However the bus does itself represent a point of failure, and also a large-scale bus introduces the risk of a compromised device connecting to the network.
 * Tree topology can isolate transmissions to specific branches on the tree. Outages would be restricted to a branch as well.
@@ -1044,7 +1064,7 @@ Two flavors of CSMA. CSMA with Collision Avoidance (CSMA/CA) uses two lanes of c
 
 Alongside this, transmission methods include unicast (one-to-one), multicast (one-to-many), and broadcast (one-to-all).
 
-Several devices operate at Layer 1: hubs (connects multiple devices by repeating all signals), repeaters (signal boosters), and concentrators (combine all signals).
+Several devices operate at Layer 1: hubs (connects multiple devices by repeating all signals), repeaters (signal boosters), amplifiers, and concentrators (combine all signals).
 
 Layer 2: Data Link
 
@@ -1069,6 +1089,12 @@ Layer 2 protocols include:
 
 Layer 2 devices include bridges that connect networks together with no concern for traffic crossing the bridge. Switches also exist at the Layer 2 level for forwarding packets to the intended recipient.
 
+A collision domain is the group of networked systems that could cause a collision if two or more of the systems transmit simultaneously. Collision domains are dviided by Layer 2 or above devices.
+
+ARP is susceptible to cache poisoning or spoofing where an attacker can insert bogus information in the cache or response. Gratuitous ARP or unsolicited ARP is when a system announces or supplies a MAC to IP mapping even when not requested. Static ARP entries can be injected to override dynamic entries. Switch port security is the best defense against ARP-based attacks.
+
+TCP/IP is a multilayer protocol which is beneficial via the encapsulation mechanism of HTTP encapsulating TCP encapsulating IP encapsulating Ethernet, and this can be extended for other protocols or layers as well. However, encapsulation can be abused to mask or tunnel malicious traffic. This can also allow for unauthorized network traffic to jump between virtual local area networks (VLAN). The drawbacks of multilayer protocols are that covert channels are allowed, filters can be bypassed, and logically imposed network segment boundaries can be overstepped. Distributed Network Protocol 3 (DNP3) is used in electric and water utility and management industries to support communication between data acquisition and system control equipment.
+
 Protected Extensible Authentication Protocol (PEAP) is an improved version of EAP as it encapsulates EAP in a TLS tunnel. EAP-TLS includes both client and seerver certificates and has high security and industry support without being proprietary.
 
 Layer 3 is the network layer where data exists as packets and datagrams. It is responsible for fragmentation and IP addressing.
@@ -1079,6 +1105,8 @@ Layer 3 protocols include:
 * IPsec - A tunneling protocol that supports authentication of other Layer 3 devices as well as encryption.
 * OSPF - Open Shortest Path First is a routing protocol used by routers to manage and direct network traffic properly and efficiently.
 * BGP - Border Gateway Protocol
+
+These can roughly be divided between interior and exterior routing protocols. Interior routing protocols generally consist of distance vector (a list of destination networks measured by distance to the next hop) such as Routing Information Protocol (RIP) and Interior Gateway Routing Protocol (IGRP) or link state (router characteristics and cost to use) such as Open Shortest Path First (SPF) and Intermediate System to Intermediate System (IS-IS). Enhanced Interior Gateway Routing Protocol (EIGRP) is a more advanced replacement of IGRP. Exterior routing protocols are path vectors that make next hop decisions based on the entire remaining path. Interior distance vector only considers the next hop, by contrast. Border Gateway Protocol (BGP) is the primary example of a path vector protocol.
 
 Layer 3 devices include:
 * Routers - connect and route network traffic based on IP addressing
@@ -1101,6 +1129,8 @@ Private network address spaces include:
 
 If networks were restricted to Class A ranges it could have 2^26 IP addresses, Class B would only have 2^16, and Class C would only have 2^8. Subnetting can be used to logically divide network host environments into discrete architecture models.
 
+A broadcast domain is the group of networked systems in which all other memebers receive a broadcast signal when a member of the group transmits it. It refers specifically to Ethernet broadcast domains and be divided by using any Layer 3 or higher device.
+
 Layer 4 Transport: transports data between services and consists of TCP or UDP. TCP is ordered and reliable while UDP is unreliable and unordered but much faster.
 
 TCP consists of a three-way handshake. First, device A sends a synchronization (SYN) request to device B alongside a session ID. evice B responds with an acknowledge (ACK) flag set with its own SYN request and random session ID number. Device A sends a final ACK flag including the incremented session ID number to increment the SYN value it received before.
@@ -1109,17 +1139,25 @@ To close the connection, device A sends an ACK plus FIN request. Device B would 
 
 The three-way TCP handshake can be hijacked if the server is spammed with an excessive level of SYN requests and overload the server. Ports equate to services and can provide specific functionality. Ports should only be opened if they are being used. Among the 65,535 available TCP and UDP ports three classes exist: well known (e.g. HTTP), registered (IANA-assigned), and dynamic/private/ephemeral which are easily interchangeable.
 
-The most common well-known ports are:
-* FTP - 21
-* SSH - 22
-* Telnet - 23
-* SMTP - 25
-* HTTP - 80
-* HTTPS - 443
+| Protocol Name                                | Abbreviation | Port(s)            | Protocol |
+|----------------------------------------------|--------------|--------------------|----------|
+| File Transfer Protocol                       | FTP          | 21                 | TCP      |
+| Secure Shell                                 | SSH          | 22                 | TCP      |
+| Telnet                                       | Telnet       | 23                 | TCP      |
+| Simple Mail Transfer Protocol                | SMTP         | 25                 | TCP      |
+| Dynamic Host Configuration Protocol          | DHCP         | 67, 68             | UDP      |
+| Trivial File Transfer Protocol               | TFTP         | 69 (do not use)    | UDP      |
+| Hypertext Transfer Protocol                  | HTTP         | 80                 | TCP      |
+| Internet Message Access Protocol             | IMAP4        | 143                | TCP      |
+| Hypertext Transfer Protocol Secure           | HTTPS        | 443                | TCP      |
+| Line Printer Daemon                          | LPD          | 515                | TCP      |
+| Network File System                          | NFS          | 2049               | TCP      |
+
+Simple Network Management Protocol (SNMP) is a standard network-management protocol supported by most network devices where the SNMP agent runs on UDP port 161 and the management console runs on UDP port 162.
 
 Layer 5 Session: supports interhost communication and maintains a logical connection between two processes on each end host. Ideal layer for identification and authentication:
 
-Conceptaully PAP, CHAP, and EAP can be labeled as Layer 5 in the OSI model even if they functionally run at Layer 2. In addition to these NetBIOS and RPC are other Layer 5 protocols.
+Conceptaully PAP, CHAP, and EAP can be labeled as Layer 5 in the OSI model even if they functionally run at Layer 2. In addition to these NetBIOS and RPC are other Layer 5 protocols. Communication sessions can be simplex (one-way communication), half-duplex (two-way, one at a time), or full-duplex (two-way, simultaneously).
 
 The circuit proxy firewall or gateway can be found at Layer 5. These can mask internal network traffic and activity from external parties.
 
@@ -1140,9 +1178,42 @@ Layer 7 devices include gateways and application-gateway firewalls.
 
 ---
 
-There are other pertinent details to understand about networking mangaement. Convergence refers to the ability of native IP networks to carry non-IP traffic via converged protocols. These include Fibre Channel over Ethernet (FCoE), Internet Small Computer Systems Interface (iSCI), and Voice over Internet Protocol (VoIP).
+Domain Name System (DNS) resolves domain names to equivalent IP addresses. Every registered domain name has an assigned authoritative name seerver. THe primary authoritative name server hosts the original editable zone file for the domain. Secondary authoritative name server can host read-only copies of hte zone file. The zone file is the collection of resource records about a specific domain. DNS operates over port 53 (TCP and UDP). Domain Name System Security Extensions (DNSSEC) is a security improvement to provide mutual certificate authentication and encrypted sessions during DNS operations. Non-DNS servers like client devices should use DNS over HTTPS (DoH) to create an encrypted session between devices during DNS operations. In late 2020, DoH was extended to include Oblivious DoH (ODoH) which adds a DNS proxy between the client and DNS resolver to make the requesting client's identity anonymous to the DNS resolver seerver.
 
-VoIP protocols include secure real-time transport protocols (SRTP) and Session Initiation Protocol (SIP). SRTP is the secure version of RTP and supports encryption, authentication, integrity, and replay attack protection. SIP is responsible for initiating, maintaing, and terminating voice and video sessions.
+DNS is susceptible to several vulnerabilities:
+* DNS poisoning can falsify DNS information sent to a client and misroute them to another system often by placing the information into a zone file or cache.
+* Rogue DNS servers can listen on network traffic and send false IP information including a query ID (QID) in the false reply
+* DNS Pharming is the malicious redirection of a valid website's URL to a fake website
+* Corrupt the IP configuration in a client to point to a bad DNS server by corrupting the DHCP
+* DNS query spoofing allows hackers to eavesdrop on client's queries to DNS servers
+* Proxy falsification can be injected in the middle to also compromise the integrity of DNS information
+
+Domains can also be compromised through the following attacks:
+* Domain hijacking is when the domain registrar information is compromised or manipulated through stolen credentials or other means
+* Typosquatting takes advantage of a mistyped domain
+* Homograph attacks use alphabetic similarities to substitute values and replace the domain
+* URL hijacking displays links to known sites but directs them to another place
+* Clickjacking embeds a hidden clickable overlay or frame to re-route to another destination
+  
+
+---
+
+Network storage solutions include:
+- **DAS (Direct-Attached Storage):** Storage directly connected to a single device, offering high performance but limited scalability and network accessibility.  
+- **NAS (Network-Attached Storage):** File-level storage accessible over a network using protocols like SMB, NFS, or AFP, supporting multi-user access with authentication controls.  
+- **SAN (Storage Area Network):** High-speed, block-level storage network using Fibre Channel or iSCSI, enabling shared storage across multiple servers with zoning and LUN masking.  
+- **FCoE (Fibre Channel over Ethernet):** Encapsulates Fibre Channel frames over Ethernet, reducing infrastructure costs while maintaining low-latency, high-speed storage networking.  
+- **MPLS (Multi-Protocol Label Switching):** High-performance routing protocol that directs data using labels instead of IP addresses, optimizing traffic flow and enhancing security.  
+- **iSCSI (Internet Small Computer Systems Interface):** Allows block-level storage access over IP networks, enabling cost-effective SAN deployment without dedicated Fibre Channel hardware.  
+
+Virtual SAN's (VSAN) have also been developed to combined multiple individual storage devices into a single consolidated network-accessible storage container. Software-designed storage (SDS) is a SDN version of SAN or NAS. Software-defined wide-area networks (SDWAN) is an evolution of SDN that can be used to manage the connectivity and control between distant data centers.
+---
+
+There are other pertinent details to understand about networking management. Convergence refers to the ability of native IP networks to carry non-IP traffic via converged protocols. These include Fibre Channel over Ethernet (FCoE), Internet Small Computer Systems Interface (iSCI), and Voice over Internet Protocol (VoIP).
+
+VoIP protocols include secure real-time transport protocols (SRTP) and Session Initiation Protocol (SIP). SRTP is the secure version of RTP and supports encryption, authentication, integrity, and replay attack protection. SIP is responsible for initiating, maintaining, and terminating voice and video sessions.
+
+Networks are usually organized into smaller organizational units, called microsegmentation. Network segmentation can help boost network performance, reduce communication problems, and provide security. Each zone is separate from one another via internal segmentation firewalls (ISFWs), subnets,, VLANs, or other virtual networking solutions. Virtual eXtensible LAN (VXLAN) is an encapsulation protocol that enables VLAN's to be stretched across subnets and geographic distances.
 
 ---
 
@@ -1162,37 +1233,72 @@ Radio frequency management is concerned with the placement of wireless network d
 
 802.11 describes the wireless protocol family.
 
-| **802.11 Standard** | **Frequency Band(s)**          | **Top Speed (Theoretical)** |
-|---------------------|--------------------------------|-----------------------------|
-| 802.11 (original)   | 2.4 GHz                        | 2 Mbps                      |
-| 802.11a             | 5 GHz                          | 54 Mbps                     |
-| 802.11b             | 2.4 GHz                        | 11 Mbps                     |
-| 802.11g             | 2.4 GHz                        | 54 Mbps                     |
-| 802.11n (Wi-Fi 4)   | 2.4 GHz / 5 GHz                | Up to 600 Mbps              |
-| 802.11ac (Wi-Fi 5)  | 5 GHz                          | Up to ~3.46 Gbps*           |
-| 802.11ax (Wi-Fi 6)  | 2.4 GHz / 5 GHz (6 GHz\*)       | Up to 9.6 Gbps              |
+| **802.11 Standard** | **Frequency Band(s)**          | **Top Speed (Theoretical)** | **Wi-Fi Alliance Name** |
+|---------------------|--------------------------------|-----------------------------|-------------------------|
+| 802.11 (original)   | 2.4 GHz                        | 2 Mbps                      | N/A                     |
+| 802.11a             | 5 GHz                          | 54 Mbps                     | Wi-Fi 2                 |
+| 802.11b             | 2.4 GHz                        | 11 Mbps                     | Wi-Fi 1                 |
+| 802.11g             | 2.4 GHz                        | 54 Mbps                     | Wi-Fi 3                 |
+| 802.11n             | 2.4 GHz / 5 GHz                | Up to 600 Mbps              | Wi-Fi 4                 |
+| 802.11ac            | 5 GHz                          | Up to ~3.46 Gbps*           | Wi-Fi 5                 |
+| 802.11ax            | 2.4 GHz / 5 GHz (6 GHz\*)      | Up to 9.6 Gbps              | Wi-Fi 6                 |
 
 \* **Note**: 802.11ax (Wi-Fi 6) can also be extended to the 6 GHz band (Wi-Fi 6E), which offers additional channels but has the same maximum theoretical speeds as standard 802.11ax.
 
+Wi-Fi can be deployed either ad hoc mode (peer-to-peer Wi-Fi) or infrastructure mode means a wireless access point (WAP) is required as wireless network access is restricted. Infrastructure mode has several variations including standalone (a WAP connects wireless entities to one another), wired extension mode when a WAP acts as a connection point to link wireless clients to the wired network. An enterprise extended mode deploy is when multiple WAP's conenct a large physical area to the same wired network. Each WAP uses the same extended service set identifier (ESSID) so that clients can roam the area while maintaining network connectivity. A bridge mode is when wireless connections are used to link two wired networks. A base station can either be a fat access point (full managed wireless system) or a thin access point (requires external management by a wireless controller). Fat access points require per device configuration and not flexible at scale. Controller-based WAP's are thin access points while standalone WAP's are fat access points.
+
+Wireless networks are assigned a service set identifier (SSID) to differentiate one wireless network from another. Extended service set identifier (ESSID) is the name of a wireless network when a WAP is used, while a basic service set identifier (BSSID) is used to differentiate multiple base stations supporting an ESSID. Independent service set identifier (ISSID) is used by Wi-Fi Direct or ad hoc mode. If a wireless client knows the SSID, they can configure their wireless NIC to communicate with the associated WAP. SSID's are defined with well-known vendor defaults and so should be modified before deployment. The WAP broadcasts the SSID using a becaon frame that allows any wireless NIC within range to see the wireless network and make connecting as simple as possible.
+
 Wireless security solutions have evolved over time and have included the following
 
-| **Protocol** | **Release Year** | **Access Control**            | **Authentication**                        | **Encryption**                  | **Integrity**                       |
-|--------------|------------------|--------------------------------|-------------------------------------------|---------------------------------|--------------------------------------|
-| **WEP**      | 1997             | Basic passphrase, MAC filtering| Open System or Shared Key                 | RC4 (40/104-bit keys)           | CRC-32 (weak)                       |
+| **Protocol** | **Release Year** | **Access Control**             | **Authentication**                        | **Encryption**                   | **Integrity**                       |
+|--------------|------------------|--------------------------------|-------------------------------------------|----------------------------------|-------------------------------------|
+| **WEP**      | 1997             | Basic passphrase, MAC filtering| Open System or Shared Key                 | RC4 (40/104-bit keys)            | CRC-32 (weak)                       |
 | **WPA**      | 2003             | 802.1X (Enterprise) or PSK     | 802.1X/EAP (Enterprise) or Pre-Shared Key | TKIP (Temporal Key Integrity)    | Michael (TKIP-integrated integrity) |
 | **WPA2**     | 2004             | 802.1X (Enterprise) or PSK     | 802.1X/EAP (Enterprise) or Pre-Shared Key | AES-CCMP (with TKIP fallback)    | CCMP (robust integrity)             |
-| **WPA3**     | 2018             | 802.1X (Enterprise) or SAE     | SAE (Simultaneous Authentication of Equals) or 802.1X/EAP | AES-CCMP or GCMP               | GCMP (enhanced integrity)           |
+| **WPA3**     | 2018             | 802.1X (Enterprise) or SAE     | SAE (Simultaneous Authentication of Equals) or 802.1X/EAP | AES-CCMP or GCMP | GCMP (enhanced integrity)           |
 
 There are three ways to authenticate to a wireless network:
 1. Open authentication (any device can connect)
 2. Shared key (a pre-shared network key is used and shared to devices directly)
 3. EAP is used (authentication requires an authenticated key exchange mechanism)
 
-EAP can have one-factor authentication like EAP-MD5, LEAP, PEAP-MSCHAP, TTLS-MSCHAP, EAP-SIM or two-factor EAP-TLS, TTLS with OTP, and PEAP-GTC.
+The main encryption technologies are temporal key integrity protocol (TKIP) was a quick fix when WEP vulnerabilities were discovered. Counter-Mode-CBC-MAC Protocol (CCMP) uses Advanced Encryption Standard (AES) with 128-bit keys, used in WPA2. No attacks yet have been successfuly against AES-CCMP encryption. WPA2 key exchange can be exploited however through KRACK or Dragonblood attacks. WPA2/802.11i defined to two authentication options: preshared or personal key (PSK/PER) and IEEE 802.1X or enterprise (ENT). PSK uses a static fixed password whiel ENT leverages and extends an existing auth service such as RADIUS or TACACS+.
 
-The main encryption technologies are temporal key integrity protocol (TKIP) was a quick fix when WEP vulnerabilities were discovered. Counter-Mode-CBC-MAC Protocol (CCMP) uses Advanced Encryption Standard (AES) with 128-bit keys, used in WPA2.
+Wi-Fi Protected Access 3 (WPA3) was finalized in 2018. WPA3-ENT uses 192-bit AES CCMP encryption while WPA3-PER uses 128-bit. WPA3-PER replaces preshared key auth with Simultaneous Authentication of Equals (SAE) which is a zero-knowledge proof process knwon as Dragonfly Key Exchange. WPA3 also implements IEEE 802.11w-2009 management frame protection so that network management can have confidentiality, integrity, authentication of source, and replay protection.
 
-TKIP implements a MIC often referred to as "Michael".
+ENT authentication is also known as 802.1X/EAP. EAP can have one-factor authentication like EAP-MD5, LEAP, PEAP-MSCHAP, TTLS-MSCHAP, EAP-SIM or two-factor EAP-TLS, TTLS with OTP, and PEAP-GTC. EAP is an authentiation framework whcih can be extended to LEAP (Cisco option that is weak and deprecated) or PEAP (open source tunneling solution).
+
+Wi-Fi Protected Setup (WPS) is a security standard for wireless networks. WPS is enabled by default on most WAP's but should be disabled in the deployment process because WPS can be brute-forced in less than six hours.
+
+WAP's can be further secured by using a MAC filter to limit or restrict access to approved devices, however this is a static solution that is not very scalable.
+
+When deploying a Wi-Fi network these steps are general best practice:
+1. Update firmware
+2. Change the default administrator password
+3. Enable WPA2 or WPA3 encryption
+4. Enable ENT authentication or PSK/SAE
+5. Change the SSID
+6. Change the wireless MAC address (hide the OUI and device make/model)
+7. Decided whether to disable SSID broadcast
+8. Enable MAC filtering for small number of wireless clients
+9. Consider using static IP address or DHCP with reservations
+10. Treat wireless as external or remote access, separate WAP from wired network using a firewall
+11. Monitor all WAP-to-wired network communications with a NIDS
+12. Deploy a WIDS and WIPS
+13. Consider requiring a VPN across a Wi-Fi link
+14. Implement a captive portal
+15. Track/log all wireless activities and events.
+
+---
+
+There are five LAN media access technologies to avoid or prevent transmission collisions.
+
+1. Carrier-Sense Multiple Access (CSMA) - The host waits listens to LAN and sends a transmission if it is not in use. If no acknowledgement, it retries.
+2. Carrier-Sense Multiple Access with Collision Detection (CSMA/CD) - During transmission, the host listens for a collision. If a collision is detected, the host jams the signal. All hosts wait a random time and try again.
+3. Carrier-Sense Multiple Access with Collision Avoidance (CSMA/CA) - Host has two connections to LAN media (inbound and outbound). Permission must be granted before a signal can be transmitted.
+4. Token passing - Used by ring topology networks where only the host with the token is allowed to transmit data.
+5. Polling - A primary syustem polls secondary systems for pending data transmissions, this is the inverse of the CSMA/CA where the primary proactively offers permission rather than the secondary proactively requesting it.
 
 ---
 
@@ -1210,7 +1316,39 @@ WAN protocols include:
 * Asynchronous Transfer Mode (ATM) - Builds on top of Frame Relay and supports very high-speed transmission needs.
 * Multi-Protocol Label Switching (MPLS) - At the forefront of current WAN connectivity solutions. It offers network connectivity that includes built-in security.
 
-## 4.2 - Securee network components
+---
+
+Wireless communications depend upon radio waves to transmit signals over a distance. The radio spectrum is differentiated via frequency. Frequency is a measurement of hte number of wave oscillations within a specific time using the unit Hertz (Hz) to indicate oscillations per second. Radio waves have a frequency between 3 Hz and 300 GHz.
+
+Three spectrum-use techniques were employed to manage radio wave spectra. Frequency Hopping Spread Spectrum (FHSS) was an early implmentation that transmits data in series across a range of frequencies, but only one at a time. Direct Sequence Spread Spectrum (DSSS) employs frequencies simultaneously in parallel using a special encoding chipping code to reconstruct data even if it is distorted during transmission. Orthogonal Frequency-Division Multiplexing (OFDM) employs a digital multicarrier modulation scheme that allows for tightly compacted transmission. OFDM requires a smaller frequency set but offers greater data throughput.
+
+IEEE 802.5, better known as Bluetooth, uses the 2.4 GHz frequency. It plaintext by default but can be encrypted via specialty transmitters. Bluetooth Low Energy (BLE) is a low-power device derived from BlueTooth that can be used for IoT or edge devices.
+
+Bluetooth is vulnerable to a number of attacks:
+* Bluesniffing: network packet capturing
+* Bluesmacking: DoS signal jamming
+* Bluejacking: Unsolicited messages
+* Bluesnarfing: Unauthorized access of data when paired or if the MAC address is known
+* Bluebugging: Remote control over hardware or software via Bluetooth
+
+Radio Frequency Identification (RFID) is a tracking technology based on the ability to power a radio transmitter using current generated in an antenna. It can be triggered or powered from a considerable distance. 
+
+Near-field communication (NFC) is a standard that establishes radio communications between devices in close proximity using a field-powered or field-triggered device.
+
+There are several common wireless attacks:
+* War driving: Using a detection or scanning tool to look for wireless networking signals.
+* Rogue Access Points: An unauthorized or shadow WAP
+* Evil twin: A false access point that cna automatically clone the identity of an authorized access point
+* Disassociation: Disassociation frames disconnect a client from one WAP as it is connecting to another WAP in the same ESSID network coverage area. Several possible attack vectors which could be mitigated by a WIDS:
+  * For networks with hidden SSID's, the MAC address can be spoofed triggering a Reassociation Request that exposes the SSID
+  * Repeated disassociation frames can be orchestrated to cause DoS
+  * Jam the client connection and hijack their session
+  * Disconnect the client using a disassociation frame then use an evil twin WAP to have the client connect to the wrong WAP
+* Prevent or interfere with communications by decreasing the effective signal-to-noise ratio
+* Initialization Vector (IV) Abuse when it is too short or exchanged in plaintext
+* Replay attacks can retransmit captured communication to attempt to hijack or piggy back off a valid session
+
+## 4.2 - Secure network components
 
 Good network architecture consists of a combination of the following components:
 * Defense in depth - multiple layers of protection
@@ -1223,12 +1361,16 @@ Good network architecture consists of a combination of the following components:
 * Firewall - A logical entity that enfroces security rules between two or more networks.
 
 Firewall technologies can take on a number of forms today;
-* Packet filtering - Examines packet headers against access control lists (ACLs) to accept or deny access. Exists at Layeer 3 and is the simplest and fastest.
+* Packet filtering - Examines packet headers against access control lists (ACLs) to accept or deny access. Exists at Layer 3 and is the simplest and fastest.
 * Stateful packet filtering - Packet state and context data is stored and updated dynamically for better tracking (RPC, UDP). Layer 3 and 4, somewhat complex but still fast.
 * Circuit-level proxy - An agnostic circuit between client or server (e.g. SOCKS). Exists at Layer 5 with more complexity and latency. Filters sessions based on rules.
 * Application-level proxy - Inspects packet payload based on the application, but can be a performance bottleneck. Layer 7 with highest latency of the four, filters based on data payload.
+* Next-Generation Firewalls (NGFWs) - a multifunction device (MFD)  or unified threat threat management (UTM) tool that offers a security suite in addition to the firewall
+* Internal Segmentation Firewalls (ISFW) - a firewall deployed between internal network segments.
 
 Some firewall technologies include context-based access controls (CBAC) to intelligently filter TCP and UDP packets based on application layer protocol session information.
+
+Proxy servers are a variation of application-level firewalls or circuit-level firewalls. A proxy server can mediate between clients and servers. Proxies most often provide clients on a private network with Internet access while protecting the identity of the clients. A forward proxy is a standard proxy that handles queries from internal clients when accessing outside services. A reverse proxy provides the opposite function of a forward proxy by handling inbound requests from external systems.
 
 Aside from the general firewall technologies, there are also various architectures that could be implemented:
 * A packet filtering architecture simply consists of a router between the client and the server.
@@ -1254,6 +1396,8 @@ Honeypots (hosts) and honeynets (two or more honeypots networked together) are t
 Honeypots should never be used to entrap individuals, they should only entice.
 
 Endpoint security is concerned with the specific protection of client devices on corporate networks. Data leak prevention (DLP) and network access control (NAC) solutions restrict access and can help fortify device endpoints.
+
+NAC is intended to prevent or mitigate attacks directly and zero-day indirectly, to enforce security policy throughout the network, and to use identities to perform access control. NAC can be divided into a preadmission philosophy (all security requirements must be met to use the network) or postadmission philosophy (allow or deny access based on user activity)
 
 ## 4.3 - Implement Secure Communication Channels According to Design
 
