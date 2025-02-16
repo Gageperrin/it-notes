@@ -711,6 +711,14 @@ Trusted platform modules (TPM) are pieces of hardware that implement an ISO stan
 
 Email is also a vector for encryption. Phil Zimmerman's Pretty Good Privacy (PGP) is a secure email system from 1991 that combines the CA hierarchy with a "web of trust". Another protocol and the current de facto standard is Secure/Multipurpose Internet Mail Extension (S/MIME) which uses the RSA encryption algorithm but because of technical limitations is not supported by default in most email providers.
 
+Email infrastructure rests on email servers using Simple Mail Transfer Protocol (SMTP) on TCP port 25 to accept messages from clients, transport them to other servers, and deposit them in a user's inbox. Email clients retrieve email from their inboxes using either Post Office Protocol (POP3) on TCP port 110 or Internet Message Access Protocol (IMAP v4) on TCP port 143. Email systems depend on the X.400 standard for addressing and handling messages.
+
+SMTP servers should be configured to avoid turning into an open relay which can be targeted by spammers.
+
+Other email auth mechanisms include DomainKey Identified Mail (DKIM) to assert that valid mail is sent by an organization through verification of domain name identity, Sender Policy Framework (SPF) to protect against spam or email spoofing by checking that inbound messages originate from a hsot authorized by the SMTP domain owner to send messages, Domain Message Authentication Reporting and Conformance (DMARC) as a DNS-based email authentication system, and STARTTLS that attempts to establish an encrypted TLS connection on the email server if the remote server supports it (by default uses TCP port 587).
+
+
+
 ## 3.5 - Assess and mitigate the vulnerabilities of security architectures, designs, and solution elements
 
 There are a number of common vulnerabilities across security architectures.
@@ -1029,6 +1037,8 @@ Layer 1: Physical exists as binary data, zeros and ones. Devices can conect via 
 
 Twisted pair cable is when a pair of wires are twisted together and can be shielded (STP) or unshielded (UTP). Most people are familiar with coaxial cable for their home networks which is a single strand of copper wire sheathed in a protective coating. Fiber optic uses light pulses to represent zeroes and ones. Fiber optic is immune to the problem of crosstalk that electrical-based wiring like twisted pairs and coaxial can suffer from.
 
+Synchronous Digital Hierarchy (SDH) and Synchronous Optical Network (SONET) are fiber-optic networking standards. SONET measures bandwidth using Synchronous Transport Signals (STS) while SDH uses Synchronous Transport Modules (STM). STM's are always 1/3 of the equivalent STS number.
+
 Coaxial cables can have problems when the cable is bent past the maximum arc radius, thus breaking the center conductor, deploying the coax cable in a length greater than its maximum recommended length, not properly terminating the ends of a coax cable with a 50 ohm resistor, or not grounding at least one end of a terminated coax cable.
 
 Twisted-pair cables can suffer from incorrect installation for twisted-pair cabling, deploying an excessively long cable, or using unshielded twisted-pair (UTP) when there is significant interference (better to use shielded twisted-pair (STP)).
@@ -1072,20 +1082,30 @@ The Data Link layer translates between the Physical Layer's bits and the Network
 
 Address Resolution Protocol (ARP) and Reverse Address Resolution Protocol (RARP) are used to translate between IP addresses and MAC addresses. One point of attack is ARP poisoning which can spoof or masquerade device mappings.
 
-Network communications can either be circuit-switched or packet-switched. Circuit-switched networks such as the Public Switched Telephone Network (PSTN) establish connection routes between each party at the end of the communication. Circuits can be switched to establish connections as needed. For a very long time this was done via analog connections. Now VoIP or IP telephony technology allows digital data to be transmitted over analog connections.
+Switches operate in four modes: learning, forwarding, dropping, and flooding. When learning, the inbound Ethernet frame is evaluated to check the source MAC address against the content addressable memory (CAM) table. The CAM table is held in switch memory and maps MAC addresses to port numbers.
 
-Packet-switched networks break up data into smaller packets can transfer it across a network. Switches transfer these packets from one end to the otehr.
+Network communications can either be circuit-switched or packet-switched. Circuit-switched networks such as the Public Switched Telephone Network (PSTN) establish connection routes between each party at the end of the communication. Circuits can be switched to establish connections as needed. For a very long time this was done via analog connections. Now VoIP or IP telephony technology allows digital data to be transmitted over analog connections. Most systems today use packet-switching. Packet-switched networks break up data into smaller packets can transfer it across a network. Switches transfer these packets from one end to the other.
+
+A virtual circuit is a logical pathway created over a packet-switched network between two endpoints. These can either be permanent virtual circuits (PVC's) and switched virtual circuits (SVC's). A PVC is a dedicated leased line that is always available, while a SVC has to be created each time it is needed.
 
 Layer 2 protocols include:
 * L2F - Layer 2 Forwarding tunneling protocol
-* PPTP - Point-to-Point Tunneling Protocol. Three auth types:
+* PPP - Point-to-Point Tunneling Protocol. It replaced the Serial Line Internet Protocol (SLIP) and is documented in RFC 1661. It has three auth types:
   1. Password Authentication Protocol (PAP) - simplest and least secure
   2. Challenge Handshake Authentication Protocol (CHAP) - More secure as password is encrypted before being sent
-  3. Extensible Authentication Protocol (EAP) - Most robust and can be combined with other protocols
+  3. Extensible Authentication Protocol (EAP) - Is actually a framework with over 40 methods.
 * L2TP - Layer 2 Tunneling Protocol
 * SLIP - Serial Line Internet Protocol (older used for remote access with modem connections)
 * ARP - IP to MAC
 * RARP - MAC to IP
+
+Primary EAP Derivatives:
+* Lightweight Extensible Authentication Protocol (LEAP) is a Cisco proprietary alternative to TKIP for WPA (developed to address TKIP vulnerabilities before 802.11i/WPA was ratified as a standard). LEAP is legacy and should not be used.
+* Protected Extensible Authentication Protocol (PEAP) encapsulates EAP in a TLS tunnel. Supports mutual authentication.
+* Subscriber Identity Module (EAP-SIM) authenticates mobile devices over the Global System for Mobile Communications (GSM) network. Each device is issued a subscriber identity module (SIM) card.
+* Flexible Authentication via Secuere Tunneling (EAP-FAST) is a Cisco protocol replacement for LEAP but is also obsolete with the introduction of WPA2.
+* EAP Protected One-Time Password (EAP-POTP) - Supports OTP tokens for MFA.
+* EAP Transport Layer Securlity (EAP-TTLS) - Extends EAP-TLS by creating a VPN tunnel before authetnication (client's username not transmitted in cleartext).
 
 Layer 2 devices include bridges that connect networks together with no concern for traffic crossing the bridge. Switches also exist at the Layer 2 level for forwarding packets to the intended recipient.
 
@@ -1112,6 +1132,8 @@ Layer 3 devices include:
 * Routers - connect and route network traffic based on IP addressing
 * Layer 3 switches - route devices on the same virtual local area network (VLAN)
 * Packet filtering firewalls - devices that make decisions based upon the header portion of a datagram
+
+A VLAN is a hardware-imposed network segmentation created by Layer 2 switches. By default all ports on a switch are part of VLAN 1. VLANs require a routing function by either an external router or internal software. They treated like subnets but are not subnet. Distributed virtual switches are becoming most common in cloud and virtual environments.
 
 IPv4 addresses are compromised of four 32-bit numbers separated by dots. Each number represents an 8-bit octet. That valid range for them is 0-255. Each packet header contains routing details like source and destination IP addresses. IPv4 is limited to just under 4.3 billion addresses. Network Address Translation (NAT) is leveraged by ISP's to translate private network IP ranges into publicly routable IP addresses. 
 
@@ -1215,6 +1237,10 @@ VoIP protocols include secure real-time transport protocols (SRTP) and Session I
 
 Networks are usually organized into smaller organizational units, called microsegmentation. Network segmentation can help boost network performance, reduce communication problems, and provide security. Each zone is separate from one another via internal segmentation firewalls (ISFWs), subnets,, VLANs, or other virtual networking solutions. Virtual eXtensible LAN (VXLAN) is an encapsulation protocol that enables VLAN's to be stretched across subnets and geographic distances.
 
+One common misunderstanding is that VoIP is inherently more secure than PSTN because transmissions are encrypted, but VoIP encryption is only supported within one single VoIP provider. Gateways between VoIP providers often include unencrypted traffic over the PSTN.
+
+Private branch exchange (PBX) is a telephone switching for a private organization at the end of a PSTN network. PBX systems are subject to fraud or avuse who can gain access to voice mailboxes, redirect messages, block access, or redirect calls. PBX systems should be configured with the same level of security as other networked system and can have direct inward system access (DISA) tools installed and configured to add authentication restrictions.
+
 ---
 
 Network attacks can take on a variety of forms and can be categorized as network attacks or network assessments (discovery).
@@ -1267,7 +1293,7 @@ The main encryption technologies are temporal key integrity protocol (TKIP) was 
 
 Wi-Fi Protected Access 3 (WPA3) was finalized in 2018. WPA3-ENT uses 192-bit AES CCMP encryption while WPA3-PER uses 128-bit. WPA3-PER replaces preshared key auth with Simultaneous Authentication of Equals (SAE) which is a zero-knowledge proof process knwon as Dragonfly Key Exchange. WPA3 also implements IEEE 802.11w-2009 management frame protection so that network management can have confidentiality, integrity, authentication of source, and replay protection.
 
-ENT authentication is also known as 802.1X/EAP. EAP can have one-factor authentication like EAP-MD5, LEAP, PEAP-MSCHAP, TTLS-MSCHAP, EAP-SIM or two-factor EAP-TLS, TTLS with OTP, and PEAP-GTC. EAP is an authentiation framework whcih can be extended to LEAP (Cisco option that is weak and deprecated) or PEAP (open source tunneling solution).
+ENT authentication is also known as 802.1X/EAP. EAP can have one-factor authentication like EAP-MD5, LEAP, PEAP-MSCHAP, TTLS-MSCHAP, EAP-SIM or two-factor EAP-TLS, TTLS with OTP, and PEAP-GTC. EAP is an authentiation framework whcih can be extended to LEAP (Cisco option that is weak and deprecated) or PEAP (open source tunneling solution). 802.1X is often associated with wireless networking but can be used with any form of network authentication.
 
 Wi-Fi Protected Setup (WPS) is a security standard for wireless networks. WPS is enabled by default on most WAP's but should be disabled in the deployment process because WPS can be brute-forced in less than six hours.
 
@@ -1403,7 +1429,7 @@ NAC is intended to prevent or mitigate attacks directly and zero-day indirectly,
 
 There are two primary strategies to protect data traveling over networks: link encryption (tunneling) and end-to-end encryption (e.g. TLS).
 
-Remote access security is concerned with controls for remote access over insecure/public networks. VPN solutions are generally utilized to protect remote access traffic. VPNs are tunneling protocols with encryption; if there is no encryption, it is not a VPN, only a tunnel.
+Remote access security is concerned with controls for remote access over insecure/public networks. VPN solutions are generally utilized to protect remote access traffic. VPNs are tunneling protocols with encryption; if there is no encryption, it is not a VPN, only a tunnel. VPN operates in either transport mode where the data payload is encrypted but the IP and IPSec headers are not or tunnel mode where the IP header is also encrypted. Transport mode is often referred to as host-to-host or end-to-end VPN. Tunnel mode is often referred to as site-to-site VPN or link encryption VPN.
 
 Tunneling encapsulates a datagram within another. It does not provide confidentiality unless encryption is applied.
 
@@ -1429,7 +1455,12 @@ Common Tunneling Protocols:
 | **SOCKS**                       | No                                 | Layer 5 (Session)     |
 | **SSH (Secure Shell Tunneling)** | Yes                                | Layer 7 (Application) |
 
-IPsec is preferred for VPNs and is embedded in IPv6 by default, offering authentication via Authentication Header (AH) and encryption via Encapsulating Security Payload (ESP).
+Internet Protocol Security (IPsec) is a standard of IP security extensions as an add-on for IPv4 and natively integrated in IPv4. It is a collection of protocols including: 
+* Authentication Header (AH) - assurance of message integrity and nonrepudiation
+* Encapsulating Security Payload - confidentiality and integrity of payload contents. it provides encryption, limited auth, and prevents replay attacks
+* Hash-based Message Authentication Code (HMAC) - primary hashing or integrity mechanism
+* IP Payload Compression (IPComp) compression tool used prior to ESP to keep up with wire speed transmission
+* Internet Key Exchange (IKE) manages keys and consists of three elements: (1) OAKLEY to generate and exchange keys, (2) Secure Key Exchange Mechanism (SKEME) similar to a digital envelope for keys, and Internet Security Association and Key Management Protocol (ISAKMP) to organize and manage encryption keys. Some systems uses ECDHE for key exchange.
 
 IPsec can operate in:
 - **Transport Mode**: Uses the header of the original packet with the AH or ESP header, protecting the payload.
