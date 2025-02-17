@@ -652,7 +652,7 @@ The take-grant model employs a directed graph which dictates how rights can be p
 3. Create rule: Allow a subject to creeate new rights
 4. Remove rule: Allow a subject to remove the rights it has
 
-An access control matrix is a table of subjects and objects that indicates the actions or funcitons that each subject cna perform on each object.
+An access control matrix is a table of subjects and objects that indicates the actions or funcitons that each subject can perform on each object. Capability tables are a way to identify privileges assigned to subjects.
 
 A central processing unit (CPU) is the brain of a computer that processes all of the instructions. It operates through four steps of fetching, decoding, executing, and storing. CPU's operate in one of two processor states: the supervisor or problem state. These states are privilege levels (i.e. restrictions on the operations that can be performed). The supervisor state has a higher privilege level and is typically where the system kernel runs, allowing full access to all the instructions and capabilities of a CPU. The problem state is a lower privilege level with limited access to CPU instructions and is the standard operating mode of a CPU. It is called the problem state because that is the fundamental role of the CPU, to solve problems.
 
@@ -982,8 +982,10 @@ Cryptographic attacks tend to focus on retrieving information or executing actio
 * A dictionary attack will use freqeuency analysis to brute force a password. Rainbow tables are similar in that this stores the hashes of the most common passwords. 
 * Rainbow tables can be mitigated by using a random salt value that is appended to a password before it is hashed. A pepper value may also be used but these are less secure as this is a shared value that is appended to all passwords in the system. 
 * A birthday attack attempts to identify hashing collisions to access a system. 
+* Spraying attack attempts to bypass lockouts controls by brute forcing password until lockout then iterating to the next user and cycling back when the lockout expires.
+* Credential stuffing attacks have access to a password on one site and attempt to test it against other known sites using the same username/password pairign.
 * Purchase key attacks (bribery) or rubber hose attack (duress) are social engineering forms of cryptographic attacks. 
-* Kerberos attacks focus specifically focused on using information like password hashes to generate a valid Kerberos ticket that can be used to bypass authentication. 
+* Kerberos attacks focus specifically focused on using information like password hashes to generate a valid Kerberos ticket that can be used to bypass authentication. It is also possible to hijack tickets either a silver ticket captured from the NTLM hash of a service account used to create a TGS ticket or worst case scenario a golden ticket which is the hash of the Kerberos service account (KRBTGT) and can have nearly unrestricted access.
 * A ransomware attack encrypts or locks down a user's system or data until certain demands are met. 
 * A fault injection attack attempts to leverage normally legitimate fault injections to modify hardware or software system behavior.
 * A statistical attack exploits statistical vulnerabilities such as floating-point errors.
@@ -1546,11 +1548,9 @@ The intersection of these two error types is the **Crossover Error Rate (CER)**,
 SSO improves user experience and reduces vulnerabilities from weaker authentication systems but introduces a **single point of failure**.
 
 **Kerberos** is a widely used SSO authentication protocol:
-- The client sends an initial message to the **Authentication Service (AS)**.
-- The AS replies with a message encrypted using the user's password:
-  - Ticket Granting Ticket (TGT).
-  - Ticket Granting Service's (TGS) key.
-- The client decrypts the message using their password and generates new tickets.
+- The client sends an initial message to the **Authentication Service (AS)** contained within the Key Distribution Center (KDC).
+- The KDC verifies the useranme against hte known crendentials. It generates a session key that will be used by the client and the Kerberos server against the Ticket Granting Service (TGS), encrypted with a hash of the user's password. It also includes an encrypted and timestamped Ticket Granting Ticket (TGT):
+- The client decrypts the message using their password, installs the TGT for use until it expires, then requests service tickets from the KDC using its TGT.
 - The client sends the TGT and new tickets to the TGS.
 - The TGS verifies the message and returns an encrypted **Service Ticket** and key.
 - The client uses the Service Ticket to authenticate with the service.  
@@ -1562,6 +1562,8 @@ SSO improves user experience and reduces vulnerabilities from weaker authenticat
 **SESAME** is an alternative to Kerberos:
 - Supports asymmetric encryption.
 - Less widely adopted due to Kerberos's established presence.
+
+**RADIUS** Remote Authentication Dial-in User Service centralized authetnication for remote access connections. The network access server is the RADIUS client which then authenticates against the RADIUS server. It provides full AAA. RADIUS only encryts the password exchange by default, RADIUS/TLS or RadSec is needed to encrypt the entire session.
 
 A **Completely Automated Public Turing test to tell Computers and Humans Apart (CAPTCHA)** prevents automated exploitation of systems.
 
@@ -1584,7 +1586,8 @@ Federated Identity Management (FIM) relies on trust relationships between identi
 - **SAML**: Provides authentication and authorization.
 - **WS-Federation**: Similar to SAML with both authentication and authorization.
 - **OpenID**: Focuses on authentication.
-- **OAuth**: Focuses on authorization.
+- **OAuth**: An authorization framework, not an authentication protocol
+- **OpenID Connection (OIDC)**: An authentication layer on top of the OAuth 2.0 authorization framework. Uses JWT with scopes issued via API calls. It bundles both authentication and authorization.
 
 SAML Workflow
 1. The user requests access to the service provider.
@@ -1595,7 +1598,7 @@ SAML Workflow
 6. The service provider approves access.
 
 **SAML Terminology**:
-- **Assertion**: Covers authentication, authorization, and attributes. Written in XML.
+- **Assertion**: Three types including authentication, authorization, and attributes. Written in XML.
 - **Protocol**: Defines how entities request or respond to requests.
 - **Bindings**: Maps SAML onto standard communication protocols.
 - **Profiles**: Specifies how SAML is used for specific business use cases.
@@ -1626,10 +1629,10 @@ Risks of IDaaS
 
 In the realm of authorization, there are several approaches:
 * Discretionary Access Control (DAC) means an asset owner determines who can access the asset.
-   - Role-Based Access Control (RBAC) is based on user roles
-   - Rule-based Access Control is based on a set of rules (e.g. ACL)
-   - Attribute-based Access Control is based on user attribute access
-* Mandatory Access Control is a system that determines rules based on labels. It is very rare and typically only seen in government organizations where confidentality is a primary factor
+* Role-Based Access Control (RBAC) is based on user roles
+* Rule-based Access Control is based on a set of rules (e.g. ACL)
+* Attribute-based Access Control is based on user attribute access, it is more advanced than Rule-based Access Control
+* Mandatory Access Control is a lattice-based system that determines rules based on labels. It is very rare and typically only seen in government organizations where confidentality is a primary factor In this case all subjects and objects must be assigned labels
 * Risk-Based Access Control assess the riskiness of the user's connection
 
 Non-discretionary access control means someone other than the owner gets to determine access such as an IT owner or admin.
