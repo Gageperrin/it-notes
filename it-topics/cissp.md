@@ -1516,24 +1516,38 @@ User identification should be:
 - Used securely
 
 Authentication can be based on:
-1. **What you know**: Passwords, security questions, etc.  
+Type 1. **What you know**: Passwords, security questions, etc.  
    - **Least secure** due to ease of compromise.
-2. **What you have**: One-time passwords (OTP), smart cards, etc.  
+Type 2. **What you have**: One-time passwords (OTP), smart cards, etc.  
    - **More secure** but still susceptible to theft or loss.
-3. **What you are**: Biometrics like fingerprints, facial recognition, voice, or handwriting.  
+Type 3. **What you are**: Biometrics like fingerprints, facial recognition, voice, or handwriting.  
    - **Most secure** method. Retina scans are the most secure of all biometrics.
 
+Context-Aware Authentication uses attributes such as user location, time, and device details to calculate a risk score for an authentication request.
+
+NIST SP-800-63B was updated in 2020 to advise these standards regarding passwords:
+* Passwords must be hashed
+* Passwords should not expire
+* Special characters should not be required
+* Users should be able to copy and paste passwords
+* Users should be able to use all characters in their passwords
+* Password systems should screen characters
+* Passwords should be between 8 and 64 characters
+
+PCI DSS 3.2.1 is different in this regard as it requires passwords expire at least every 90 days and be at least seven characters long.
+
 **Biometric authentication** must be designed to minimize:
-- **Type 2 errors**: False acceptance of unauthorized users.
-- **Type 1 errors**: False rejection of valid users.  
-The intersection of these two error types is the **Crossover Error Rate (CER)**, a key measure of biometric accuracy.
+- **Type 2 errors**: False acceptance of unauthorized users. Measured by False Acceptance Rate (FAR).
+- **Type 1 errors**: False rejection of valid users. Measured by False Rejection Rate (FRR).
+
+The intersection of these two error types is the **Crossover Error Rate (CER)**, a key measure of biometric accuracy. A lower CER means a more accurate biometric system.
+
 
 SSO improves user experience and reduces vulnerabilities from weaker authentication systems but introduces a **single point of failure**.
 
 **Kerberos** is a widely used SSO authentication protocol:
 - The client sends an initial message to the **Authentication Service (AS)**.
-- The AS replies with:
-  - Password encrypted as a key.
+- The AS replies with a message encrypted using the user's password:
   - Ticket Granting Ticket (TGT).
   - Ticket Granting Service's (TGS) key.
 - The client decrypts the message using their password and generates new tickets.
