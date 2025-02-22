@@ -1175,7 +1175,10 @@ The three-way TCP handshake can be hijacked if the server is spammed with an exc
 | Internet Message Access Protocol             | IMAP4        | 143                | TCP      |
 | Hypertext Transfer Protocol Secure           | HTTPS        | 443                | TCP      |
 | Line Printer Daemon                          | LPD          | 515                | TCP      |
+| Microsoft SQL Server                         | -            | 1433/1434          | TCP      |
+| Oracle                                       | -            | 1521               | TCP      |
 | Network File System                          | NFS          | 2049               | TCP      |
+| Remote Desktop Protocol                      | RDP.         | 3389               | TCP.     |
 
 Simple Network Management Protocol (SNMP) is a standard network-management protocol supported by most network devices where the SNMP agent runs on UDP port 161 and the management console runs on UDP port 162.
 
@@ -1646,6 +1649,8 @@ Identity life cycle is composed of provisioning, review, and revocation. Access 
 
 ## 6.1 - Design and validate assessment, test, and audit strategies
 
+NIST 800-53A provides guidelines for conducting security and privacy assessments.
+
 Validation identifies if the right product is being built, while verification identifies if the product is being built right by assessing completeness, correctness, and consistency.
 
 Security assessment and testing provides assurance around the architecture, application, or system, to validate and verify it meets requirements and best practices.
@@ -1724,6 +1729,10 @@ Automated Tools:
 Common Vulnerability Resources:
 - **Common Vulnerability and Exposures (CVE):** A dictionary of publicly disclosed vulnerabilities.
 - **Common Vulnerability Scoring System (CVSS):** Quantitatively measures vulnerabilities on a scale of 1 to 10.
+- **Common Configuration Enumeration (CCE):** A naming system for configuration issues.
+- **Common Platform Enumeration (CPE):** A naming system for OS, applications, and devices.
+- **Extensible Configuration Checklist Description Format (XCCDF):** Language for specifying security checklists.
+- **Open Vulnerability and Assessment Langauge (OVAL):** Language for describing security testing procedures.
 
 Log Management and Monitoring:
 - Regular log reviews identify errors and anomalies such as unauthorized modification or breaches.
