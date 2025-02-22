@@ -1254,7 +1254,12 @@ The four attack phases are reconnaissance, enumeration, vulnerability analysis, 
 
 Fragment attacks can either be overlapping fragmnets which attempt to use fragment overlap to bypass firewalls and IDS tools to get access to a target system or a teardrop TCP attack which sends packet of various sizes out of order with fake sequence numbers to corrupt a target system's ability to assemble a TCP packet and cause it to crash.
 
-IP spoofing attacks include a smurf attack where the attacker spoofs their IP address to match a victim's and pings a server so the victim's IP address is inundated with the response traffic. A fraggle attack sends a massive amount of UDP packets to a target system which would respond to the spoofed IP address. Neither of these are very common anymore.
+IP spoofing attacks include a smurf attack where the attacker spoofs their IP address to match a victim's and pings a server so the victim's IP address is inundated with the response traffic. A fraggle attack sends a massive amount of UDP packets to a target system which would respond to the spoofed IP address. Neither of these are very common anymore. A ping flood attack floods a victim with ping requests.
+
+Legacy attacks include:
+* Ping of Death: Oversized ping packets to crash the OS
+* Teardrop: Data packet fragments that are intensive to reassemble, crashing the system
+* Land: Spoofed SYN packet using the victim's IP address as both source and destination IP address
 
 A denial of service (DoS) attack is an attack that impedes or denies functionality of a system or network. A distributed denial of service attack involves multiple machines acting in unison.
 
@@ -1750,6 +1755,7 @@ Log Data Lifecycle:
 Log File Management:
 - **Circular Overwrite:** Overwrites older logs to avoid storage issues.
 - **Clipping Levels:** Avoid storing irrelevant logs by setting thresholds.
+- **Syslog Protocol**: Specified by RFC 5424, send event notification messages. Historically used by Unix and Linux systems.
 
 Monitoring Techniques:
 - **Real User Monitoring:** Passively observes user interactions with applications.
@@ -1936,6 +1942,33 @@ Incident response should include the following stages:
 6. Recovery - return to normal
 7. Remediation - prevent
 8. Lessons Learned
+
+Several models identifiy the stages of an attack.
+
+Cyber Kill Chain framework has seven stages:
+1. Reconnaissance - Attacker gathers info on the target
+2. Weaponization - Identify an exploit that the target is vulnerable ot
+3. Delivery - Send weapon to target
+4. Exploitation - Weapons exploits vulnerability on target system
+5. Installation - Installation of malware
+6. Command and control - Manage malware actions
+7. Actions on objectives - Execute original goals
+
+MITRE ATT&CK Matrix is a knowledge base of identified tactics, techniques, and procedueres (TTPs) used by attackers. These include but are not limited to:
+* Reconnaissance
+* Resource development
+* Initial access
+* Execution
+* Persistence
+* Privilege escalation
+* Defense evasion
+* Credential access
+* Discovery
+* Lateral movement
+* Collection
+* Command and control
+* Exfiltration
+* Impact
 
 
 ## 7.7 - Operate and maintain detective and preventive measures
