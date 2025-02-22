@@ -733,7 +733,7 @@ Emanations manifest in the forms of unseen things leaking out of systems usch as
 
 Hardening is the process of looking at individual components of a system and then securing each component to reduce overall vulneerabilities. Hardening can include, disabling unnecessary services, installing security patches, closing certain ports, installing anti-malware, installing host-based firewall/IDS, enabling encryption, requiring strong passwords, and taking back-ups.
 
-Mobile systems present their own kinds of risks that can be managed through mobile device management (MDM) and mobile application management (MAM). MDM is concerned with the devices themselves while MAM is concerned with the applications on those devices.
+Mobile systems present their own kinds of risks that can be managed through mobile device management (MDM) and mobile application management (MAM). MDM is concerned with the devices themselves while MAM is concerned with the applications on those devices. Reusable media are subject to a finite lifecycle that can be measured by mean time to failure (MTTF) indicating the number of time s it can be reused or the number of years it can be expected to function for.
 
 Policies can reduce, mitigate, or acknowledge risk associated with mobile devices. There should be clearly defined processes related to the loss or theft of stolen devices. Remote access security, endpoint security, and application whitelisting are methods of increasing the security of devices.
 
@@ -1908,12 +1908,15 @@ There are several key concepts for security operations:
 * Privileged account management refers to the access controls surrounding privileged or system administrator accounts.
 * Need to know - restriction of knowledge
 * Least privilege - restriction of actions/privileges
+* Two person control - Two separate individuals are required for approval of critical tasks
 * Job rotation - Switching job duties to help with fraud detection
 * Service level agreements (SLAs) - Legal contracts between a customer and vendor
 
 ## 7.5 - Apply resource protection techniques
 
 Data protection requirements may vary depending on the specific data retention policies for individual resources. This may help determine the medium or media upon which thes eshould be stored. The Mean Time Between Failure (MTBF) can help determine the best media to use for a given need. Operational processes must be put in place to constantly move data to new media, updating file formats consistently, the protection of data must be updated to reflect current cryptography standards.
+
+Monitoring use of elevated privileges can also detect advanced persistent threat (APT) activities.
 
 ## 7.6 - Conduct incident management
 
