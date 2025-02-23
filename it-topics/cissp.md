@@ -2153,6 +2153,13 @@ It looks at software assurance from the perspective of five business functions
 4. Verification
 5. Operations
 
+The IDEAL model was developed by the Software Engineering Institute to implement many SW-CMM attributes. It consists of five phases:
+1. Initiating - Business justification and building support
+2. Diagnosing - Analyze the current state of the organization and make general recommendations
+3. Establishing - Develop a specific plan of execution
+4. Acting - Develop, test, refine, and implement solutions
+5. Learning - Retrospective and apply lessons learned
+
 ## 8.2 - Identify and apply security controls in software development ecosystems
 
 Several key terms related to security in the software development ecosystem:
