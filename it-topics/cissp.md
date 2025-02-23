@@ -89,6 +89,20 @@ The (ISC)^2 Code of Ethics holds the following canons, prioritized in order of i
 3. Provide diligent and competent service to principals
 4. Advance and protect the profession
 
+RFC 1087 "Ethics and the Internet" provided a brief list of unethical practices in January 1989 including, seeking unauthorized access, disrupt intended use, waste resources, destroy integrity of digital information, and compromise user prviacy.
+
+The Computer Ethics Institute has ten commandments:
+1. Thou shalt not use a computer to harm other people
+2. Thou sahlt not interfere with other people's computer work
+3. Thou shalt not snoop around in other people's computer files
+4. Thou shalt not use a computer to steal
+5. Thou shalt not use a computer to bear false witness
+6. Thou shalt not copy proprietary software you have not paid for
+7. Thou shalt not use other people's computer resources without authorization or proper compensation
+8. Thou salt not appropriate other people's intellectual output
+9. Thou shalt think about the social consequences of your programming and system design
+10. Thou shalt always use a computer in ways that ensure consideration and respect for your fellow humans
+
 ## 1.2 - Understand and apply security concepts
 
 The CIA triad consists of confidentiality, integrity, and availability:
