@@ -2032,11 +2032,11 @@ Failure modes refer to how an environment is designed to handle failure:
 
 Back up storage mechanisms cna include the following:
 * Archive bit - Use 0 or 1 to indicate if there are no changes to file (no backup required) or if it has been changed (backup required)
-* Incremental backup - Perform a full backup periodically and then incremental backups regularly, targeting changes since the last **incremental** backup. This allows for the lowest cost overhead and fast backup time, but a very slow restore time
-* Differential backup - Perform a full backup periodically and then differential backups regularly, targeting changes since the last **full** backup
+* Incremental backup - Perform a full backup periodically and then incremental backups regularly, targeting changes since the last **incremental** backup. This allows for the lowest cost overhead and fast backup time, but a very slow restore time. An incremental backup resets the archive bit
+* Differential backup - Perform a full backup periodically and then differential backups regularly, targeting changes since the last **full** backup. A differential backup does not change the archive bit.
 * Mirror backup - An exact copy of a data set is created with zero compression. Fastest backup and restore time but can be expensive.
 
-Backup storage strategies cna include offsite storage, electronic vaulting, and tape rotation.
+Backup storage strategies cna include offsite storage, electronic vaulting, remote journaling, remote mirroring, and tape rotation.
 
 A cyclic redundancy check (CRC) can be used to verify the integrity of data via its checksum and is useful when validating backup integrity.
 
@@ -2052,6 +2052,7 @@ RAID patterns include:
 * RAID 1 - Mirroring: Files are writting in full to each drive for sake of redundancy
 * RAID 10 - Mirroring and Striping: Combines the two. Requires 4 drives.
 * RAID 5 - Parity Protection: Strikes a balance between RAID 0 and RAID 1 in a mroe cost effective manner. Parity data is generated and stored on the alternate drive to help with recovery in case of data corruption or loss on the primary drive. Requires 3 drives.
+* RAID 6 - Same as RAID-5 but stores parity information on two disks to protect against the failure of two separate disks but requiring a minimum of four disks to implement.
 
 Clustering is when multiple systems are used to work together to support a workload while redundancy is a single primary system supporting the entire workload.
 
