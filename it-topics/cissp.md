@@ -737,9 +737,11 @@ Other email auth mechanisms include DomainKey Identified Mail (DKIM) to assert t
 
 There are a number of common vulnerabilities across security architectures.
 
-A single point of failure refers to the minimum necessary but sufficient condition of failure that would cause a failure in teh system. Points of failure can be mitigated through redundancy to support high availability and failover.
+A single point of failure refers to the minimum necessary but sufficient condition of failure that would cause a failure in the system. Points of failure can be mitigated through redundancy to support high availability and failover.
 
 Bypass controls are intended methods to bypass and access administration settings but do introduce a risk vector in the security architecture. Strong protections around these bypass contorls can help mitigate or prevent their exploitation. This can be done via segregation of duties, logging and monitoring, and physical security.
+
+Buffer overflow is when user input is not properly validated and can overflow data to gain unintended access to target system by overwriting system commands when memory is exceeded.
 
 Time-of-Check Time-of_use (TOCTOU) is a short window between when something is used and when authorization or access for that use is checked. This window is a risk vector for exploitation and can be referred to as a "race condition". Frequency of access checks can help mitigate this.
 
@@ -827,9 +829,11 @@ In the first type, malicious code is stored on the web server itself. In the sec
 
 DOM-based attacks modify the client-side document object model (DOM) to modify it. This can be Type I or Type II XSS. It is much more rare.
 
-Cross-Site Request forgery is when an attacker forges a request, embeds the request in a hyperlink sent to the victim, the victim clicks the link and executes the embedded logic to a service or provider, and the service provider trusting the victim's request executes the logic. CSRF is dependent upon the persistence of cookies in browsers which allows the attacker to operate using the identity of the victim.
+Cross-Site Request forgery (CSRF/XSRF) is when an attacker forges a request, embeds the request in a hyperlink sent to the victim, the victim clicks the link and executes the embedded logic to a service or provider, and the service provider trusting the victim's request executes the logic. CSRF is dependent upon the persistence of cookies in browsers which allows the attacker to operate using the identity of the victim.
 
-In summary, XSS exploits a user's browser to perform an unwanted action. CSRF exploits a web server to perform an unwanted action on a trusted website.
+Server-Side Request forgery (SSRF) is when a server is tricked into visiting a URL based on user input.
+
+In summary, XSS exploits a user's browser to perform an unwanted action. CSRF exploits a web server to perform an unwanted action on a trusted website. SSRF exploits a web server by manipulating URL input.
 
 SQL injection is a method of attack that nests or embeds malicious logic into a SQL query that can be executed against the website, if there is no validation or sanitization of SQL input. User input should always be validated. Prepared statements, parameterized queries, or stored procedures also provide tools to mitigate or prevent SQL injections.
 
@@ -1633,7 +1637,7 @@ Personnel Security and Risk Management should also be exercised as part of a rob
 
 Employees and contractors should undergo proper screening and interview with signed legal agreements such as NDA's before being onboarded. They should also sign Acceptable Use Policies (AUP) to define what is acceptable or unacceptable behavior, given their role and responsibilities.
 
-User behavior analytics (UBA) and user and entity behavior analytics (UEBA) should be conducted by a SIEM to track for anomalous or potentially threatening internal behavior.
+User behavior analytics (UBA) and user and entity behavior analytics (UEBA) should be conducted by a SIEM to track for anomalous or potentially threatening internal behavior. Endpoint detection and response (EDR) packages go beyond traditioanl antimalware and use advanced techniques to automatically eradicate malware.
 
 ## 5.3 - Federated Identity with a Third-Party Service
 
@@ -2004,6 +2008,8 @@ Malware can follow into several common categories:
 * Rootkit - Malware tools that are hidden in a system through some backdoor
 * Data diddler - Makes very small changes over a long period of time to avoid detection
 * Zero day - Unprecedented malware that no one has seen before
+
+Master Boot Record Viruses (MBR) were one of the earliest forms of virust infection and attack bootable media uses to load the OS upon boot. Files infector viruses infect various types of executable files and can even be hidden inside companion virue file types which mask that they are executable. Service injection viruses inject themselves into trusted runtime processes.
 
 Malware detection can include using signature-based anti-malware tools that can identify malware based off known signature characteristics (but is useless against zero day) or heuristic systems which explore underlying code or behavior in a file using static or dynamic scanning techniques. Activity monitors and change detection can also be used to track for malware activity.
 
