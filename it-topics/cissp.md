@@ -231,12 +231,12 @@ California has the most famous state-level law with the California Consumer Priv
 
 Personal data may include direct or indirect identifiers. Direct identifiers are unique identifiers for an individual (phone number, SSN) while indirect identifiers may be used to narrow the scope of identification (age, zip code).
 
-Privacy policies are required to speak to how:
-* Data owners have defined accountabilities regarding the collection and protection of customer data. This is generally senior management.
-* Asset owners are the person who owns the asset that processes sensitive data.
-* Data custodians need to have defined responsibilities based on the input of owners
-* Data processors need to have clearly defined responsibilities when processing data on behalf of the owner
-* Data subjects which are the individuals that the data belongs to
+Data governance roles
+* Data Owners are senior-level individual who is ultimately responsible for classifying, defining, and protecting data within an organization including the policies and baselines to do so.
+* Asset owners manage hardware, software, or IT infrastructure, enforcing the policies defined by Data Owner.
+* Data Custodians implement technical security controls and operational management of data per the policies of the Data Owner.
+* Data Processors process data on behalf of the Data Owner. They do not own or control the data or make decisions on it but stick to the rules.
+* Data subjects are the individuals whose personal data is collected.
 
 The Organization for Economic Cooperation and Development (OECD) also has its own set of standards and policies. These include the following principles:
 * Collection Limitation Principle: Limit the collection of personal data to only what is needed to provide a service.
@@ -1574,16 +1574,44 @@ The intersection of these two error types is the **Crossover Error Rate (CER)**,
 SSO improves user experience and reduces vulnerabilities from weaker authentication systems but introduces a **single point of failure**.
 
 **Kerberos** is a widely used SSO authentication protocol:
-- The client sends an initial message to the **Authentication Service (AS)** contained within the Key Distribution Center (KDC).
-- The KDC verifies the useranme against hte known crendentials. It generates a session key that will be used by the client and the Kerberos server against the Ticket Granting Service (TGS), encrypted with a hash of the user's password. It also includes an encrypted and timestamped Ticket Granting Ticket (TGT):
-- The client decrypts the message using their password, installs the TGT for use until it expires, then requests service tickets from the KDC using its TGT.
-- The client sends the TGT and new tickets to the TGS.
-- The TGS verifies the message and returns an encrypted **Service Ticket** and key.
-- The client uses the Service Ticket to authenticate with the service.  
-**Note**: The AS and TGS are components of the **Key Distribution Center (KDC)**.
+The client sends an authentication request to the Authentication Service (AS) within the Key Distribution Center (KDC). The request includes the username, but not the password.
+
+The AS verifies the username against its credential database. If valid, it generates:
+
+A session key (SK1) for secure communication between the client and the Ticket Granting Service (TGS).
+A Ticket Granting Ticket (TGT), which is encrypted with the KDC’s secret key (only the KDC can read it).
+The AS encrypts SK1 with a key derived from the user's password (typically using a hash of the password stored on the KDC). The AS sends this encrypted session key along with the TGT to the client.
+
+The client decrypts SK1 using their password-derived key and stores the TGT, which remains encrypted (since only the KDC can read it). The TGT is valid for a limited time.
+
+When the client wants access to a service, it sends a request to the Ticket Granting Service (TGS). This request includes:
+
+The TGT (proving the client was authenticated by the AS).
+An authenticator (a timestamped, encrypted message proving the client's identity), encrypted with SK1.
+The TGS decrypts the TGT using the KDC’s secret key and retrieves SK1. It then decrypts the authenticator using SK1 to verify the client’s identity.
+
+If authentication is successful, the TGS generates:
+
+A session key (SK2) for secure communication between the client and the requested service.
+A Service Ticket (ST), encrypted with the target service’s secret key (only the service can read it).
+The TGS encrypts SK2 with SK1 and sends SK2 and the Service Ticket back to the client.
+
+The client decrypts SK2 using SK1 and stores it. The Service Ticket remains encrypted (since only the target service can read it).
+
+The client sends a request to the target service, including:
+
+The Service Ticket (encrypted with the service’s secret key).
+A new authenticator, encrypted with SK2, to prove possession of SK2.
+The service decrypts the Service Ticket using its own secret key to retrieve SK2. It then decrypts the authenticator using SK2 to verify the client’s identity.
+
+If authentication is successful, the service may send a mutual authentication response, encrypted with SK2, confirming the session is established.
+
+The client and service now communicate securely using SK2 for encrypted data exchange.
+
+Note: The Authentication Service (AS) and Ticket Granting Service (TGS) are both part of the Key Distribution Center (KDC).
 
 **Disadvantages of Kerberos**:
-- Only supports symmetric encryption.
+- Only supports symmetric encryption and the KDC is a single point of failure for all authentication.
 
 **SESAME** is an alternative to Kerberos:
 - Supports asymmetric encryption.
