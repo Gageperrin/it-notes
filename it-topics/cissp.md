@@ -2106,7 +2106,7 @@ Clustering is when multiple systems are used to work together to support a workl
 
 Recovery site strategies refer to actual data center sites and their geographic distribution which can be configured for cold site failover, warm site failover, hot site failover, or redundant sites running in parallel. It is also possible to distribute recovery sites between internal and external providers. Some companies leverage reciprocal agreements to support each other in case of failover.
 
-Disaster recovery solutions measure both Recovery Point Objective (RPO) which is how much data a compnay could afford to lose and Recovery Time Objective (RTO) how long it takes an organization to move from the time of disaster to operating at defined service levels with an acceptable Quality of Service (QoS).
+Disaster recovery solutions measure both Recovery Point Objective (RPO) which is how much data a company could afford to lose and Recovery Time Objective (RTO) how long it takes an organization to move from the time of disaster to operating at defined service levels with an acceptable Quality of Service (QoS).
 
 ## 7.11 - Implement disaster recovery (DR) processes
 
