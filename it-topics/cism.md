@@ -238,3 +238,18 @@ A business impact analysis (BIA) is a formal process to identify mission-essenti
 2. The mean time to repair (MTTR) is the average amount of time to restore a system to its normal operating state after a failure.
 3. The recovery time objective (RTO) is the amount of time the organization can tolerate a system being down
 4. The recovery point objective (RPO) is the amount of data an organization can tolerate losing during an outage
+
+# Chapter 4 - Cybersecurity Threats
+
+Threats can vary widely in nature and can be uncovered by "hat" hackers:
+* White-hat hackers are authorized attackers who act with authorization to discover security vulnerabilities with the intent of correcting them.
+* Black-hat hackers are unauthorized attackers with malicious intent.
+* Gray-hat hackers act without proper authorization but intend to inform targets of security vulnerabilities without maliciously exploiting them
+
+Advanced persistent threats (APTs) are sophisticated attacks over a period of time and can often be tied to nation-state actors.
+
+Threat intelligence sharing between organizations is facilitated by standardized protocols:
+* **Structured Threat Information Expression (STIX)**: A standardized XML language for representing threat information, including indicators of compromise (IOCs), threat actors, and attack patterns. STIX uses JSON format to describe cyber threat information in a consistent, machine-readable format.
+* **Trusted Automated Exchange of Intelligence Information (TAXII)**: A protocol for exchanging cyber threat intelligence over HTTPS. TAXII defines a set of services and message exchanges that enable organizations to share threat information in a secure, automated way using STIX-formatted data.
+* **OpenIOC**: An extensible XML schema developed by Mandiant (now part of Google) for describing technical indicators of compromise. It provides a standardized format for sharing forensic data and threat intelligence, particularly useful for incident response and malware analysis.
+
