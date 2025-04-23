@@ -253,3 +253,34 @@ Threat intelligence sharing between organizations is facilitated by standardized
 * **Trusted Automated Exchange of Intelligence Information (TAXII)**: A protocol for exchanging cyber threat intelligence over HTTPS. TAXII defines a set of services and message exchanges that enable organizations to share threat information in a secure, automated way using STIX-formatted data.
 * **OpenIOC**: An extensible XML schema developed by Mandiant (now part of Google) for describing technical indicators of compromise. It provides a standardized format for sharing forensic data and threat intelligence, particularly useful for incident response and malware analysis.
 
+# Chapter 5 - Information Security Program Development and Management
+
+The CISO's primary responsibility is to develop, implement, and maintain the organization's information security program. This program is a collection of policies, standards, processes, activities, and projects that work together to achieve the goals set forth in the organization's information security strategy.
+
+First, a scope needs to be identified for the information security program. Two elements are included in the scope:
+1. The type of the security objectives included in the program.
+2. The portion of the organization covered by the information security program.
+
+Second, an information security program charter will be the organizing document for the cybersecurity program, building off the scope. This charter should include:
+* A scope statement
+* A business purpose clearly linking the information security program to business objectives
+* A statement of authority for the program
+* Roles and responsiblities for other stakeholders to carry out the activities of the information security program
+* Governance structure and processes that will continue to ensure the organization's security program remains aligned with organization business goals
+* Program documentation procedures that formalize how the organization will establish, communicate, and maintain information security standards, guidelines, procedures, etc.
+* Enforcement mechanisms to establish how the organization will guide and enforce compliance with information security policies and provide consequences for individuals who choose not to comply
+* A review process conducted on a periodic basis to ensure that hte informaiton security program continues to achieve the information security objectives
+* An approval statement that describes the authority under which the progam is enacted.
+
+It is one thing to set up an information security program but another to maintain it. Metrics are critical to ensure the efficiency and effectiveness of security controls on an ongoing basis.
+* Key performance indicators (KPIs) are metrics that demonstrate the success of the security program in achieving its objectives. They are historical in focus.
+* Key goal indicators (KGIs) measure progress toward defined goals.
+* Key risk indicators (KRIs) quantify the security risk facing an organization, selected based on potential impact, effort, reliability, and sensitivity.
+
+Security budgets can have two approaches:
+1. Incremental budgeting starts with the prior year's budget and then adjusts by either raising or lowering the budget.
+2. Zero-based budgeting starts with zero each year and managers are asked ot justify their entire budget.
+
+Fiscal years may or may not align to the calendar year and this is important for understanding budgets.
+
+Capital expenses (CapEx) are costs an orgnaization incurs as part of building or maintaining large assets. Operational expenses (OpEx) are costs for running the business day-to-day.
