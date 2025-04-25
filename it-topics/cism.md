@@ -1,6 +1,6 @@
 # CISM
 
-These are my manually compiled notes for the CISM exam.
+These are my manually compiled notes for the CISM exam. Due to the level of overlap with CISSP, I ended up opting not to include information in this page that was not already included in my CISSP notes.
 
 Sources include:
 * Chapple, Mike. *Certified Information Security Manager Study Guide*. Wiley and Sons, 2022.
@@ -292,3 +292,17 @@ Asset inventory and asset criticality should determine testing and asssessment n
 Security scanners can cover networks or web applications. Vulnerability scanners should be kept up-to-date with vulnerability feeds.
 
 Other data sources for cybersecurity includes log reviews, SIEM, and configuration management systems.
+
+# Chapter 7 - Cybersecurity Technology
+
+(This is largely duplicated information from the CISSP exam content.)
+
+Fagan inspection (SDLC):
+1. Planning - Preparation of materials, attendees, and location
+2. Overview - Prepares the team by reviewing materials and assigning roles
+3. Preparation - Reviewing code and documenting issues/questions
+4. Meeting to identify defects based on notes from preparation phase
+5. Rework to resolve issues
+6. Follow-up by moderator to ensure resolution
+
+
