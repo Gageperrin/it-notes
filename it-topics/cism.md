@@ -284,3 +284,11 @@ Security budgets can have two approaches:
 Fiscal years may or may not align to the calendar year and this is important for understanding budgets.
 
 Capital expenses (CapEx) are costs an orgnaization incurs as part of building or maintaining large assets. Operational expenses (OpEx) are costs for running the business day-to-day.
+
+# Chapter 6 - Security Assessment and Testing
+
+Asset inventory and asset criticality should determine testing and asssessment needs.
+
+Security scanners can cover networks or web applications. Vulnerability scanners should be kept up-to-date with vulnerability feeds.
+
+Other data sources for cybersecurity includes log reviews, SIEM, and configuration management systems.
