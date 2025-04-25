@@ -305,4 +305,44 @@ Fagan inspection (SDLC):
 5. Rework to resolve issues
 6. Follow-up by moderator to ensure resolution
 
+# Chapter 8 - Incident Response
 
+A security event is any observable occurrency in a system or network that relates to a security function.
+
+An adverse event is an event with negative consequences.
+
+A security incident is a violation or imminent threat of violation of security policies or practices, particularly violating the CIA triad.
+
+Computer security incident response teams (CSIRTs) are responsible for responding to computer security incidents by following standardized repsonse procedures.
+
+NIST 800-61 describes four categories of security event indicators: alrts, logs, publicly available information, and people.
+
+The incident repsonse process should follow four cyclical phases:
+1. Preparation - Cybersecurity best practices for environment management
+2. Detection & Analysis - Follow best practices to build a systematic process for detecting and triggering the CSIRT
+3. Containment, Eradication and Recovery - (1) Select containment strategy, (2) Implement selected containment strategy, (3) Gather additional evidence to support repsonse, (4) Identify attacker, (5) Eradicate effects of the incident and recover normal business operations
+4. Post-Incident Activity - Lessons Learned review, Evidence Retention, final report
+
+The Incident response policy should tbe the cornerstone of the organization's incident response program.
+
+The policy should include:
+* Statement of management commitment
+* Purpose and objectives of the policy
+* Scope of the policy
+* Definition of cybersecurity incidents and related terms
+* Organizational structure and definition of roles, responsibilities, and level of authority
+* Prioritization or severity rating scheme for incidents
+* Performance measures for the CSIRT
+* Reporting and contact forms
+
+Procedures provide the detailed, tactical information for teh CSIRT to respond to an incident.
+
+CSIRTs should develop playbooks that describe the specific procedures they will follow in the event of a specific type of cybersecurity incident.
+
+CSIRT scope can vary organization by organization and depend on these questions:
+* What triggers the activation of the CSIRT? Who is authorized to activate the CSIRT?
+* Does the CSIRT cover the entire organization or is it responsible only for certain business units?
+* Is the CSIRT authorized to communicate with law enforcement, regulatory bodies, or other external parties?
+* Does the CSIRT have internal communication and/or escalation responsibilities?
+
+NIST 800-61 includes specifications around the functional, economic, and recoverability impact of various incidents.
