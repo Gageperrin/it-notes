@@ -4,6 +4,7 @@ These are my manually compiled notes for the CISM exam. Due to the level of over
 
 Sources include:
 * Chapple, Mike. *Certified Information Security Manager Study Guide*. Wiley and Sons, 2022.
+* ISACA. *CISM Review Mnaual*. 15th Edition. 2016.
 
 
 # Chapter 1 - Today's Information Security Manager
@@ -335,7 +336,7 @@ The policy should include:
 * Performance measures for the CSIRT
 * Reporting and contact forms
 
-Procedures provide the detailed, tactical information for teh CSIRT to respond to an incident.
+Procedures provide the detailed, tactical information for the CSIRT to respond to an incident.
 
 CSIRTs should develop playbooks that describe the specific procedures they will follow in the event of a specific type of cybersecurity incident.
 
@@ -346,3 +347,29 @@ CSIRT scope can vary organization by organization and depend on these questions:
 * Does the CSIRT have internal communication and/or escalation responsibilities?
 
 NIST 800-61 includes specifications around the functional, economic, and recoverability impact of various incidents.
+
+# Chapter 9 - Business Continuity and Disaster Recovery
+
+Business continuity planning is concerned with assessing the risks to organizational processes and creating policies, plans, and procedures to minimize the impact those risks might have on the organization if they were to occur. It consists of four phases.
+
+The first phase, Project scope and planning, can be divided into several pieces:
+* Organizational review to identify all stakeholders and departments
+* BCP Team selection to identify the right mixture of representatives and stakeholders
+* Resource requirements for BCP development, implementation, testing, training, and maintenance
+* Legal and regulatory requirement reviews (including SLA's)
+
+
+Once the first phase of project scope and planning is completed, a business impact analysis (BIA) identifies the business processes and tasks critical to the organization's ongoing viabliity and the threats posed to those resources, often via both quantitative and qualitative risk assessments.
+
+The BIA development should take the following steps:
+1. Identifying priorities, including RPO, RTO, MTD
+2. Risk identification
+3. Likelihood assessment
+4. Impact Analysis
+5. Resource Prioritization
+
+Once the BIA has been developed, continuity planning can take place. This phase includes the following steps:
+* Strategy development bridges the BIA and continuity planning phases of BCP. This includes determining which risks are acceptable given the MTD estimates.
+* Provisions and processes need to safeguard people, then building and facilities, then infrastructure
+
+Once the BCP design is completed, the plan must be approved, implemented, then maintained. This will include training and education, BCP documentation, building continuity planning goals that re measured, statement of importance, statement of priorities, statement of organizational responsibility, state of urgency and timing, risk assessment, risk acceptance/mitigation, vital records program, emergency response guidelines, and then maintenance for the BCP itself.
